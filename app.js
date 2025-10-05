@@ -140,9 +140,16 @@ class DocentePlusPlus {
             id: Date.now(),
             title: document.getElementById('lesson-title').value,
             subject: document.getElementById('lesson-subject').value,
+            class: document.getElementById('lesson-class').value,
             date: document.getElementById('lesson-date').value,
+            time: document.getElementById('lesson-time').value || '',
+            type: document.getElementById('lesson-type').value || 'normal',
+            status: document.getElementById('lesson-status').value || 'planned',
             description: document.getElementById('lesson-description').value,
-            createdAt: new Date().toISOString()
+            notes: document.getElementById('lesson-notes').value || '',
+            materials: document.getElementById('lesson-materials').value || '',
+            createdAt: new Date().toISOString(),
+            modifiedAt: new Date().toISOString()
         };
 
         this.lessons.push(lesson);
@@ -161,29 +168,250 @@ class DocentePlusPlus {
         }
     }
 
+    editLesson(id) {
+        const lesson = this.lessons.find(l => l.id === id);
+        if (!lesson) return;
+
+        // Populate form with lesson data
+        document.getElementById('lesson-title').value = lesson.title;
+        document.getElementById('lesson-subject').value = lesson.subject;
+        document.getElementById('lesson-class').value = lesson.class || '';
+        document.getElementById('lesson-date').value = lesson.date;
+        document.getElementById('lesson-time').value = lesson.time || '';
+        document.getElementById('lesson-type').value = lesson.type || 'normal';
+        document.getElementById('lesson-status').value = lesson.status || 'planned';
+        document.getElementById('lesson-description').value = lesson.description || '';
+        document.getElementById('lesson-notes').value = lesson.notes || '';
+        document.getElementById('lesson-materials').value = lesson.materials || '';
+
+        // Delete the old lesson (it will be re-added with same data or modified)
+        this.lessons = this.lessons.filter(l => l.id !== id);
+
+        // Show form
+        this.showAddLessonForm();
+    }
+
+    updateLessonStatus(id) {
+        const lesson = this.lessons.find(l => l.id === id);
+        if (!lesson) return;
+
+        const statuses = ['planned', 'completed', 'modified', 'skipped'];
+        const statusLabels = {
+            'planned': '📅 Pianificata',
+            'completed': '✅ Svolta',
+            'modified': '✏️ Modificata',
+            'skipped': '⏭️ Saltata'
+        };
+
+        const currentIndex = statuses.indexOf(lesson.status || 'planned');
+        const nextIndex = (currentIndex + 1) % statuses.length;
+        lesson.status = statuses[nextIndex];
+        lesson.modifiedAt = new Date().toISOString();
+
+        this.saveData();
+        this.renderLessons();
+        this.renderDashboard();
+    }
+
+    showAnnualProgramming() {
+        document.getElementById('annual-programming-modal').style.display = 'flex';
+    }
+
+    hideAnnualProgramming() {
+        document.getElementById('annual-programming-modal').style.display = 'none';
+        document.getElementById('programming-preview').innerHTML = '';
+    }
+
+    generateAnnualProgramming() {
+        const className = document.getElementById('programming-class').value;
+        const subject = document.getElementById('programming-subject').value;
+        const weeks = parseInt(document.getElementById('programming-weeks').value) || 33;
+        const lessonsPerWeek = parseInt(document.getElementById('programming-lessons-per-week').value) || 2;
+
+        if (!className || !subject) {
+            alert('Seleziona una classe e inserisci una materia');
+            return;
+        }
+
+        const totalLessons = weeks * lessonsPerWeek;
+        const startDate = new Date();
+        const preview = document.getElementById('programming-preview');
+        
+        preview.innerHTML = `
+            <div class="programming-summary">
+                <h4>Anteprima Programmazione</h4>
+                <p><strong>Classe:</strong> ${className}</p>
+                <p><strong>Materia:</strong> ${subject}</p>
+                <p><strong>Totale lezioni:</strong> ${totalLessons}</p>
+                <p><strong>Periodo:</strong> ${weeks} settimane</p>
+                <button class="btn btn-primary" onclick="app.confirmAnnualProgramming('${className}', '${subject}', ${weeks}, ${lessonsPerWeek})">
+                    Conferma e Crea Lezioni
+                </button>
+            </div>
+        `;
+    }
+
+    confirmAnnualProgramming(className, subject, weeks, lessonsPerWeek) {
+        const totalLessons = weeks * lessonsPerWeek;
+        const startDate = new Date();
+        
+        // Generate lessons
+        for (let week = 0; week < weeks; week++) {
+            for (let lessonNum = 0; lessonNum < lessonsPerWeek; lessonNum++) {
+                const lessonDate = new Date(startDate);
+                lessonDate.setDate(lessonDate.getDate() + (week * 7) + (lessonNum * Math.floor(7 / lessonsPerWeek)));
+                
+                const lesson = {
+                    id: Date.now() + week * 1000 + lessonNum,
+                    title: `${subject} - Settimana ${week + 1} - Lezione ${lessonNum + 1}`,
+                    subject: subject,
+                    class: className,
+                    date: lessonDate.toISOString().split('T')[0],
+                    time: '',
+                    type: 'normal',
+                    status: 'planned',
+                    description: `Lezione ${lessonNum + 1} della settimana ${week + 1}`,
+                    notes: '',
+                    materials: '',
+                    createdAt: new Date().toISOString(),
+                    modifiedAt: new Date().toISOString(),
+                    annualProgramming: true
+                };
+                
+                this.lessons.push(lesson);
+            }
+        }
+
+        this.saveData();
+        this.renderLessons();
+        this.renderDashboard();
+        this.hideAnnualProgramming();
+        alert(`${totalLessons} lezioni create con successo!`);
+    }
+
+    async generateAnnualProgrammingWithAI() {
+        const apiKey = localStorage.getItem('openrouter-api-key');
+        
+        if (!apiKey) {
+            alert('Configura la tua API key di OpenRouter nelle impostazioni prima di usare l\'IA');
+            this.switchTab('settings');
+            return;
+        }
+
+        const className = document.getElementById('programming-class').value;
+        const subject = document.getElementById('programming-subject').value;
+        const weeks = parseInt(document.getElementById('programming-weeks').value) || 33;
+        const lessonsPerWeek = parseInt(document.getElementById('programming-lessons-per-week').value) || 2;
+
+        if (!className || !subject) {
+            alert('Seleziona una classe e inserisci una materia');
+            return;
+        }
+
+        const preview = document.getElementById('programming-preview');
+        preview.innerHTML = '<p>Generazione programmazione con IA in corso...</p>';
+
+        try {
+            const response = await this.callOpenRouterAPI(
+                `Genera una programmazione annuale dettagliata per ${subject} per la classe ${className}.
+                La programmazione deve coprire ${weeks} settimane con ${lessonsPerWeek} lezioni a settimana.
+                Per ogni lezione, fornisci: titolo, descrizione breve, obiettivi, e materiali suggeriti.
+                Organizza le lezioni in modo progressivo e didattico.
+                Rispondi in formato JSON con array di oggetti lezione con campi: week, lessonNumber, title, description, objectives, materials.`,
+                apiKey
+            );
+
+            if (response && response.content) {
+                preview.innerHTML = `
+                    <div class="ai-programming-result">
+                        <h4>Programmazione generata dall'IA</h4>
+                        <pre>${response.content}</pre>
+                        <button class="btn btn-primary" onclick="app.confirmAnnualProgramming('${className}', '${subject}', ${weeks}, ${lessonsPerWeek})">
+                            Usa Programmazione Base
+                        </button>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error generating annual programming:', error);
+            preview.innerHTML = `<p class="error">Errore nella generazione: ${error.message}</p>`;
+        }
+    }
+
     renderLessons() {
         const lessonsList = document.getElementById('lessons-list');
         
-        if (this.lessons.length === 0) {
+        // Get filter values
+        const filterStatus = document.getElementById('filter-status')?.value || '';
+        const filterClass = document.getElementById('filter-class')?.value || '';
+        const filterType = document.getElementById('filter-type')?.value || '';
+        
+        // Filter lessons
+        let filteredLessons = this.lessons;
+        if (filterStatus) {
+            filteredLessons = filteredLessons.filter(l => l.status === filterStatus);
+        }
+        if (filterClass) {
+            filteredLessons = filteredLessons.filter(l => l.class === filterClass);
+        }
+        if (filterType) {
+            filteredLessons = filteredLessons.filter(l => (l.type || 'normal') === filterType);
+        }
+        
+        if (filteredLessons.length === 0) {
             lessonsList.innerHTML = `
                 <div class="empty-state">
-                    <h3>Nessuna lezione programmata</h3>
+                    <h3>Nessuna lezione trovata</h3>
                     <p>Inizia aggiungendo una nuova lezione o generandola con l'IA</p>
                 </div>
             `;
             return;
         }
 
-        lessonsList.innerHTML = this.lessons
+        // Get status and type labels
+        const getStatusLabel = (status) => {
+            const labels = {
+                'planned': '📅 Pianificata',
+                'completed': '✅ Svolta',
+                'modified': '✏️ Modificata',
+                'skipped': '⏭️ Saltata'
+            };
+            return labels[status] || '📅 Pianificata';
+        };
+
+        const getTypeLabel = (type) => {
+            const labels = {
+                'normal': '📝 Standard',
+                'lab': '🔬 Laboratorio',
+                'test': '✅ Verifica',
+                'review': '📚 Ripasso',
+                'presentation': '🎤 Presentazione',
+                'project': '🎨 Progetto'
+            };
+            return labels[type || 'normal'] || '📝 Standard';
+        };
+
+        lessonsList.innerHTML = filteredLessons
             .sort((a, b) => new Date(b.date) - new Date(a.date))
             .map(lesson => `
-                <div class="lesson-item">
-                    <h4>${lesson.title}</h4>
-                    <p><strong>Materia:</strong> ${lesson.subject}</p>
-                    <p><strong>Data:</strong> ${new Date(lesson.date).toLocaleDateString('it-IT')}</p>
-                    <p>${lesson.description || 'Nessuna descrizione'}</p>
+                <div class="lesson-item lesson-status-${lesson.status || 'planned'}">
+                    <div class="lesson-header">
+                        <h4>${lesson.title}</h4>
+                        <span class="lesson-status-badge">${getStatusLabel(lesson.status || 'planned')}</span>
+                    </div>
+                    <div class="lesson-details">
+                        <p><strong>🎯 Tipo:</strong> ${getTypeLabel(lesson.type)}</p>
+                        <p><strong>📚 Materia:</strong> ${lesson.subject}</p>
+                        ${lesson.class ? `<p><strong>👥 Classe:</strong> ${lesson.class}</p>` : ''}
+                        <p><strong>📅 Data:</strong> ${new Date(lesson.date).toLocaleDateString('it-IT')}${lesson.time ? ` - ⏰ ${lesson.time}` : ''}</p>
+                        ${lesson.description ? `<p><strong>📝 Descrizione:</strong> ${lesson.description}</p>` : ''}
+                        ${lesson.notes ? `<p><strong>📌 Note:</strong> ${lesson.notes}</p>` : ''}
+                        ${lesson.materials ? `<p><strong>🎒 Materiali:</strong> ${lesson.materials}</p>` : ''}
+                    </div>
                     <div class="item-actions">
-                        <button class="btn btn-danger" onclick="app.deleteLesson(${lesson.id})">Elimina</button>
+                        <button class="btn btn-sm btn-primary" onclick="app.editLesson(${lesson.id})">Modifica</button>
+                        <button class="btn btn-sm btn-secondary" onclick="app.updateLessonStatus(${lesson.id})">Cambia Stato</button>
+                        <button class="btn btn-sm btn-danger" onclick="app.deleteLesson(${lesson.id})">Elimina</button>
                     </div>
                 </div>
             `).join('');

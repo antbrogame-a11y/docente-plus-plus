@@ -86,6 +86,39 @@
             <div class="section-actions">
                 <button class="btn btn-primary" onclick="app.showAddLessonForm()">➕ Nuova Lezione</button>
                 <button class="btn btn-secondary" onclick="app.generateLessonWithAI()">🤖 Genera con IA</button>
+                <button class="btn btn-secondary" onclick="app.showAnnualProgramming()">📅 Programmazione Annuale</button>
+            </div>
+            
+            <div class="lesson-filters">
+                <select id="filter-status" onchange="app.renderLessons()">
+                    <option value="">Tutti gli stati</option>
+                    <option value="planned">📅 Pianificate</option>
+                    <option value="completed">✅ Svolte</option>
+                    <option value="modified">✏️ Modificate</option>
+                    <option value="skipped">⏭️ Saltate</option>
+                </select>
+                <select id="filter-class" onchange="app.renderLessons()">
+                    <option value="">Tutte le classi</option>
+                    <option value="1A">1A</option>
+                    <option value="1B">1B</option>
+                    <option value="2A">2A</option>
+                    <option value="2B">2B</option>
+                    <option value="3A">3A</option>
+                    <option value="3B">3B</option>
+                    <option value="4A">4A</option>
+                    <option value="4B">4B</option>
+                    <option value="5A">5A</option>
+                    <option value="5B">5B</option>
+                </select>
+                <select id="filter-type" onchange="app.renderLessons()">
+                    <option value="">Tutti i tipi</option>
+                    <option value="normal">📝 Standard</option>
+                    <option value="lab">🔬 Laboratorio</option>
+                    <option value="test">✅ Verifica</option>
+                    <option value="review">📚 Ripasso</option>
+                    <option value="presentation">🎤 Presentazione</option>
+                    <option value="project">🎨 Progetto</option>
+                </select>
             </div>
             
             <div id="add-lesson-form" class="form-container" style="display: none;">
@@ -100,12 +133,63 @@
                         <input type="text" id="lesson-subject" required>
                     </div>
                     <div class="form-group">
+                        <label for="lesson-class">Classe:</label>
+                        <select id="lesson-class" required>
+                            <option value="">Seleziona una classe</option>
+                            <option value="1A">1A</option>
+                            <option value="1B">1B</option>
+                            <option value="1C">1C</option>
+                            <option value="2A">2A</option>
+                            <option value="2B">2B</option>
+                            <option value="2C">2C</option>
+                            <option value="3A">3A</option>
+                            <option value="3B">3B</option>
+                            <option value="3C">3C</option>
+                            <option value="4A">4A</option>
+                            <option value="4B">4B</option>
+                            <option value="5A">5A</option>
+                            <option value="5B">5B</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="lesson-date">Data:</label>
                         <input type="date" id="lesson-date" required>
                     </div>
                     <div class="form-group">
+                        <label for="lesson-time">Orario:</label>
+                        <input type="time" id="lesson-time">
+                    </div>
+                    <div class="form-group">
+                        <label for="lesson-type">Tipo Lezione:</label>
+                        <select id="lesson-type">
+                            <option value="normal">📝 Lezione Standard</option>
+                            <option value="lab">🔬 Laboratorio</option>
+                            <option value="test">✅ Verifica</option>
+                            <option value="review">📚 Ripasso</option>
+                            <option value="presentation">🎤 Presentazione</option>
+                            <option value="project">🎨 Progetto</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="lesson-status">Stato:</label>
+                        <select id="lesson-status">
+                            <option value="planned">📅 Pianificata</option>
+                            <option value="completed">✅ Svolta</option>
+                            <option value="modified">✏️ Modificata</option>
+                            <option value="skipped">⏭️ Saltata</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="lesson-description">Descrizione:</label>
                         <textarea id="lesson-description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="lesson-notes">Note:</label>
+                        <textarea id="lesson-notes" rows="2" placeholder="Note aggiuntive..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="lesson-materials">Materiali:</label>
+                        <textarea id="lesson-materials" rows="2" placeholder="Elenco materiali necessari..."></textarea>
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Salva</button>
@@ -115,6 +199,52 @@
             </div>
 
             <div id="lessons-list" class="lessons-list"></div>
+            
+            <!-- Annual Programming Modal -->
+            <div id="annual-programming-modal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>📅 Programmazione Annuale</h3>
+                        <button class="close-modal" onclick="app.hideAnnualProgramming()">✕</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="programming-class">Classe:</label>
+                            <select id="programming-class">
+                                <option value="">Seleziona una classe</option>
+                                <option value="1A">1A</option>
+                                <option value="1B">1B</option>
+                                <option value="2A">2A</option>
+                                <option value="2B">2B</option>
+                                <option value="3A">3A</option>
+                                <option value="3B">3B</option>
+                                <option value="4A">4A</option>
+                                <option value="4B">4B</option>
+                                <option value="5A">5A</option>
+                                <option value="5B">5B</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="programming-subject">Materia:</label>
+                            <input type="text" id="programming-subject" placeholder="Es: Matematica">
+                        </div>
+                        <div class="form-group">
+                            <label for="programming-weeks">Numero di settimane:</label>
+                            <input type="number" id="programming-weeks" min="1" max="52" value="33" placeholder="Es: 33">
+                        </div>
+                        <div class="form-group">
+                            <label for="programming-lessons-per-week">Lezioni a settimana:</label>
+                            <input type="number" id="programming-lessons-per-week" min="1" max="10" value="2" placeholder="Es: 2">
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-primary" onclick="app.generateAnnualProgramming()">Genera Programmazione</button>
+                            <button class="btn btn-secondary" onclick="app.generateAnnualProgrammingWithAI()">🤖 Genera con IA</button>
+                            <button class="btn btn-secondary" onclick="app.hideAnnualProgramming()">Annulla</button>
+                        </div>
+                        <div id="programming-preview" class="programming-preview"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Students Tab -->

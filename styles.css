@@ -623,3 +623,186 @@ header h1 {
 .selected-file-display .remove-file-btn:hover {
     background: #c0392b;
 }
+
+/* Lesson Filters */
+.lesson-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.lesson-filters select {
+    padding: 8px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: white;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.lesson-filters select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Lesson Status Styles */
+.lesson-item {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 15px;
+    border-left: 4px solid var(--primary-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lesson-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.lesson-status-planned {
+    border-left-color: var(--primary-color);
+}
+
+.lesson-status-completed {
+    border-left-color: var(--secondary-color);
+}
+
+.lesson-status-modified {
+    border-left-color: var(--accent-color);
+}
+
+.lesson-status-skipped {
+    border-left-color: var(--text-secondary);
+}
+
+.lesson-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.lesson-header h4 {
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.lesson-status-badge {
+    padding: 6px 12px;
+    background: var(--bg-color);
+    border-radius: 6px;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+.lesson-details {
+    margin-bottom: 15px;
+}
+
+.lesson-details p {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: var(--danger-color);
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.programming-preview {
+    margin-top: 20px;
+}
+
+.programming-summary {
+    background: var(--bg-color);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.programming-summary h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+}
+
+.programming-summary p {
+    margin: 8px 0;
+}
+
+.ai-programming-result {
+    background: var(--bg-color);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.ai-programming-result pre {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    overflow-x: auto;
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 15px 0;
+    font-size: 0.9em;
+}
+
+/* Button Sizes */
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85em;
+}
