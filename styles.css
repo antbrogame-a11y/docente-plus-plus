@@ -623,3 +623,121 @@ header h1 {
 .selected-file-display .remove-file-btn:hover {
     background: #c0392b;
 }
+
+/* Weekly Schedule */
+.schedule-info {
+    background: var(--card-bg);
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+}
+
+.schedule-info p {
+    margin: 5px 0;
+    color: var(--text-secondary);
+}
+
+.schedule-info strong {
+    color: var(--text-primary);
+}
+
+.schedule-container {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.schedule-grid {
+    display: grid;
+    grid-template-columns: 100px repeat(5, 1fr);
+    gap: 2px;
+    min-width: 700px;
+}
+
+.schedule-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+.schedule-time {
+    background: var(--text-secondary);
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9em;
+}
+
+.schedule-cell {
+    background: var(--bg-color);
+    border: 2px solid var(--border-color);
+    padding: 10px;
+    min-height: 60px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.85em;
+}
+
+.schedule-cell:hover {
+    border-color: var(--primary-color);
+    background: white;
+    transform: scale(1.02);
+}
+
+.schedule-cell.occupied {
+    background: #e3f2fd;
+    border-color: var(--primary-color);
+}
+
+.schedule-cell.occupied:hover {
+    background: #bbdefb;
+}
+
+.schedule-cell-subject {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 4px;
+}
+
+.schedule-cell-room {
+    font-size: 0.75em;
+    color: var(--text-secondary);
+}
+
+.schedule-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .schedule-grid {
+        min-width: 600px;
+    }
+    
+    .schedule-header,
+    .schedule-time,
+    .schedule-cell {
+        font-size: 0.8em;
+        padding: 8px;
+    }
+}
+

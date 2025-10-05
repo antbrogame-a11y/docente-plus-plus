@@ -9,6 +9,7 @@ class DocentePlusPlus {
         this.chatMessages = [];
         this.activeClass = '';
         this.selectedFile = null;
+        this.weeklySchedule = {};
         this.init();
     }
 
@@ -23,6 +24,7 @@ class DocentePlusPlus {
         this.renderDashboard();
         this.renderLessons();
         this.renderStudents();
+        this.renderSchedule();
         this.loadSettings();
         this.loadActiveClass();
         
@@ -98,6 +100,7 @@ class DocentePlusPlus {
         this.activeClass = className;
         localStorage.setItem('active-class', className);
         this.updateClassDisplay();
+        this.renderSchedule();
     }
 
     loadActiveClass() {

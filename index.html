@@ -15,6 +15,7 @@
 
         <nav class="tabs">
             <button class="tab-button active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-button" data-tab="schedule">Orario</button>
             <button class="tab-button" data-tab="lessons">Lezioni</button>
             <button class="tab-button" data-tab="students">Studenti</button>
             <button class="tab-button" data-tab="ai-assistant">Assistente IA</button>
@@ -77,6 +78,86 @@
                     <p class="stat-number" id="ai-status">✓</p>
                     <p class="stat-label">OpenRouter Ready</p>
                 </div>
+            </div>
+        </div>
+
+        <!-- Schedule Tab -->
+        <div id="schedule" class="tab-content">
+            <h2>Orario Settimanale</h2>
+            <div class="schedule-info">
+                <p><strong>Classe:</strong> <span id="schedule-class-name">Seleziona una classe dal dashboard</span></p>
+                <p><strong>Anno Scolastico:</strong> <span id="schedule-year">-</span></p>
+            </div>
+            <div class="schedule-container">
+                <div class="schedule-grid">
+                    <div class="schedule-header">Ora</div>
+                    <div class="schedule-header">Lunedì</div>
+                    <div class="schedule-header">Martedì</div>
+                    <div class="schedule-header">Mercoledì</div>
+                    <div class="schedule-header">Giovedì</div>
+                    <div class="schedule-header">Venerdì</div>
+                    
+                    <!-- Time slot 1: 8:00-9:00 -->
+                    <div class="schedule-time">8:00-9:00</div>
+                    <div class="schedule-cell" data-day="mon" data-slot="0"></div>
+                    <div class="schedule-cell" data-day="tue" data-slot="0"></div>
+                    <div class="schedule-cell" data-day="wed" data-slot="0"></div>
+                    <div class="schedule-cell" data-day="thu" data-slot="0"></div>
+                    <div class="schedule-cell" data-day="fri" data-slot="0"></div>
+                    
+                    <!-- Time slot 2: 9:00-10:00 -->
+                    <div class="schedule-time">9:00-10:00</div>
+                    <div class="schedule-cell" data-day="mon" data-slot="1"></div>
+                    <div class="schedule-cell" data-day="tue" data-slot="1"></div>
+                    <div class="schedule-cell" data-day="wed" data-slot="1"></div>
+                    <div class="schedule-cell" data-day="thu" data-slot="1"></div>
+                    <div class="schedule-cell" data-day="fri" data-slot="1"></div>
+                    
+                    <!-- Time slot 3: 10:00-11:00 -->
+                    <div class="schedule-time">10:00-11:00</div>
+                    <div class="schedule-cell" data-day="mon" data-slot="2"></div>
+                    <div class="schedule-cell" data-day="tue" data-slot="2"></div>
+                    <div class="schedule-cell" data-day="wed" data-slot="2"></div>
+                    <div class="schedule-cell" data-day="thu" data-slot="2"></div>
+                    <div class="schedule-cell" data-day="fri" data-slot="2"></div>
+                    
+                    <!-- Time slot 4: 11:00-12:00 -->
+                    <div class="schedule-time">11:00-12:00</div>
+                    <div class="schedule-cell" data-day="mon" data-slot="3"></div>
+                    <div class="schedule-cell" data-day="tue" data-slot="3"></div>
+                    <div class="schedule-cell" data-day="wed" data-slot="3"></div>
+                    <div class="schedule-cell" data-day="thu" data-slot="3"></div>
+                    <div class="schedule-cell" data-day="fri" data-slot="3"></div>
+                    
+                    <!-- Time slot 5: 12:00-13:00 -->
+                    <div class="schedule-time">12:00-13:00</div>
+                    <div class="schedule-cell" data-day="mon" data-slot="4"></div>
+                    <div class="schedule-cell" data-day="tue" data-slot="4"></div>
+                    <div class="schedule-cell" data-day="wed" data-slot="4"></div>
+                    <div class="schedule-cell" data-day="thu" data-slot="4"></div>
+                    <div class="schedule-cell" data-day="fri" data-slot="4"></div>
+                    
+                    <!-- Time slot 6: 14:00-15:00 -->
+                    <div class="schedule-time">14:00-15:00</div>
+                    <div class="schedule-cell" data-day="mon" data-slot="5"></div>
+                    <div class="schedule-cell" data-day="tue" data-slot="5"></div>
+                    <div class="schedule-cell" data-day="wed" data-slot="5"></div>
+                    <div class="schedule-cell" data-day="thu" data-slot="5"></div>
+                    <div class="schedule-cell" data-day="fri" data-slot="5"></div>
+                    
+                    <!-- Time slot 7: 15:00-16:00 -->
+                    <div class="schedule-time">15:00-16:00</div>
+                    <div class="schedule-cell" data-day="mon" data-slot="6"></div>
+                    <div class="schedule-cell" data-day="tue" data-slot="6"></div>
+                    <div class="schedule-cell" data-day="wed" data-slot="6"></div>
+                    <div class="schedule-cell" data-day="thu" data-slot="6"></div>
+                    <div class="schedule-cell" data-day="fri" data-slot="6"></div>
+                </div>
+            </div>
+            <div class="schedule-actions">
+                <button class="btn btn-primary" onclick="app.editScheduleSlot()">✏️ Modifica Orario</button>
+                <button class="btn btn-secondary" onclick="app.clearSchedule()">🗑️ Svuota Orario</button>
+                <button class="btn btn-secondary" onclick="app.generateScheduleFromLessons()">🔄 Genera da Lezioni</button>
             </div>
         </div>
 
