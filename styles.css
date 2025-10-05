@@ -267,7 +267,6 @@ header h1 {
     gap: 15px;
 }
 
-.lesson-item,
 .student-item {
     background: var(--card-bg);
     padding: 20px;
@@ -276,19 +275,16 @@ header h1 {
     transition: all 0.3s ease;
 }
 
-.lesson-item:hover,
 .student-item:hover {
     box-shadow: var(--shadow-hover);
     transform: translateX(5px);
 }
 
-.lesson-item h4,
 .student-item h4 {
     color: var(--primary-color);
     margin-bottom: 10px;
 }
 
-.lesson-item p,
 .student-item p {
     color: var(--text-secondary);
     margin: 5px 0;
