@@ -7,6 +7,90 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Onboarding Modal -->
+    <div id="onboarding-modal" class="modal" style="display: none;">
+        <div class="modal-content onboarding-content">
+            <h2>🎓 Benvenuto in Docente++</h2>
+            <p class="onboarding-intro">Configura il tuo profilo per iniziare</p>
+            
+            <form id="onboarding-form">
+                <div class="onboarding-section">
+                    <h3>👤 Dati Personali</h3>
+                    <div class="form-group">
+                        <label for="onboarding-first-name">Nome: *</label>
+                        <input type="text" id="onboarding-first-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="onboarding-last-name">Cognome: *</label>
+                        <input type="text" id="onboarding-last-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="onboarding-email">Email: *</label>
+                        <input type="email" id="onboarding-email" required>
+                    </div>
+                </div>
+
+                <div class="onboarding-section">
+                    <h3>🏫 Informazioni Scolastiche</h3>
+                    <div class="form-group">
+                        <label for="onboarding-school-level">Ordine di Scuola: *</label>
+                        <select id="onboarding-school-level" required>
+                            <option value="">Seleziona ordine di scuola</option>
+                            <option value="infanzia">Scuola dell'Infanzia</option>
+                            <option value="primaria">Scuola Primaria</option>
+                            <option value="secondaria-I">Scuola Secondaria di I Grado</option>
+                            <option value="secondaria-II">Scuola Secondaria di II Grado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="onboarding-school-name">Nome Scuola:</label>
+                        <input type="text" id="onboarding-school-name" placeholder="Nome dell'istituto">
+                    </div>
+                </div>
+
+                <div class="onboarding-section">
+                    <h3>📚 Discipline</h3>
+                    <div class="form-group">
+                        <label for="onboarding-subjects">Seleziona o inserisci le tue discipline:</label>
+                        <div class="subjects-container">
+                            <div id="selected-subjects-display" class="selected-subjects"></div>
+                            <input type="text" id="onboarding-subjects" placeholder="Scrivi una disciplina e premi Invio">
+                            <div id="subjects-suggestions" class="subjects-suggestions"></div>
+                        </div>
+                        <small>Premi Invio o seleziona dalla lista per aggiungere una disciplina</small>
+                    </div>
+                </div>
+
+                <div class="onboarding-section">
+                    <h3>📅 Anno Scolastico</h3>
+                    <div class="form-group">
+                        <label for="onboarding-school-year">Anno Scolastico: *</label>
+                        <select id="onboarding-school-year" required>
+                            <option value="">Seleziona anno scolastico</option>
+                            <option value="2024/2025">2024/2025</option>
+                            <option value="2025/2026">2025/2026</option>
+                            <option value="2026/2027">2026/2027</option>
+                            <option value="2027/2028">2027/2028</option>
+                            <option value="2028/2029">2028/2029</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="onboarding-year-start">Data Inizio Anno:</label>
+                        <input type="date" id="onboarding-year-start" value="2025-09-09">
+                    </div>
+                    <div class="form-group">
+                        <label for="onboarding-year-end">Data Fine Anno:</label>
+                        <input type="date" id="onboarding-year-end" value="2026-06-30">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Inizia ad Usare Docente++</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <h1>🎓 Docente++</h1>
@@ -18,6 +102,7 @@
             <button class="tab-button" data-tab="schedule">Orario</button>
             <button class="tab-button" data-tab="lessons">Lezioni</button>
             <button class="tab-button" data-tab="students">Studenti</button>
+            <button class="tab-button" data-tab="classes">Classi</button>
             <button class="tab-button" data-tab="ai-assistant">Assistente IA</button>
             <button class="tab-button" data-tab="settings">Impostazioni</button>
         </nav>
@@ -29,31 +114,6 @@
                 <label for="active-class-selector">🎯 Classe Attiva:</label>
                 <select id="active-class-selector" onchange="app.setActiveClass(this.value)">
                     <option value="">Seleziona una classe</option>
-                    <option value="1A">1A</option>
-                    <option value="1B">1B</option>
-                    <option value="1C">1C</option>
-                    <option value="1D">1D</option>
-                    <option value="1E">1E</option>
-                    <option value="2A">2A</option>
-                    <option value="2B">2B</option>
-                    <option value="2C">2C</option>
-                    <option value="2D">2D</option>
-                    <option value="2E">2E</option>
-                    <option value="3A">3A</option>
-                    <option value="3B">3B</option>
-                    <option value="3C">3C</option>
-                    <option value="3D">3D</option>
-                    <option value="3E">3E</option>
-                    <option value="4A">4A</option>
-                    <option value="4B">4B</option>
-                    <option value="4C">4C</option>
-                    <option value="4D">4D</option>
-                    <option value="4E">4E</option>
-                    <option value="5A">5A</option>
-                    <option value="5B">5B</option>
-                    <option value="5C">5C</option>
-                    <option value="5D">5D</option>
-                    <option value="5E">5E</option>
                 </select>
                 <span id="current-class-display" class="current-class-badge">Nessuna classe selezionata</span>
             </div>
@@ -175,6 +235,51 @@
             <div id="students-list" class="students-list"></div>
         </div>
 
+        <!-- Classes Tab -->
+        <div id="classes" class="tab-content">
+            <h2>Gestione Classi</h2>
+            <div class="section-actions">
+                <button class="btn btn-primary" onclick="app.showAddClassForm()">➕ Nuova Classe</button>
+            </div>
+            
+            <div id="add-class-form" class="form-container" style="display: none;">
+                <h3 id="class-form-title">Nuova Classe</h3>
+                <form id="class-form">
+                    <input type="hidden" id="class-edit-id">
+                    <div class="form-group">
+                        <label for="class-name">Nome Classe: *</label>
+                        <input type="text" id="class-name" placeholder="es. 1A, 2B, 3C" required>
+                        <small>Inserisci il nome/sezione della classe</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="class-year">Anno di Corso:</label>
+                        <select id="class-year">
+                            <option value="">Seleziona anno</option>
+                            <option value="1">1° Anno</option>
+                            <option value="2">2° Anno</option>
+                            <option value="3">3° Anno</option>
+                            <option value="4">4° Anno</option>
+                            <option value="5">5° Anno</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="class-section">Sezione:</label>
+                        <input type="text" id="class-section" placeholder="es. A, B, C" maxlength="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="class-students-count">Numero Studenti:</label>
+                        <input type="number" id="class-students-count" min="0" placeholder="es. 25">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Salva</button>
+                        <button type="button" class="btn btn-secondary" onclick="app.hideAddClassForm()">Annulla</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="classes-list" class="classes-list"></div>
+        </div>
+
         <!-- AI Assistant Tab -->
         <div id="ai-assistant" class="tab-content">
             <h2>Assistente IA OpenRouter</h2>
@@ -208,6 +313,72 @@
             <h2>Impostazioni</h2>
             <div class="settings-container">
                 <form id="settings-form" onsubmit="event.preventDefault(); app.saveSettings();">
+                    <h3>👤 Profilo Docente</h3>
+                    <div class="form-group">
+                        <label for="teacher-first-name">Nome: *</label>
+                        <input type="text" id="teacher-first-name" placeholder="Il tuo nome" autocomplete="given-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="teacher-last-name">Cognome: *</label>
+                        <input type="text" id="teacher-last-name" placeholder="Il tuo cognome" autocomplete="family-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="teacher-email">Email: *</label>
+                        <input type="email" id="teacher-email" placeholder="La tua email" autocomplete="email" required>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">🏫 Informazioni Scolastiche</h3>
+                    <div class="form-group">
+                        <label for="school-level">Ordine di Scuola: *</label>
+                        <select id="school-level" required>
+                            <option value="">Seleziona ordine di scuola</option>
+                            <option value="infanzia">Scuola dell'Infanzia</option>
+                            <option value="primaria">Scuola Primaria</option>
+                            <option value="secondaria-I">Scuola Secondaria di I Grado</option>
+                            <option value="secondaria-II">Scuola Secondaria di II Grado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="school-name">Nome Scuola:</label>
+                        <input type="text" id="school-name" placeholder="Nome della scuola" autocomplete="organization">
+                    </div>
+
+                    <h3 style="margin-top: 30px;">📚 Discipline</h3>
+                    <div class="form-group">
+                        <label for="teacher-subjects-settings">Le tue discipline:</label>
+                        <div class="subjects-container">
+                            <div id="selected-subjects-display-settings" class="selected-subjects"></div>
+                            <input type="text" id="teacher-subjects-settings" placeholder="Scrivi una disciplina e premi Invio">
+                            <div id="subjects-suggestions-settings" class="subjects-suggestions"></div>
+                        </div>
+                        <small>Premi Invio o seleziona dalla lista per aggiungere una disciplina</small>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">📅 Anno Scolastico</h3>
+                    <div class="form-group">
+                        <label for="school-year">Anno Scolastico: *</label>
+                        <select id="school-year" required>
+                            <option value="">Seleziona anno scolastico</option>
+                            <option value="2024/2025">2024/2025</option>
+                            <option value="2025/2026">2025/2026</option>
+                            <option value="2026/2027">2026/2027</option>
+                            <option value="2027/2028">2027/2028</option>
+                            <option value="2028/2029">2028/2029</option>
+                        </select>
+                        <small>Seleziona l'anno scolastico di riferimento</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="school-year-start">Data Inizio Anno:</label>
+                        <input type="date" id="school-year-start">
+                        <small>Data di inizio dell'anno scolastico (es. 09/09/2025)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="school-year-end">Data Fine Anno:</label>
+                        <input type="date" id="school-year-end">
+                        <small>Data di fine dell'anno scolastico (es. 30/06/2026)</small>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">🤖 Integrazione IA</h3>
                     <div class="form-group">
                         <label for="openrouter-api-key">OpenRouter API Key:</label>
                         <div class="api-key-input-container">
@@ -222,28 +393,7 @@
                         <input type="text" id="openrouter-model-id" placeholder="es. alibaba/tongyi-deepresearch-30b-a3b" autocomplete="off">
                         <small>ID del modello OpenRouter da utilizzare (default: alibaba/tongyi-deepresearch-30b-a3b)</small>
                     </div>
-                    <div class="form-group">
-                        <label for="teacher-name">Nome Insegnante:</label>
-                        <input type="text" id="teacher-name" placeholder="Il tuo nome" autocomplete="name">
-                    </div>
-                    <div class="form-group">
-                        <label for="school-name">Nome Scuola:</label>
-                        <input type="text" id="school-name" placeholder="Nome della scuola" autocomplete="organization">
-                    </div>
-                    <div class="form-group">
-                        <label for="school-year">Anno Scolastico:</label>
-                        <select id="school-year">
-                            <option value="">Seleziona anno scolastico</option>
-                            <option value="2023/2024">2023/2024</option>
-                            <option value="2024/2025">2024/2025</option>
-                            <option value="2025/2026">2025/2026</option>
-                            <option value="2026/2027">2026/2027</option>
-                            <option value="2027/2028">2027/2028</option>
-                            <option value="2028/2029">2028/2029</option>
-                            <option value="2029/2030">2029/2030</option>
-                        </select>
-                        <small>Seleziona l'anno scolastico di riferimento</small>
-                    </div>
+
                     <button type="submit" class="btn btn-primary">Salva Impostazioni</button>
                 </form>
                 <div style="margin-top: 20px;">

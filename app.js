@@ -5,6 +5,8 @@ class DocentePlusPlus {
     constructor() {
         this.lessons = [];
         this.students = [];
+        this.classes = [];
+        this.subjects = [];
         this.settings = {};
         this.chatMessages = [];
         this.activeClass = '';
@@ -20,6 +22,11 @@ class DocentePlusPlus {
         // Load data from localStorage
         this.loadData();
         
+        // Check if onboarding is needed
+        if (!this.isOnboardingComplete()) {
+            this.showOnboarding();
+        }
+        
         // Set up event listeners
         this.setupEventListeners();
         
@@ -27,9 +34,11 @@ class DocentePlusPlus {
         this.renderDashboard();
         this.renderLessons();
         this.renderStudents();
+        this.renderClasses();
         this.renderSchedule();
         this.loadSettings();
         this.loadActiveClass();
+        this.updateClassSelectors();
         
         console.log('Docente++ initialized successfully');
     }
@@ -60,6 +69,24 @@ class DocentePlusPlus {
             });
         }
 
+        // Class form
+        const classForm = document.getElementById('class-form');
+        if (classForm) {
+            classForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.saveClass();
+            });
+        }
+
+        // Onboarding form
+        const onboardingForm = document.getElementById('onboarding-form');
+        if (onboardingForm) {
+            onboardingForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.completeOnboarding();
+            });
+        }
+
         // AI input
         const aiInput = document.getElementById('ai-input');
         if (aiInput) {
@@ -78,6 +105,189 @@ class DocentePlusPlus {
                 this.saveScheduleCell();
             });
         }
+
+        // Subject inputs
+        this.setupSubjectInput('onboarding-subjects', 'subjects-suggestions', 'selected-subjects-display');
+        this.setupSubjectInput('teacher-subjects-settings', 'subjects-suggestions-settings', 'selected-subjects-display-settings');
+    }
+
+    // Onboarding methods
+    isOnboardingComplete() {
+        return localStorage.getItem('onboarding-complete') === 'true';
+    }
+
+    showOnboarding() {
+        const modal = document.getElementById('onboarding-modal');
+        if (modal) {
+            modal.style.display = 'flex';
+            
+            // Prefill email if available
+            const email = localStorage.getItem('teacher-email');
+            if (email) {
+                document.getElementById('onboarding-email').value = email;
+            }
+        }
+    }
+
+    completeOnboarding() {
+        // Get all form values
+        const firstName = document.getElementById('onboarding-first-name').value;
+        const lastName = document.getElementById('onboarding-last-name').value;
+        const email = document.getElementById('onboarding-email').value;
+        const schoolLevel = document.getElementById('onboarding-school-level').value;
+        const schoolName = document.getElementById('onboarding-school-name').value;
+        const schoolYear = document.getElementById('onboarding-school-year').value;
+        const yearStart = document.getElementById('onboarding-year-start').value;
+        const yearEnd = document.getElementById('onboarding-year-end').value;
+
+        // Save to localStorage
+        localStorage.setItem('teacher-first-name', firstName);
+        localStorage.setItem('teacher-last-name', lastName);
+        localStorage.setItem('teacher-email', email);
+        localStorage.setItem('school-level', schoolLevel);
+        localStorage.setItem('school-name', schoolName);
+        localStorage.setItem('school-year', schoolYear);
+        localStorage.setItem('school-year-start', yearStart);
+        localStorage.setItem('school-year-end', yearEnd);
+        localStorage.setItem('teacher-subjects', JSON.stringify(this.subjects));
+        localStorage.setItem('onboarding-complete', 'true');
+
+        // Hide onboarding modal
+        document.getElementById('onboarding-modal').style.display = 'none';
+
+        // Load settings to reflect changes
+        this.loadSettings();
+        this.renderDashboard();
+
+        // Show welcome message
+        alert(`Benvenuto/a ${firstName}! Il tuo profilo è stato configurato con successo.`);
+    }
+
+    // Subject management methods
+    getCommonSubjects() {
+        return [
+            'Italiano',
+            'Matematica',
+            'Scienze',
+            'Storia',
+            'Geografia',
+            'Inglese',
+            'Francese',
+            'Spagnolo',
+            'Tedesco',
+            'Arte e Immagine',
+            'Musica',
+            'Educazione Fisica',
+            'Tecnologia',
+            'Religione',
+            'Educazione Civica',
+            'Fisica',
+            'Chimica',
+            'Biologia',
+            'Filosofia',
+            'Latino',
+            'Greco',
+            'Informatica',
+            'Diritto ed Economia'
+        ];
+    }
+
+    setupSubjectInput(inputId, suggestionsId, displayId) {
+        const input = document.getElementById(inputId);
+        const suggestionsDiv = document.getElementById(suggestionsId);
+        const displayDiv = document.getElementById(displayId);
+
+        if (!input || !suggestionsDiv || !displayDiv) return;
+
+        // Render existing subjects
+        this.renderSubjects(displayDiv);
+
+        // Handle input
+        input.addEventListener('input', (e) => {
+            const value = e.target.value.trim().toLowerCase();
+            if (value.length > 0) {
+                const commonSubjects = this.getCommonSubjects();
+                const filtered = commonSubjects.filter(s => 
+                    s.toLowerCase().includes(value) && 
+                    !this.subjects.includes(s)
+                );
+
+                if (filtered.length > 0) {
+                    suggestionsDiv.innerHTML = filtered.map(subject => 
+                        `<div class="subject-suggestion-item" data-subject="${subject}">${subject}</div>`
+                    ).join('');
+                    suggestionsDiv.classList.add('active');
+
+                    // Add click handlers to suggestions
+                    suggestionsDiv.querySelectorAll('.subject-suggestion-item').forEach(item => {
+                        item.addEventListener('click', () => {
+                            this.addSubject(item.dataset.subject);
+                            this.renderSubjects(displayDiv);
+                            input.value = '';
+                            suggestionsDiv.classList.remove('active');
+                        });
+                    });
+                } else {
+                    suggestionsDiv.classList.remove('active');
+                }
+            } else {
+                suggestionsDiv.classList.remove('active');
+            }
+        });
+
+        // Handle Enter key
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const value = input.value.trim();
+                if (value) {
+                    this.addSubject(value);
+                    this.renderSubjects(displayDiv);
+                    input.value = '';
+                    suggestionsDiv.classList.remove('active');
+                }
+            }
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!input.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+                suggestionsDiv.classList.remove('active');
+            }
+        });
+    }
+
+    addSubject(subject) {
+        const normalizedSubject = subject.charAt(0).toUpperCase() + subject.slice(1).toLowerCase();
+        if (!this.subjects.includes(normalizedSubject)) {
+            this.subjects.push(normalizedSubject);
+        }
+    }
+
+    removeSubject(subject) {
+        this.subjects = this.subjects.filter(s => s !== subject);
+    }
+
+    renderSubjects(displayDiv) {
+        if (!displayDiv) return;
+
+        if (this.subjects.length === 0) {
+            displayDiv.innerHTML = '<span style="color: var(--text-secondary); padding: 10px;">Nessuna disciplina aggiunta</span>';
+        } else {
+            displayDiv.innerHTML = this.subjects.map(subject => `
+                <span class="subject-tag">
+                    ${subject}
+                    <span class="remove-subject" onclick="app.removeSubject('${subject}'); app.renderAllSubjects();">×</span>
+                </span>
+            `).join('');
+        }
+    }
+
+        renderAllSubjects() {
+        const displayOnboarding = document.getElementById('selected-subjects-display');
+        const displaySettings = document.getElementById('selected-subjects-display-settings');
+        this.renderSubjects(displayOnboarding);
+        this.renderSubjects(displaySettings);
     }
 
     switchTab(tabName) {
@@ -358,6 +568,156 @@ ${lessonData.evaluation || 'N/D'}
         `).join('');
     }
 
+    // Class Management methods
+    showAddClassForm() {
+        document.getElementById('add-class-form').style.display = 'block';
+        document.getElementById('class-form-title').textContent = 'Nuova Classe';
+        document.getElementById('class-edit-id').value = '';
+    }
+
+    hideAddClassForm() {
+        document.getElementById('add-class-form').style.display = 'none';
+        document.getElementById('class-form').reset();
+        document.getElementById('class-edit-id').value = '';
+    }
+
+    saveClass() {
+        const editId = document.getElementById('class-edit-id').value;
+        const className = document.getElementById('class-name').value.trim();
+        const year = document.getElementById('class-year').value;
+        const section = document.getElementById('class-section').value.trim();
+        const studentsCount = document.getElementById('class-students-count').value;
+
+        if (!className) {
+            alert('Il nome della classe è obbligatorio');
+            return;
+        }
+
+        if (editId) {
+            // Edit existing class
+            const classIndex = this.classes.findIndex(c => c.id === parseInt(editId));
+            if (classIndex !== -1) {
+                this.classes[classIndex] = {
+                    ...this.classes[classIndex],
+                    name: className,
+                    year: year,
+                    section: section,
+                    studentsCount: studentsCount ? parseInt(studentsCount) : 0,
+                    updatedAt: new Date().toISOString()
+                };
+            }
+        } else {
+            // Add new class
+            const newClass = {
+                id: Date.now(),
+                name: className,
+                year: year,
+                section: section,
+                studentsCount: studentsCount ? parseInt(studentsCount) : 0,
+                createdAt: new Date().toISOString()
+            };
+            this.classes.push(newClass);
+        }
+
+        this.saveData();
+        this.renderClasses();
+        this.updateClassSelectors();
+        this.hideAddClassForm();
+    }
+
+    editClass(id) {
+        const classToEdit = this.classes.find(c => c.id === id);
+        if (!classToEdit) return;
+
+        document.getElementById('add-class-form').style.display = 'block';
+        document.getElementById('class-form-title').textContent = 'Modifica Classe';
+        document.getElementById('class-edit-id').value = classToEdit.id;
+        document.getElementById('class-name').value = classToEdit.name;
+        document.getElementById('class-year').value = classToEdit.year || '';
+        document.getElementById('class-section').value = classToEdit.section || '';
+        document.getElementById('class-students-count').value = classToEdit.studentsCount || '';
+
+        // Scroll to form
+        document.getElementById('add-class-form').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    deleteClass(id) {
+        const classToDelete = this.classes.find(c => c.id === id);
+        if (!classToDelete) return;
+
+        if (confirm(`Sei sicuro di voler eliminare la classe ${classToDelete.name}?`)) {
+            this.classes = this.classes.filter(c => c.id !== id);
+            
+            // If this was the active class, clear it
+            if (this.activeClass === classToDelete.name) {
+                this.activeClass = '';
+                localStorage.removeItem('active-class');
+            }
+
+            this.saveData();
+            this.renderClasses();
+            this.updateClassSelectors();
+            this.renderDashboard();
+        }
+    }
+
+    renderClasses() {
+        const classesList = document.getElementById('classes-list');
+        
+        if (!classesList) return;
+
+        if (this.classes.length === 0) {
+            classesList.innerHTML = `
+                <div class="empty-state">
+                    <h3>Nessuna classe configurata</h3>
+                    <p>Inizia aggiungendo le tue classi per organizzare al meglio la didattica</p>
+                </div>
+            `;
+            return;
+        }
+
+        classesList.innerHTML = this.classes
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(cls => `
+                <div class="class-item">
+                    <h4>${cls.name}</h4>
+                    ${cls.year ? `<p><strong>Anno:</strong> ${cls.year}°</p>` : ''}
+                    ${cls.section ? `<p><strong>Sezione:</strong> ${cls.section}</p>` : ''}
+                    <p><strong>Studenti:</strong> ${cls.studentsCount || 0}</p>
+                    <div class="item-actions">
+                        <button class="btn btn-secondary" onclick="app.editClass(${cls.id})">Modifica</button>
+                        <button class="btn btn-danger" onclick="app.deleteClass(${cls.id})">Elimina</button>
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    updateClassSelectors() {
+        const selector = document.getElementById('active-class-selector');
+        if (!selector) return;
+
+        const currentValue = selector.value;
+        
+        // Clear and rebuild options
+        selector.innerHTML = '<option value="">Seleziona una classe</option>';
+        
+        this.classes
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .forEach(cls => {
+                const option = document.createElement('option');
+                option.value = cls.name;
+                option.textContent = cls.name;
+                selector.appendChild(option);
+            });
+
+        // Restore selection if it still exists
+        if (currentValue && this.classes.some(c => c.name === currentValue)) {
+            selector.value = currentValue;
+        } else if (this.activeClass && this.classes.some(c => c.name === this.activeClass)) {
+            selector.value = this.activeClass;
+        }
+    }
+
     // AI Assistant methods
     handleFileSelect(event) {
         const file = event.target.files[0];
@@ -516,9 +876,14 @@ ${lessonData.evaluation || 'N/D'}
     saveSettings() {
         const apiKey = document.getElementById('openrouter-api-key').value;
         const modelId = document.getElementById('openrouter-model-id').value;
-        const teacherName = document.getElementById('teacher-name').value;
+        const firstName = document.getElementById('teacher-first-name').value;
+        const lastName = document.getElementById('teacher-last-name').value;
+        const email = document.getElementById('teacher-email').value;
+        const schoolLevel = document.getElementById('school-level').value;
         const schoolName = document.getElementById('school-name').value;
         const schoolYear = document.getElementById('school-year').value;
+        const yearStart = document.getElementById('school-year-start').value;
+        const yearEnd = document.getElementById('school-year-end').value;
 
         if (apiKey) {
             localStorage.setItem('openrouter-api-key', apiKey);
@@ -526,8 +891,17 @@ ${lessonData.evaluation || 'N/D'}
         if (modelId) {
             localStorage.setItem('openrouter-model-id', modelId);
         }
-        if (teacherName) {
-            localStorage.setItem('teacher-name', teacherName);
+        if (firstName) {
+            localStorage.setItem('teacher-first-name', firstName);
+        }
+        if (lastName) {
+            localStorage.setItem('teacher-last-name', lastName);
+        }
+        if (email) {
+            localStorage.setItem('teacher-email', email);
+        }
+        if (schoolLevel) {
+            localStorage.setItem('school-level', schoolLevel);
         }
         if (schoolName) {
             localStorage.setItem('school-name', schoolName);
@@ -535,6 +909,15 @@ ${lessonData.evaluation || 'N/D'}
         if (schoolYear) {
             localStorage.setItem('school-year', schoolYear);
         }
+        if (yearStart) {
+            localStorage.setItem('school-year-start', yearStart);
+        }
+        if (yearEnd) {
+            localStorage.setItem('school-year-end', yearEnd);
+        }
+
+        // Save subjects
+        localStorage.setItem('teacher-subjects', JSON.stringify(this.subjects));
 
         this.renderDashboard();
         alert('Impostazioni salvate con successo!');
@@ -543,9 +926,15 @@ ${lessonData.evaluation || 'N/D'}
     loadSettings() {
         const apiKey = localStorage.getItem('openrouter-api-key');
         const modelId = localStorage.getItem('openrouter-model-id');
-        const teacherName = localStorage.getItem('teacher-name');
+        const firstName = localStorage.getItem('teacher-first-name');
+        const lastName = localStorage.getItem('teacher-last-name');
+        const email = localStorage.getItem('teacher-email');
+        const schoolLevel = localStorage.getItem('school-level');
         const schoolName = localStorage.getItem('school-name');
         const schoolYear = localStorage.getItem('school-year');
+        const yearStart = localStorage.getItem('school-year-start');
+        const yearEnd = localStorage.getItem('school-year-end');
+        const subjectsData = localStorage.getItem('teacher-subjects');
 
         if (apiKey) {
             document.getElementById('openrouter-api-key').value = apiKey;
@@ -553,14 +942,46 @@ ${lessonData.evaluation || 'N/D'}
         if (modelId) {
             document.getElementById('openrouter-model-id').value = modelId;
         }
-        if (teacherName) {
-            document.getElementById('teacher-name').value = teacherName;
+        if (firstName) {
+            const firstNameInput = document.getElementById('teacher-first-name');
+            if (firstNameInput) firstNameInput.value = firstName;
+        }
+        if (lastName) {
+            const lastNameInput = document.getElementById('teacher-last-name');
+            if (lastNameInput) lastNameInput.value = lastName;
+        }
+        if (email) {
+            const emailInput = document.getElementById('teacher-email');
+            if (emailInput) emailInput.value = email;
+        }
+        if (schoolLevel) {
+            const schoolLevelInput = document.getElementById('school-level');
+            if (schoolLevelInput) schoolLevelInput.value = schoolLevel;
         }
         if (schoolName) {
             document.getElementById('school-name').value = schoolName;
         }
         if (schoolYear) {
             document.getElementById('school-year').value = schoolYear;
+        }
+        if (yearStart) {
+            const yearStartInput = document.getElementById('school-year-start');
+            if (yearStartInput) yearStartInput.value = yearStart;
+        }
+        if (yearEnd) {
+            const yearEndInput = document.getElementById('school-year-end');
+            if (yearEndInput) yearEndInput.value = yearEnd;
+        }
+
+        // Load subjects
+        if (subjectsData) {
+            try {
+                this.subjects = JSON.parse(subjectsData);
+                this.renderAllSubjects();
+            } catch (e) {
+                console.error('Error loading subjects:', e);
+                this.subjects = [];
+            }
         }
 
         // Initialize API key status icon
@@ -818,12 +1239,14 @@ ${lessonData.evaluation || 'N/D'}
     saveData() {
         localStorage.setItem('docente-plus-lessons', JSON.stringify(this.lessons));
         localStorage.setItem('docente-plus-students', JSON.stringify(this.students));
+        localStorage.setItem('docente-plus-classes', JSON.stringify(this.classes));
         localStorage.setItem('docente-plus-schedule', JSON.stringify(this.schedule));
     }
 
     loadData() {
         const lessonsData = localStorage.getItem('docente-plus-lessons');
         const studentsData = localStorage.getItem('docente-plus-students');
+        const classesData = localStorage.getItem('docente-plus-classes');
         const scheduleData = localStorage.getItem('docente-plus-schedule');
 
         if (lessonsData) {
@@ -844,6 +1267,15 @@ ${lessonData.evaluation || 'N/D'}
             }
         }
 
+        if (classesData) {
+            try {
+                this.classes = JSON.parse(classesData);
+            } catch (e) {
+                console.error('Error loading classes:', e);
+                this.classes = [];
+            }
+        }
+
         if (scheduleData) {
             try {
                 this.schedule = JSON.parse(scheduleData);
@@ -858,7 +1290,19 @@ ${lessonData.evaluation || 'N/D'}
         const data = {
             lessons: this.lessons,
             students: this.students,
+            classes: this.classes,
+            subjects: this.subjects,
             schedule: this.schedule,
+            teacherProfile: {
+                firstName: localStorage.getItem('teacher-first-name'),
+                lastName: localStorage.getItem('teacher-last-name'),
+                email: localStorage.getItem('teacher-email'),
+                schoolLevel: localStorage.getItem('school-level'),
+                schoolName: localStorage.getItem('school-name'),
+                schoolYear: localStorage.getItem('school-year'),
+                schoolYearStart: localStorage.getItem('school-year-start'),
+                schoolYearEnd: localStorage.getItem('school-year-end')
+            },
             exportDate: new Date().toISOString()
         };
 
@@ -894,14 +1338,35 @@ ${lessonData.evaluation || 'N/D'}
                     if (data.students) {
                         this.students = data.students;
                     }
+                    if (data.classes) {
+                        this.classes = data.classes;
+                    }
+                    if (data.subjects) {
+                        this.subjects = data.subjects;
+                        localStorage.setItem('teacher-subjects', JSON.stringify(this.subjects));
+                    }
                     if (data.schedule) {
                         this.schedule = data.schedule;
+                    }
+                    if (data.teacherProfile) {
+                        const profile = data.teacherProfile;
+                        if (profile.firstName) localStorage.setItem('teacher-first-name', profile.firstName);
+                        if (profile.lastName) localStorage.setItem('teacher-last-name', profile.lastName);
+                        if (profile.email) localStorage.setItem('teacher-email', profile.email);
+                        if (profile.schoolLevel) localStorage.setItem('school-level', profile.schoolLevel);
+                        if (profile.schoolName) localStorage.setItem('school-name', profile.schoolName);
+                        if (profile.schoolYear) localStorage.setItem('school-year', profile.schoolYear);
+                        if (profile.schoolYearStart) localStorage.setItem('school-year-start', profile.schoolYearStart);
+                        if (profile.schoolYearEnd) localStorage.setItem('school-year-end', profile.schoolYearEnd);
                     }
                     
                     this.saveData();
                     this.renderLessons();
                     this.renderStudents();
+                    this.renderClasses();
                     this.renderSchedule();
+                    this.updateClassSelectors();
+                    this.loadSettings();
                     this.renderDashboard();
                     
                     alert('Dati importati con successo!');

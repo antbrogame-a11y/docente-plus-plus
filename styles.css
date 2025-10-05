@@ -818,6 +818,12 @@ header h1 {
     animation: slideUp 0.3s ease;
 }
 
+/* Onboarding modal has wider content */
+#onboarding-modal .modal-content {
+    max-width: 800px;
+    border-radius: 16px;
+}
+
 @keyframes slideUp {
     from {
         opacity: 0;
@@ -832,6 +838,145 @@ header h1 {
 .modal-content h3 {
     margin-bottom: 20px;
     color: var(--text-primary);
+}
+
+/* Onboarding Styles */
+.onboarding-content h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.onboarding-intro {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.onboarding-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: var(--bg-color);
+    border-radius: 12px;
+}
+
+.onboarding-section h3 {
+    color: var(--text-primary);
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+/* Subject Management */
+.subjects-container {
+    position: relative;
+}
+
+.selected-subjects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    min-height: 40px;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+}
+
+.subject-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.subject-tag .remove-subject {
+    cursor: pointer;
+    font-weight: bold;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.subject-tag .remove-subject:hover {
+    opacity: 1;
+}
+
+.subjects-suggestions {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: var(--shadow);
+    display: none;
+}
+
+.subjects-suggestions.active {
+    display: block;
+}
+
+.subject-suggestion-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.subject-suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.subject-suggestion-item:hover {
+    background: var(--bg-color);
+}
+
+/* Classes List */
+.classes-list {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.class-item {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--primary-color);
+}
+
+.class-item:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.class-item h4 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 1.3em;
+}
+
+.class-item p {
+    color: var(--text-secondary);
+    margin: 5px 0;
+    font-size: 0.95em;
+}
+
+.class-item .item-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 8px;
 }
 
 /* Responsive Schedule */
@@ -852,6 +997,20 @@ header h1 {
     .schedule-table td {
         min-width: 100px;
         padding: 6px;
+    }
+
+    .modal-content {
+        margin: 10px;
+        padding: 20px;
+        max-height: 95vh;
+    }
+
+    .onboarding-section {
+        padding: 15px;
+    }
+
+    .classes-list {
+        grid-template-columns: 1fr;
     }
 }
 

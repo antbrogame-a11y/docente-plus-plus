@@ -8,13 +8,18 @@ App per un insegnamento basato su IA, evoluzione del progetto docente-plus con i
 
 ### Funzionalità Principali
 
-- **Dashboard Intuitiva**: Panoramica rapida di lezioni, studenti e attività
+- **🎯 Onboarding Guidato**: Configurazione iniziale del profilo docente al primo accesso
+- **👤 Profilo Docente**: Nome, cognome, email e informazioni scolastiche complete
+- **🏫 Gestione Classi**: Crea, modifica ed elimina le tue classi con dettagli completi
+- **📚 Discipline**: Gestione materie insegnate con autocomplete intelligente
+- **📅 Anno Scolastico**: Configurazione anno scolastico con date inizio/fine personalizzabili
+- **Dashboard Intuitiva**: Panoramica rapida di lezioni, studenti e attività con selezione classe attiva
 - **Gestione Lezioni**: Crea, visualizza ed elimina lezioni programmate
 - **Gestione Studenti**: Organizza e gestisci i tuoi studenti
 - **Assistente IA OpenRouter**: Ottieni aiuto per pianificazione didattica, creazione materiali e idee innovative
 - **Generazione Automatica**: Crea piani di lezione completi con l'IA
 - **Persistenza Dati**: Tutti i dati salvati localmente nel browser
-- **Import/Export**: Backup e ripristino dei dati
+- **Import/Export**: Backup e ripristino completo di profilo, classi e dati
 
 ### Funzionalità IA
 
@@ -53,28 +58,59 @@ L'assistente IA OpenRouter può aiutarti con:
      ```
    - Poi naviga su `http://localhost:8000`
 
-3. **Configura l'API Key e il Model ID**:
+3. **Primo accesso - Onboarding**:
+   - Al primo avvio, compila il form di benvenuto con:
+     - Nome, cognome ed email
+     - Ordine di scuola (Infanzia, Primaria, Secondaria I/II grado)
+     - Discipline insegnate (con autocomplete)
+     - Anno scolastico con date personalizzabili (default: 09/09/2025 - 30/06/2026)
+   - Clicca "Inizia ad Usare Docente++"
+
+4. **Configura le tue classi**:
+   - Vai nella sezione "Classi"
+   - Aggiungi le tue classi con nome, anno, sezione e numero studenti
+   - Modifica o elimina classi quando necessario
+
+5. **Configura l'API Key** (opzionale, per usare l'IA):
    - Vai nella sezione "Impostazioni"
    - Inserisci la tua OpenRouter API Key
-   - (Opzionale) Inserisci il Model ID del modello OpenRouter che desideri utilizzare
+   - (Opzionale) Inserisci il Model ID del modello OpenRouter
    - Clicca "Verifica API Key" per testare la configurazione
    - Salva le impostazioni
 
-4. **Inizia ad usare l'app**:
+6. **Inizia ad usare l'app**:
+   - Seleziona la classe attiva dalla Dashboard
    - Aggiungi studenti e lezioni
    - Usa l'assistente IA per generare contenuti
    - Esporta i tuoi dati per backup
 
 ## 📖 Guida all'Uso
 
-### Dashboard
+### 🎓 Onboarding Iniziale
+Al primo accesso, l'app ti guiderà attraverso la configurazione del profilo:
+1. **Dati Personali**: Nome, cognome ed email
+2. **Informazioni Scolastiche**: Ordine di scuola e nome istituto
+3. **Discipline**: Seleziona o inserisci le materie che insegni
+4. **Anno Scolastico**: Scegli l'anno e personalizza le date di inizio/fine
+
+Tutti i dati vengono salvati automaticamente in localStorage.
+
+### 🏫 Gestione Classi
+1. Clicca "Nuova Classe" nella sezione Classi
+2. Inserisci nome classe (es. 3A, 5B)
+3. (Opzionale) Specifica anno di corso, sezione e numero studenti
+4. Le classi create saranno disponibili nel selettore della Dashboard
+5. Modifica o elimina classi in qualsiasi momento
+
+### 📊 Dashboard
 Visualizza statistiche rapide su:
 - Numero di lezioni programmate
 - Totale studenti
 - Valutazioni pendenti
 - Stato connessione IA
+- **Classe Attiva**: Seleziona la classe corrente per contestualizzare l'assistente IA
 
-### Gestione Lezioni
+### 📚 Gestione Lezioni
 1. Clicca "Nuova Lezione" per creare manualmente
 2. Oppure "Genera con IA" per una generazione assistita
 3. Compila i campi richiesti
