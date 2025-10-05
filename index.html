@@ -90,6 +90,11 @@
             </div>
             
             <div class="lesson-filters">
+                <select id="filter-view" onchange="app.renderLessons()">
+                    <option value="all">📋 Tutte le lezioni</option>
+                    <option value="upcoming">📅 Prossime lezioni</option>
+                    <option value="past">📚 Storico lezioni</option>
+                </select>
                 <select id="filter-status" onchange="app.renderLessons()">
                     <option value="">Tutti gli stati</option>
                     <option value="planned">📅 Pianificate</option>

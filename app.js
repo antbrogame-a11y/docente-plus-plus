@@ -82,7 +82,17 @@ class DocentePlusPlus {
 
     // Dashboard methods
     renderDashboard() {
-        document.getElementById('lesson-count').textContent = this.lessons.length;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        // Calculate upcoming lessons (lessons with date >= today)
+        const upcomingLessons = this.lessons.filter(lesson => {
+            const lessonDate = new Date(lesson.date);
+            lessonDate.setHours(0, 0, 0, 0);
+            return lessonDate >= today;
+        });
+        
+        document.getElementById('lesson-count').textContent = upcomingLessons.length;
         document.getElementById('student-count').textContent = this.students.length;
         document.getElementById('evaluation-count').textContent = '0';
         
@@ -342,12 +352,32 @@ class DocentePlusPlus {
         const lessonsList = document.getElementById('lessons-list');
         
         // Get filter values
+        const filterView = document.getElementById('filter-view')?.value || 'all';
         const filterStatus = document.getElementById('filter-status')?.value || '';
         const filterClass = document.getElementById('filter-class')?.value || '';
         const filterType = document.getElementById('filter-type')?.value || '';
         
         // Filter lessons
         let filteredLessons = this.lessons;
+        
+        // Filter by view (upcoming vs past)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        if (filterView === 'upcoming') {
+            filteredLessons = filteredLessons.filter(l => {
+                const lessonDate = new Date(l.date);
+                lessonDate.setHours(0, 0, 0, 0);
+                return lessonDate >= today;
+            });
+        } else if (filterView === 'past') {
+            filteredLessons = filteredLessons.filter(l => {
+                const lessonDate = new Date(l.date);
+                lessonDate.setHours(0, 0, 0, 0);
+                return lessonDate < today;
+            });
+        }
+        
         if (filterStatus) {
             filteredLessons = filteredLessons.filter(l => l.status === filterStatus);
         }
@@ -391,10 +421,19 @@ class DocentePlusPlus {
             return labels[type || 'normal'] || '📝 Standard';
         };
 
+        // Check if lesson is in the past
+        const isPastLesson = (lessonDate) => {
+            const dateObj = new Date(lessonDate);
+            dateObj.setHours(0, 0, 0, 0);
+            return dateObj < today;
+        };
+
         lessonsList.innerHTML = filteredLessons
             .sort((a, b) => new Date(b.date) - new Date(a.date))
-            .map(lesson => `
-                <div class="lesson-item lesson-status-${lesson.status || 'planned'}">
+            .map(lesson => {
+                const pastClass = isPastLesson(lesson.date) ? ' lesson-past' : ' lesson-upcoming';
+                return `
+                <div class="lesson-item lesson-status-${lesson.status || 'planned'}${pastClass}">
                     <div class="lesson-header">
                         <h4>${lesson.title}</h4>
                         <span class="lesson-status-badge">${getStatusLabel(lesson.status || 'planned')}</span>
@@ -414,7 +453,7 @@ class DocentePlusPlus {
                         <button class="btn btn-sm btn-danger" onclick="app.deleteLesson(${lesson.id})">Elimina</button>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
     }
 
     async generateLessonWithAI() {

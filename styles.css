@@ -806,3 +806,24 @@ header h1 {
     padding: 6px 12px;
     font-size: 0.85em;
 }
+
+/* Lesson History Indicators */
+.lesson-past {
+    opacity: 0.85;
+}
+
+.lesson-upcoming {
+    border-left-width: 5px;
+}
+
+.lesson-past .lesson-header h4::after {
+    content: ' 📚';
+    font-size: 0.8em;
+    opacity: 0.6;
+}
+
+.lesson-upcoming .lesson-header h4::after {
+    content: ' 🔜';
+    font-size: 0.8em;
+    opacity: 0.6;
+}
