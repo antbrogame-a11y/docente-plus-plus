@@ -623,3 +623,235 @@ header h1 {
 .selected-file-display .remove-file-btn:hover {
     background: #c0392b;
 }
+
+/* Schedule Styles */
+.schedule-controls {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.view-toggle {
+    display: flex;
+    gap: 10px;
+}
+
+#daily-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#daily-selector label {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+#daily-selector select {
+    padding: 8px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1em;
+    background: white;
+    cursor: pointer;
+}
+
+.schedule-container {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+}
+
+.schedule-table th {
+    background: var(--primary-color);
+    color: white;
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid var(--primary-color);
+}
+
+.schedule-table th:first-child {
+    border-top-left-radius: 8px;
+}
+
+.schedule-table th:last-child {
+    border-top-right-radius: 8px;
+}
+
+.schedule-table td {
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    min-width: 120px;
+    min-height: 60px;
+    vertical-align: top;
+    background: white;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.schedule-table td:hover {
+    background: var(--bg-color);
+    box-shadow: inset 0 0 0 2px var(--primary-color);
+}
+
+.schedule-table .time-cell {
+    background: var(--bg-color);
+    font-weight: 600;
+    text-align: center;
+    cursor: default;
+    min-width: 80px;
+}
+
+.schedule-table .time-cell:hover {
+    background: var(--bg-color);
+    box-shadow: none;
+}
+
+.schedule-cell {
+    min-height: 60px;
+}
+
+.schedule-cell.has-content {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.schedule-cell.has-content:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+}
+
+.cell-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cell-activity-icon {
+    font-size: 1.2em;
+    margin-bottom: 4px;
+}
+
+.cell-class {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.9em;
+}
+
+.cell-subject {
+    color: var(--text-primary);
+    font-size: 0.85em;
+}
+
+.cell-notes-indicator {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 0.8em;
+    color: var(--accent-color);
+    cursor: help;
+}
+
+.activity-lesson {
+    border-left: 4px solid #4a90e2;
+}
+
+.activity-lab {
+    border-left: 4px solid #50c878;
+}
+
+.activity-test {
+    border-left: 4px solid #e74c3c;
+}
+
+.activity-exercise {
+    border-left: 4px solid #f39c12;
+}
+
+.activity-project {
+    border-left: 4px solid #9b59b6;
+}
+
+.activity-discussion {
+    border-left: 4px solid #3498db;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content h3 {
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+/* Responsive Schedule */
+@media (max-width: 768px) {
+    .schedule-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .view-toggle {
+        flex-direction: column;
+    }
+    
+    .schedule-table {
+        font-size: 0.85em;
+    }
+    
+    .schedule-table td {
+        min-width: 100px;
+        padding: 6px;
+    }
+}
+

@@ -9,6 +9,10 @@ class DocentePlusPlus {
         this.chatMessages = [];
         this.activeClass = '';
         this.selectedFile = null;
+        this.schedule = {};
+        this.scheduleView = 'weekly';
+        this.selectedDay = 0;
+        this.editingCell = null;
         this.init();
     }
 
@@ -23,6 +27,7 @@ class DocentePlusPlus {
         this.renderDashboard();
         this.renderLessons();
         this.renderStudents();
+        this.renderSchedule();
         this.loadSettings();
         this.loadActiveClass();
         
@@ -62,6 +67,15 @@ class DocentePlusPlus {
                 if (e.key === 'Enter' && e.ctrlKey) {
                     this.sendAIMessage();
                 }
+            });
+        }
+
+        // Schedule edit form
+        const scheduleEditForm = document.getElementById('schedule-edit-form');
+        if (scheduleEditForm) {
+            scheduleEditForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.saveScheduleCell();
             });
         }
     }
@@ -618,15 +632,199 @@ ${lessonData.evaluation || 'N/D'}
         }
     }
 
+    // Schedule management methods
+    setScheduleView(view) {
+        this.scheduleView = view;
+        const weeklyBtn = document.getElementById('weekly-view-btn');
+        const dailyBtn = document.getElementById('daily-view-btn');
+        const dailySelector = document.getElementById('daily-selector');
+
+        if (view === 'weekly') {
+            weeklyBtn.classList.add('btn-primary');
+            weeklyBtn.classList.remove('btn-secondary');
+            dailyBtn.classList.remove('btn-primary');
+            dailyBtn.classList.add('btn-secondary');
+            dailySelector.style.display = 'none';
+        } else {
+            dailyBtn.classList.add('btn-primary');
+            dailyBtn.classList.remove('btn-secondary');
+            weeklyBtn.classList.remove('btn-primary');
+            weeklyBtn.classList.add('btn-secondary');
+            dailySelector.style.display = 'flex';
+        }
+
+        this.renderSchedule();
+    }
+
+    renderSchedule() {
+        const container = document.getElementById('schedule-container');
+        if (!container) return;
+
+        const days = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì'];
+        const hours = [
+            { start: '08:00', end: '09:00', label: '1ª ora (8-9)' },
+            { start: '09:00', end: '10:00', label: '2ª ora (9-10)' },
+            { start: '10:00', end: '11:00', label: '3ª ora (10-11)' },
+            { start: '11:00', end: '12:00', label: '4ª ora (11-12)' },
+            { start: '12:00', end: '13:00', label: '5ª ora (12-13)' },
+            { start: '13:00', end: '14:00', label: '6ª ora (13-14)' }
+        ];
+
+        let daysToShow = this.scheduleView === 'weekly' ? days : [days[this.selectedDay]];
+        if (this.scheduleView === 'daily') {
+            const daySelect = document.getElementById('day-select');
+            if (daySelect) {
+                this.selectedDay = parseInt(daySelect.value);
+                daysToShow = [days[this.selectedDay]];
+            }
+        }
+
+        let tableHTML = '<table class="schedule-table" role="table" aria-label="Orario settimanale"><thead><tr>';
+        tableHTML += '<th scope="col">Ora</th>';
+        
+        daysToShow.forEach(day => {
+            tableHTML += `<th scope="col">${day}</th>`;
+        });
+        
+        tableHTML += '</tr></thead><tbody>';
+
+        hours.forEach((hour, hourIndex) => {
+            tableHTML += '<tr>';
+            tableHTML += `<td class="time-cell" role="rowheader">${hour.label}</td>`;
+            
+            daysToShow.forEach((day, dayIndex) => {
+                const actualDayIndex = this.scheduleView === 'weekly' ? dayIndex : this.selectedDay;
+                const cellKey = `${actualDayIndex}-${hourIndex}`;
+                const cellData = this.schedule[cellKey] || {};
+                
+                const hasContent = cellData.class || cellData.subject;
+                const activityClass = cellData.activityType ? `activity-${cellData.activityType}` : '';
+                
+                tableHTML += `<td class="schedule-cell ${hasContent ? 'has-content' : ''} ${activityClass}" 
+                    onclick="app.showScheduleEditModal(${actualDayIndex}, ${hourIndex})"
+                    role="gridcell"
+                    aria-label="${day} ${hour.label}">`;
+                
+                if (hasContent) {
+                    tableHTML += '<div class="cell-content">';
+                    
+                    if (cellData.activityType) {
+                        const icon = this.getActivityIcon(cellData.activityType);
+                        tableHTML += `<div class="cell-activity-icon" aria-hidden="true">${icon}</div>`;
+                    }
+                    
+                    if (cellData.class) {
+                        tableHTML += `<div class="cell-class">${cellData.class}</div>`;
+                    }
+                    
+                    if (cellData.subject) {
+                        tableHTML += `<div class="cell-subject">${cellData.subject}</div>`;
+                    }
+                    
+                    if (cellData.notes) {
+                        tableHTML += `<span class="cell-notes-indicator" title="${cellData.notes}">📌</span>`;
+                    }
+                    
+                    tableHTML += '</div>';
+                }
+                
+                tableHTML += '</td>';
+            });
+            
+            tableHTML += '</tr>';
+        });
+
+        tableHTML += '</tbody></table>';
+        container.innerHTML = tableHTML;
+    }
+
+    getActivityIcon(type) {
+        const icons = {
+            'lesson': '📚',
+            'lab': '🔬',
+            'test': '📝',
+            'exercise': '✏️',
+            'project': '🎯',
+            'discussion': '💬'
+        };
+        return icons[type] || '';
+    }
+
+    showScheduleEditModal(day, hour) {
+        const cellKey = `${day}-${hour}`;
+        this.editingCell = { day, hour, key: cellKey };
+        
+        const cellData = this.schedule[cellKey] || {};
+        
+        document.getElementById('cell-class').value = cellData.class || '';
+        document.getElementById('cell-subject').value = cellData.subject || '';
+        document.getElementById('cell-activity-type').value = cellData.activityType || '';
+        document.getElementById('cell-notes').value = cellData.notes || '';
+        
+        const modal = document.getElementById('schedule-edit-modal');
+        modal.style.display = 'flex';
+        
+        // Focus first input for accessibility
+        setTimeout(() => {
+            document.getElementById('cell-class').focus();
+        }, 100);
+    }
+
+    hideScheduleEditModal() {
+        const modal = document.getElementById('schedule-edit-modal');
+        modal.style.display = 'none';
+        this.editingCell = null;
+        document.getElementById('schedule-edit-form').reset();
+    }
+
+    saveScheduleCell() {
+        if (!this.editingCell) return;
+
+        const cellClass = document.getElementById('cell-class').value.trim();
+        const subject = document.getElementById('cell-subject').value.trim();
+        const activityType = document.getElementById('cell-activity-type').value;
+        const notes = document.getElementById('cell-notes').value.trim();
+
+        if (cellClass || subject || activityType || notes) {
+            this.schedule[this.editingCell.key] = {
+                class: cellClass,
+                subject: subject,
+                activityType: activityType,
+                notes: notes,
+                day: this.editingCell.day,
+                hour: this.editingCell.hour
+            };
+        } else {
+            delete this.schedule[this.editingCell.key];
+        }
+
+        this.saveData();
+        this.renderSchedule();
+        this.hideScheduleEditModal();
+    }
+
+    clearScheduleCell() {
+        if (!this.editingCell) return;
+
+        if (confirm('Sei sicuro di voler cancellare questa ora di lezione?')) {
+            delete this.schedule[this.editingCell.key];
+            this.saveData();
+            this.renderSchedule();
+            this.hideScheduleEditModal();
+        }
+    }
+
     // Data persistence methods
     saveData() {
         localStorage.setItem('docente-plus-lessons', JSON.stringify(this.lessons));
         localStorage.setItem('docente-plus-students', JSON.stringify(this.students));
+        localStorage.setItem('docente-plus-schedule', JSON.stringify(this.schedule));
     }
 
     loadData() {
         const lessonsData = localStorage.getItem('docente-plus-lessons');
         const studentsData = localStorage.getItem('docente-plus-students');
+        const scheduleData = localStorage.getItem('docente-plus-schedule');
 
         if (lessonsData) {
             try {
@@ -645,12 +843,22 @@ ${lessonData.evaluation || 'N/D'}
                 this.students = [];
             }
         }
+
+        if (scheduleData) {
+            try {
+                this.schedule = JSON.parse(scheduleData);
+            } catch (e) {
+                console.error('Error loading schedule:', e);
+                this.schedule = {};
+            }
+        }
     }
 
     exportData() {
         const data = {
             lessons: this.lessons,
             students: this.students,
+            schedule: this.schedule,
             exportDate: new Date().toISOString()
         };
 
@@ -686,10 +894,14 @@ ${lessonData.evaluation || 'N/D'}
                     if (data.students) {
                         this.students = data.students;
                     }
+                    if (data.schedule) {
+                        this.schedule = data.schedule;
+                    }
                     
                     this.saveData();
                     this.renderLessons();
                     this.renderStudents();
+                    this.renderSchedule();
                     this.renderDashboard();
                     
                     alert('Dati importati con successo!');

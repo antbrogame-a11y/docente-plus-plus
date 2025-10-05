@@ -15,6 +15,7 @@
 
         <nav class="tabs">
             <button class="tab-button active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-button" data-tab="schedule">Orario</button>
             <button class="tab-button" data-tab="lessons">Lezioni</button>
             <button class="tab-button" data-tab="students">Studenti</button>
             <button class="tab-button" data-tab="ai-assistant">Assistente IA</button>
@@ -77,6 +78,31 @@
                     <p class="stat-number" id="ai-status">✓</p>
                     <p class="stat-label">OpenRouter Ready</p>
                 </div>
+            </div>
+        </div>
+
+        <!-- Schedule Tab -->
+        <div id="schedule" class="tab-content">
+            <h2>Orario Settimanale</h2>
+            <div class="schedule-controls">
+                <div class="view-toggle">
+                    <button class="btn btn-secondary" id="weekly-view-btn" onclick="app.setScheduleView('weekly')">📅 Vista Settimanale</button>
+                    <button class="btn btn-secondary" id="daily-view-btn" onclick="app.setScheduleView('daily')">📆 Vista Giornaliera</button>
+                </div>
+                <div id="daily-selector" style="display: none;">
+                    <label for="day-select">Giorno:</label>
+                    <select id="day-select" onchange="app.renderSchedule()">
+                        <option value="0">Lunedì</option>
+                        <option value="1">Martedì</option>
+                        <option value="2">Mercoledì</option>
+                        <option value="3">Giovedì</option>
+                        <option value="4">Venerdì</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="schedule-container" class="schedule-container">
+                <!-- Schedule table will be rendered here -->
             </div>
         </div>
 
@@ -225,6 +251,44 @@
                     <button class="btn btn-secondary" onclick="app.importData()">📤 Importa Dati</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Schedule Cell Edit Modal -->
+    <div id="schedule-edit-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Modifica Ora di Lezione</h3>
+            <form id="schedule-edit-form">
+                <div class="form-group">
+                    <label for="cell-class">Classe:</label>
+                    <input type="text" id="cell-class" placeholder="es. 3A">
+                </div>
+                <div class="form-group">
+                    <label for="cell-subject">Materia:</label>
+                    <input type="text" id="cell-subject" placeholder="es. Matematica">
+                </div>
+                <div class="form-group">
+                    <label for="cell-activity-type">Tipo Attività:</label>
+                    <select id="cell-activity-type">
+                        <option value="">Nessuna attività</option>
+                        <option value="lesson">📚 Lezione</option>
+                        <option value="lab">🔬 Laboratorio</option>
+                        <option value="test">📝 Verifica</option>
+                        <option value="exercise">✏️ Esercitazione</option>
+                        <option value="project">🎯 Progetto</option>
+                        <option value="discussion">💬 Discussione</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cell-notes">Note:</label>
+                    <textarea id="cell-notes" rows="3" placeholder="Note aggiuntive..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Salva</button>
+                    <button type="button" class="btn btn-secondary" onclick="app.hideScheduleEditModal()">Annulla</button>
+                    <button type="button" class="btn btn-danger" onclick="app.clearScheduleCell()">Cancella</button>
+                </div>
+            </form>
         </div>
     </div>
 
