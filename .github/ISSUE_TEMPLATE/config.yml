@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📚 Documentazione
+    url: https://github.com/antbrogame-a11y/docente-plus-plus/tree/main/docs
+    about: Consulta la documentazione completa del progetto
+  - name: 💬 Discussioni
+    url: https://github.com/antbrogame-a11y/docente-plus-plus/discussions
+    about: Partecipa alle discussioni della community (se abilitate)

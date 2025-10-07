@@ -152,17 +152,15 @@ Questo progetto è rilasciato sotto licenza MIT. Vedi il file LICENSE per i dett
 
 ## 🤝 Contributi
 
-I contributi sono benvenuti! Per contribuire:
+I contributi sono benvenuti! Puoi contribuire in diversi modi:
 
-1. Fai fork del repository
-2. Crea un branch per la tua feature (`git checkout -b feature/NuovaFunzionalità`)
-3. Commit delle modifiche (`git commit -m 'Aggiunge nuova funzionalità'`)
-4. Push al branch (`git push origin feature/NuovaFunzionalità`)
-5. Apri una Pull Request
+- 🐛 **[Segnala un Bug](https://github.com/antbrogame-a11y/docente-plus-plus/issues/new?template=bug_report.md)** - Hai trovato un problema? Aiutaci a risolverlo!
+- ✨ **[Richiedi una Funzionalità](https://github.com/antbrogame-a11y/docente-plus-plus/issues/new?template=feature_request.md)** - Hai un'idea? Condividila!
+- 🎨 **[Suggerisci Miglioramenti UX/UI](https://github.com/antbrogame-a11y/docente-plus-plus/issues/new?template=ux_improvement.md)** - L'interfaccia potrebbe essere migliore? Diccelo!
+- 💬 **[Condividi Feedback](https://github.com/antbrogame-a11y/docente-plus-plus/issues/new?template=feedback.md)** - La tua esperienza è preziosa!
+- 💻 **Contribuisci al Codice** - Leggi la [Guida ai Contributi](CONTRIBUTING.md) per iniziare
 
-## 🐛 Segnalazione Bug
-
-Per segnalare bug o richiedere nuove funzionalità, apri una [Issue](https://github.com/antbrogame-a11y/docente-plus-plus/issues) su GitHub.
+Per informazioni dettagliate su come contribuire, consulta la **[📚 Guida ai Contributi](CONTRIBUTING.md)**.
 
 ## 👨‍💻 Autore
 
