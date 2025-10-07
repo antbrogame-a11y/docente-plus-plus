@@ -28,6 +28,12 @@ Benvenuto nella documentazione completa di Docente++!
 - **[Test Results](IMPLEMENTATION_TEST_RESULTS.md)** - Risultati test implementazione funzionalità
 - **[Implementation Summary](IMPLEMENTATION_SUMMARY.md)** - Sommario generale implementazioni
 - **[News Testing Guide](NEWS_TESTING_GUIDE.md)** - Guida completa per test modulo News
+- **[Piano Test Beta](BETA_TEST_PLAN.md)** - Piano completo test per release Beta 1.0
+- **[Feedback Utente](FEEDBACK_UTENTE.md)** - Raccolta feedback utenti e requisiti
+
+### 🗺️ Pianificazione e Roadmap
+
+- **[Roadmap Operativa](ROADMAP.md)** - Roadmap incrementale sviluppo per macro-temi (UI/UX, IA, File, Testing, Release)
 
 ### 🔍 Documentazione PWA
 

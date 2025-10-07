@@ -96,9 +96,36 @@ class DocentePlusPlus {
     }
 
     setupEventListeners() {
+        // Hamburger menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mainNav = document.getElementById('main-nav');
+        const menuBackdrop = document.getElementById('menu-backdrop');
+        
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                menuToggle.classList.toggle('active');
+                mainNav.classList.toggle('mobile-open');
+                menuBackdrop.classList.toggle('active');
+            });
+        }
+        
+        if (menuBackdrop) {
+            menuBackdrop.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                mainNav.classList.remove('mobile-open');
+                menuBackdrop.classList.remove('active');
+            });
+        }
+        
         // Tab switching
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', (e) => {
+                // Close mobile menu when tab is selected
+                if (menuToggle) {
+                    menuToggle.classList.remove('active');
+                    mainNav.classList.remove('mobile-open');
+                    menuBackdrop.classList.remove('active');
+                }
                 this.switchTab(e.target.dataset.tab);
             });
         });

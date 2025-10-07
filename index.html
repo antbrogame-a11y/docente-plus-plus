@@ -150,23 +150,56 @@
     <div class="container">
         <header>
             <h1>🎓 Docente++</h1>
-            <p class="subtitle">Gestione della Didattica Potenziata da IA OpenRouter</p>
+            <p class="subtitle">Gestione Didattica Potenziata da IA</p>
         </header>
 
-        <nav class="tabs">
-            <button class="tab-button active" data-tab="dashboard">Dashboard</button>
-            <button class="tab-button" data-tab="lessons">Lezioni</button>
-            <button class="tab-button" data-tab="schedule">Orario</button>
-            <button class="tab-button" data-tab="activities">Attività</button>
-            <button class="tab-button" data-tab="students">Studenti</button>
-            <button class="tab-button" data-tab="classes">Classi</button>
-            <button class="tab-button" data-tab="evaluations">Valutazioni</button>
-            <button class="tab-button" data-tab="notifications">Notifiche</button>
-            <button class="tab-button" data-tab="news">📰 News</button>
-            <button class="tab-button" data-tab="ai-assistant">Assistente IA</button>
-            <button class="tab-button" data-tab="document-import">🤖 Importa/gestisci con IA</button>
-            <button class="tab-button" data-tab="settings">Impostazioni</button>
-        </nav>
+        <div class="nav-container">
+            <button class="menu-toggle" id="menu-toggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <nav class="tabs" id="main-nav">
+                <div class="menu-group">
+                    <div class="menu-group-title">📊 Vista Generale</div>
+                    <button class="tab-button active" data-tab="dashboard">Dashboard</button>
+                </div>
+                
+                <div class="menu-group">
+                    <div class="menu-group-title">👨‍🏫 In Classe</div>
+                    <button class="tab-button" data-tab="lessons">Lezioni</button>
+                    <button class="tab-button" data-tab="schedule">Orario</button>
+                    <button class="tab-button" data-tab="evaluations">Valutazioni</button>
+                </div>
+                
+                <div class="menu-group">
+                    <div class="menu-group-title">📋 Pianificazione</div>
+                    <button class="tab-button" data-tab="activities">Attività</button>
+                    <button class="tab-button" data-tab="notifications">Notifiche</button>
+                    <button class="tab-button" data-tab="news">News</button>
+                </div>
+                
+                <div class="menu-group">
+                    <div class="menu-group-title">👥 Gestione</div>
+                    <button class="tab-button" data-tab="students">Studenti</button>
+                    <button class="tab-button" data-tab="classes">Classi</button>
+                </div>
+                
+                <div class="menu-group">
+                    <div class="menu-group-title">🤖 Strumenti IA</div>
+                    <button class="tab-button" data-tab="ai-assistant">Assistente IA</button>
+                    <button class="tab-button" data-tab="document-import">Importa con IA</button>
+                </div>
+                
+                <div class="menu-group">
+                    <div class="menu-group-title">⚙️ Sistema</div>
+                    <button class="tab-button" data-tab="settings">Impostazioni</button>
+                </div>
+            </nav>
+        </div>
+        
+        <div class="menu-backdrop" id="menu-backdrop"></div>
 
         <!-- Dashboard Tab -->
         <div id="dashboard" class="tab-content active">
