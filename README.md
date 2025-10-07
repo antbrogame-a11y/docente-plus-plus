@@ -160,16 +160,11 @@ I contributi sono benvenuti! Puoi contribuire in diversi modi:
 - 💬 **[Condividi Feedback](https://github.com/antbrogame-a11y/docente-plus-plus/issues/new?template=feedback.md)** - La tua esperienza è preziosa!
 - 💻 **Contribuisci al Codice** - Leggi la [Guida ai Contributi](CONTRIBUTING.md) per iniziare
 
-Per informazioni dettagliate su come contribuire, consulta la **[📚 Guida ai Contributi](CONTRIBUTING.md)**.
+### 📋 Risorse per Contributi e Feedback
 
-## 🐛 Segnalazione Bug e Feedback
-
-Vogliamo rendere Docente++ sempre migliore! Il tuo feedback è prezioso:
-
-- **🐛 Segnala un Bug:** [Apri Bug Report](https://github.com/antbrogame-a11y/docente-plus-plus/issues/new?template=bug_report.md)
-- **💡 Condividi Feedback:** [Invia Suggerimenti](https://github.com/antbrogame-a11y/docente-plus-plus/issues/new?template=feedback.md)
-- **📋 Vedi Feedback Raccolti:** [Documento Feedback Utente](docs/FEEDBACK_UTENTE.md)
-- **🧪 Piano Test Beta:** [Piano Test Completo](docs/BETA_TEST_PLAN.md)
+- **[📚 Guida ai Contributi](CONTRIBUTING.md)** - Guida completa per contribuire al progetto
+- **[📋 Feedback Raccolti](docs/FEEDBACK_UTENTE.md)** - Documento feedback utenti e roadmap miglioramenti
+- **[🧪 Piano Test Beta](docs/BETA_TEST_PLAN.md)** - Piano completo test per release Beta 1.0
 
 ## 👨‍💻 Autore
 
