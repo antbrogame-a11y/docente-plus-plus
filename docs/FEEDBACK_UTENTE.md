@@ -17,13 +17,13 @@ Questo documento raccoglie il feedback degli utenti per guidare lo sviluppo e il
 
 **Miglioramenti Proposti:**
 - ✅ Ridurre dimensioni header e padding
-- ✅ Implementare hamburger menu per navigazione principale
-- ✅ Ottimizzare gerarchia visiva dei testi (dimensioni basate su importanza)
-- ✅ Applicare design più soft e minimalista
-- ✅ Migliorare contrasto e leggibilità
+- [ ] Implementare hamburger menu per navigazione principale
+- [ ] Ottimizzare gerarchia visiva dei testi (dimensioni basate su importanza)
+- [ ] Applicare design più soft e minimalista
+- [ ] Migliorare contrasto e leggibilità
 
 **Priorità:** Alta  
-**Stato:** ✅ Completato  
+**Stato:** In pianificazione  
 **Riferimento Issue:** #[numero]
 
 ### 1.2 Organizzazione e Navigazione
@@ -34,13 +34,13 @@ Questo documento raccoglie il feedback degli utenti per guidare lo sviluppo e il
 - Manca raggruppamento logico per processi d'uso
 
 **Miglioramenti Proposti:**
-- ✅ Raggruppare funzionalità per casi d'uso (es. "In Classe", "Pianificazione", "Valutazione")
-- ✅ Implementare wizard/guide contestuali
+- [ ] Raggruppare funzionalità per casi d'uso (es. "In Classe", "Pianificazione", "Valutazione")
+- [ ] Implementare wizard/guide contestuali
 - [ ] Nascondere funzionalità avanzate in menu secondari
 - [ ] Creare percorsi guidati per scenari comuni
 
 **Priorità:** Alta  
-**Stato:** 🔄 In corso (menu raggruppato implementato)
+**Stato:** In pianificazione
 
 ### 1.3 Coerenza tra Pagine
 
