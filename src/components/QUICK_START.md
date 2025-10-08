@@ -4,50 +4,60 @@ This file provides a quick example of how to integrate the Material UI component
 
 ## Option 1: Standalone React App (Recommended for Testing)
 
+The repository now includes all necessary configuration files (`package.json`, `vite.config.js`, and `src/index.jsx`), so you can get started immediately!
+
 ### Step 1: Install Dependencies
 
 ```bash
-npm install react react-dom @mui/material @emotion/react @emotion/styled @mui/icons-material
-npm install -D vite @vitejs/plugin-react
+npm install
 ```
 
-### Step 2: Create Vite Config
+This will install all required dependencies including:
+- React and ReactDOM
+- Material UI components
+- Emotion (CSS-in-JS for MUI)
+- Vite (build tool)
 
-Create `vite.config.js` in the project root:
+### Step 2: Run Development Server
 
-```javascript
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-
-export default defineConfig({
-  plugins: [react()],
-  root: './',
-  build: {
-    outDir: 'dist'
-  }
-});
+```bash
+npm run dev
 ```
 
-### Step 3: Create Entry Point
+This will start the Vite development server at http://localhost:5173
 
-Create `src/index.jsx`:
+### Step 3: Build for Production
 
-```jsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import MainScreen from './components/MainScreen';
-
-const root = ReactDOM.createRoot(document.getElementById('app-root'));
-root.render(
-  <React.StrictMode>
-    <MainScreen />
-  </React.StrictMode>
-);
+```bash
+npm run build
 ```
 
-### Step 4: Create HTML Page
+This creates an optimized production build in the `dist/` folder.
 
-Create `app.html` (or modify existing `index.html`):
+---
+
+## Configuration Files Included
+
+The following files are now part of the repository:
+
+### `package.json`
+Contains all dependencies and npm scripts (`dev`, `build`, `preview`).
+
+### `vite.config.js`
+Vite configuration for building the React application.
+
+### `src/index.jsx`
+Entry point that mounts the MainScreen component.
+
+---
+
+## Alternative Setup (Manual Configuration)
+
+If you need to customize the setup, here's what each file contains:
+
+### Create HTML Page (Optional)
+
+Create `app.html` if you want a separate HTML file for the React app:
 
 ```html
 <!DOCTYPE html>
@@ -76,42 +86,25 @@ Create `app.html` (or modify existing `index.html`):
 </html>
 ```
 
-### Step 5: Update package.json
 
-Add scripts to `package.json`:
+### Package.json Scripts Reference
+
+The included `package.json` has the following scripts:
 
 ```json
 {
-  "name": "docente-plus-plus",
-  "version": "1.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@mui/material": "^5.14.0",
-    "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.14.0"
-  },
-  "devDependencies": {
-    "vite": "^5.0.0",
-    "@vitejs/plugin-react": "^4.2.0"
+    "dev": "vite",           // Start development server
+    "build": "vite build",   // Build for production
+    "preview": "vite preview" // Preview production build
   }
 }
 ```
 
-### Step 6: Run Development Server
-
-```bash
-npm run dev
-```
-
-Then open http://localhost:5173 in your browser.
+**Available npm commands:**
+- `npm run dev` - Start development server at http://localhost:5173
+- `npm run build` - Create production build in `dist/` folder
+- `npm run preview` - Preview the production build locally
 
 ---
 

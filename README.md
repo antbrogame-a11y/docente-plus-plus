@@ -26,6 +26,8 @@ App installabile per un insegnamento basato su IA, evoluzione del progetto docen
 
 ## 🚀 Avvio Rapido
 
+### Opzione 1: App Vanilla JavaScript (Esistente)
+
 1. **Clona il repository**:
    ```bash
    git clone https://github.com/antbrogame-a11y/docente-plus-plus.git
@@ -48,6 +50,32 @@ App installabile per un insegnamento basato su IA, evoluzione del progetto docen
    - Vai nella sezione "Impostazioni"
    - Inserisci la tua OpenRouter API Key (ottenibile su [openrouter.ai](https://openrouter.ai))
    - Salva le impostazioni
+
+### Opzione 2: Nuova Interfaccia Material UI (React)
+
+Per utilizzare la nuova interfaccia Material UI post-login:
+
+1. **Installa le dipendenze**:
+   ```bash
+   npm install
+   ```
+
+2. **Avvia il server di sviluppo**:
+   ```bash
+   npm run dev
+   ```
+   
+   L'app sarà disponibile su `http://localhost:5173`
+
+3. **Build per la produzione**:
+   ```bash
+   npm run build
+   ```
+
+📚 **Documentazione completa**: Vedi `/src/components/` per:
+- `QUICK_START.md` - Guida rapida all'integrazione
+- `README.md` - Documentazione componenti
+- `checklist.md` - Checklist di validazione
 
 4. **Inizia ad usare l'app**:
    - Completa l'onboarding iniziale con i tuoi dati
