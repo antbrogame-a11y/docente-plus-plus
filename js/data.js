@@ -1,9 +1,8 @@
 
 // js/data.js
 
-import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-
-const db = getFirestore();
+import { collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { db } from './firebase.js'; // Importa l'istanza db dal modulo firebase
 
 export const state = {
     settings: {},
