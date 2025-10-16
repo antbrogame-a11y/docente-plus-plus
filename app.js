@@ -1859,7 +1859,7 @@ class DocentePlusPlus {
             const exists = state.classes.find(c => c.name === classData.name);
             if (!exists) {
                 state.classes.push({
-                    id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                    id: Date.now().toString() + Math.random().toString(36).substring(2, 11),
                     name: classData.name,
                     schoolYear: classData.schoolYear,
                     description: `Generata automaticamente`,
