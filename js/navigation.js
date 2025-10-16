@@ -1,7 +1,6 @@
 // js/navigation.js
 // Navigation management with breadcrumbs, back button, and history
 
-import { showToast } from './ui.js';
 
 // Navigation history stack
 const navigationHistory = [];
