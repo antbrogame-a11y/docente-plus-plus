@@ -325,7 +325,7 @@ breadcrumbConfig.studentDetail = (studentId) => [
 
 ### Testing Navigation
 
-See `tests/navigation.test.js` for comprehensive test examples.
+See `tests/README.md` for navigation testing procedures and manual test instructions.
 
 ## Troubleshooting
 
