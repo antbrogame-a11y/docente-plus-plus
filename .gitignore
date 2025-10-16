@@ -5,3 +5,16 @@
 contextual-ai.js
 onboarding_test.html
 test_pwa.sh
+
+# Node modules and dependencies
+node_modules/
+package-lock.json
+
+# Test results and artifacts
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Build artifacts
+dist/
+build/
