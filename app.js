@@ -1913,7 +1913,12 @@ class DocentePlusPlus {
                 </label>
             `).join('');
             
-            showToast(`Generate ${generatedClasses.length} classi`, 'success');
+            showToast(
+                generatedClasses.length === 1
+                    ? `Generata 1 classe`
+                    : `Generate ${generatedClasses.length} classi`,
+                'success'
+            );
         }
     }
     
