@@ -1,7 +1,7 @@
 // tests/unit/onboarding.test.js
 // Unit tests for onboarding state management
 
-import { describe, test, expect, beforeEach } from '@jest/globals';
+import { describe, test, expect, beforeEach, jest } from '@jest/globals';
 
 /**
  * Test suite for onboarding state management
