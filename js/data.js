@@ -178,3 +178,71 @@ export function checkStorageHealth() {
         return false;
     }
 }
+
+/**
+ * Recover from corrupted onboarding state
+ * This ensures the app is always in a valid state
+ */
+export function recoverOnboardingState() {
+    const onboardingComplete = isOnboardingComplete();
+    const profileComplete = isProfileComplete();
+    
+    console.log('Checking onboarding state:', { onboardingComplete, profileComplete });
+    
+    // Case 1: Onboarding marked complete but profile is actually incomplete (corrupted state)
+    if (onboardingComplete && !profileComplete) {
+        console.warn('Detected corrupted onboarding state. Profile is incomplete despite onboarding flag.');
+        // Keep onboarding flag but require profile completion
+        return {
+            needsOnboarding: false,
+            needsProfileCompletion: true,
+            reason: 'corrupted_profile'
+        };
+    }
+    
+    // Case 2: Normal incomplete onboarding
+    if (!onboardingComplete) {
+        return {
+            needsOnboarding: true,
+            needsProfileCompletion: false,
+            reason: 'not_started'
+        };
+    }
+    
+    // Case 3: Everything is OK
+    return {
+        needsOnboarding: false,
+        needsProfileCompletion: false,
+        reason: 'complete'
+    };
+}
+
+/**
+ * Validate and fix onboarding state
+ * @returns {boolean} True if state is valid or was fixed
+ */
+export function validateAndFixOnboardingState() {
+    try {
+        const recovery = recoverOnboardingState();
+        
+        if (recovery.reason === 'corrupted_profile') {
+            console.log('Attempting to fix corrupted profile state...');
+            // Check if we can recover any profile data
+            if (state.settings.teacherName && state.settings.teacherName.trim() !== '') {
+                console.log('Profile data recovered successfully');
+                return true;
+            } else {
+                // Reset onboarding flag to force re-completion
+                console.warn('Cannot recover profile data. Resetting onboarding flag.');
+                localStorage.removeItem('onboardingComplete');
+                return false;
+            }
+        }
+        
+        return recovery.reason === 'complete';
+    } catch (error) {
+        console.error('Error validating onboarding state:', error);
+        return false;
+    }
+}
+

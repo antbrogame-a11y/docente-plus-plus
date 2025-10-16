@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Inattivo - Docente++</title>
+    <link href="fonts/material-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <link href="fonts/roboto.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Highlight the inactive menu items for demo */
+        .nav-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            position: relative;
+        }
+        .nav-item.disabled::after {
+            content: "🔒";
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .demo-banner {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            font-family: 'Roboto', sans-serif;
+        }
+        .demo-banner h2 {
+            margin-top: 0;
+            color: #856404;
+        }
+        .demo-banner p {
+            color: #856404;
+            margin: 10px 0;
+        }
+        .demo-highlight {
+            background: #ff5252;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Banner -->
+    <div class="demo-banner">
+        <h2>🔒 Esempio: Menu Inattivo dopo Onboarding Incompleto</h2>
+        <p>Questo è un esempio visivo che mostra come appaiono le voci di menu quando l'onboarding non è completo o i dati del profilo sono corrotti.</p>
+        <p><span class="demo-highlight">PROBLEMA</span>: Le voci di menu sono <strong>disabilitate</strong> e mostrano un'icona lucchetto 🔒</p>
+        <p><span class="demo-highlight">SOLUZIONE</span>: L'utente deve completare il profilo tramite il banner in alto o le impostazioni</p>
+    </div>
+
+    <!-- Onboarding Incomplete Banner -->
+    <div id="onboarding-incomplete-banner" class="onboarding-banner" style="display: block;">
+        <div class="onboarding-banner-content">
+            <span class="material-symbols-outlined">info</span>
+            <div class="onboarding-banner-text">
+                <strong>Configurazione incompleta</strong>
+                <p>Completa il tuo profilo per accedere a tutte le funzionalità</p>
+            </div>
+            <button id="complete-onboarding-btn" class="btn btn-primary btn-sm">
+                <span class="material-symbols-outlined">person</span>
+                Completa Profilo
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="app-header">
+        <div class="header-content">
+            <button id="menu-toggle" class="menu-toggle icon-btn" title="Menu" aria-label="Apri menu navigazione">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <h1>Docente++ - Demo Menu Inattivo</h1>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <aside id="main-nav" class="sidebar" style="display: block;">
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-tab="home">
+                <span class="material-symbols-outlined">home</span>
+                <span class="nav-label">Home</span>
+            </button>
+            <button class="nav-item disabled" data-tab="lessons" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">menu_book</span>
+                <span class="nav-label">Lezioni</span>
+            </button>
+            <button class="nav-item disabled" data-tab="students" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">group</span>
+                <span class="nav-label">Studenti</span>
+            </button>
+            <button class="nav-item disabled" data-tab="classes" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">school</span>
+                <span class="nav-label">Classi</span>
+            </button>
+            <button class="nav-item disabled" data-tab="activities" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">assignment</span>
+                <span class="nav-label">Attività</span>
+            </button>
+            <button class="nav-item disabled" data-tab="evaluations" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">assessment</span>
+                <span class="nav-label">Valutazioni</span>
+            </button>
+            <button class="nav-item disabled" data-tab="schedule" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">calendar_month</span>
+                <span class="nav-label">Orario</span>
+            </button>
+            <button class="nav-item disabled" data-tab="agenda" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">event</span>
+                <span class="nav-label">Agenda</span>
+            </button>
+            <button class="nav-item disabled" data-tab="aiAssistant" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">psychology</span>
+                <span class="nav-label">Assistente IA</span>
+            </button>
+            <button class="nav-item disabled" data-tab="documentImport" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">upload_file</span>
+                <span class="nav-label">Importa Documenti</span>
+            </button>
+            
+            <div class="nav-divider"></div>
+            
+            <button class="nav-item" data-tab="settings">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="nav-label">Impostazioni</span>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main style="padding-left: 260px; padding-top: 60px;">
+        <div style="padding: 40px;">
+            <h2>Esempio di Menu Inattivo</h2>
+            <p>Osserva come le voci di menu nella sidebar a sinistra sono disabilitate (opache con icona lucchetto).</p>
+            <p>Solo <strong>Home</strong> e <strong>Impostazioni</strong> sono accessibili.</p>
+            <p>Questo succede quando:</p>
+            <ul>
+                <li>L'utente non ha completato l'onboarding</li>
+                <li>I dati del profilo sono corrotti o mancanti</li>
+                <li>localStorage ha problemi</li>
+            </ul>
+            <h3>Soluzione:</h3>
+            <p>L'utente vede il banner arancione in alto che lo guida a completare il profilo.</p>
+        </div>
+    </main>
+</body>
+</html>
