@@ -783,7 +783,7 @@ function processCSVData(data) {
         } else {
             // Create new student
             const newStudent = {
-                id: `student_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                id: `student_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
                 firstName: firstName.trim(),
                 lastName: lastName.trim(),
                 email: row['Email'] || row['email'] || '',

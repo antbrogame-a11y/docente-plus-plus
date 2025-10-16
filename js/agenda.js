@@ -7,7 +7,7 @@ import { showToast } from './ui.js';
  * Generate a unique event ID
  */
 function generateEventId() {
-    return `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `evt_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
 }
 
 /**

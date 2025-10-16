@@ -343,7 +343,7 @@ export class NotificationSystem {
      */
     createNotification(notificationData) {
         const notification = {
-            id: `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            id: `notif_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
             title: notificationData.title,
             message: notificationData.message,
             type: notificationData.type,

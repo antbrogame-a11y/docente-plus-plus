@@ -121,22 +121,23 @@ export function hideOnboardingBanner() {
 }
 
 export function disableMenuItems(enabledItems = ['home', 'settings']) {
-    // Disable all menu items except the ones specified
+    // NEW: Keep all menu items visible and clickable, but show a tooltip
+    // indicating that profile completion is recommended
     document.querySelectorAll('.nav-item[data-tab]').forEach(button => {
         const tab = button.dataset.tab;
         if (!enabledItems.includes(tab)) {
-            button.classList.add('disabled');
-            button.setAttribute('aria-disabled', 'true');
-            button.setAttribute('title', 'Completa il profilo per accedere a questa funzionalità');
+            // Don't disable, just add a visual indicator
+            button.classList.add('needs-profile');
+            button.setAttribute('data-tooltip', 'Completa il profilo per un\'esperienza ottimale');
         }
     });
 }
 
 export function enableAllMenuItems() {
-    // Enable all menu items
+    // Enable all menu items (remove visual indicators)
     document.querySelectorAll('.nav-item[data-tab]').forEach(button => {
-        button.classList.remove('disabled');
-        button.removeAttribute('aria-disabled');
+        button.classList.remove('needs-profile');
+        button.removeAttribute('data-tooltip');
         button.setAttribute('title', button.querySelector('.nav-label')?.textContent || '');
     });
 }
