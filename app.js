@@ -5,7 +5,7 @@ import { createToastContainer, showToast, switchTab, updateActiveClassBadge, sho
 import { setupEventListeners } from './js/events.js';
 import { initializeTheme, setupThemePicker } from './js/theme.js';
 import { initAppBar } from './js/appbar.js';
-import { initNavigation, updateBreadcrumbs, pushToHistory, pushState, getCurrentTabFromURL, navigateToHome } from './js/navigation.js';
+import { initNavigation, updateBreadcrumbs, pushToHistory, pushState, getCurrentTabFromURL } from './js/navigation.js';
 import { 
     showModal, hideModal, 
     createClass, editClass, deleteClass,
