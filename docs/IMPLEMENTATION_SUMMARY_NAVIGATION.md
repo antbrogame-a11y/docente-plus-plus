@@ -275,30 +275,6 @@ tests/
     └─ 14 automated tests
 ```
 
-## 🚀 CI/CD Integration
-
-### GitHub Actions Workflow
-- Runs on push to main, develop, and copilot/* branches
-- Runs on pull requests
-- Tests across 5 browser configurations
-- Uploads test reports as artifacts
-- Uploads screenshots on failure
-- 60-minute timeout
-
-### Running Tests Locally
-```bash
-# Install dependencies
-npm install
-
-# Run all tests
-npm test
-
-# Run tests with UI
-npm test:ui
-
-# Run tests in debug mode
-npm test:debug
-
 # View test report
 npm test:report
 ```
