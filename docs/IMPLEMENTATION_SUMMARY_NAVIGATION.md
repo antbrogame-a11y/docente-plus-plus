@@ -343,8 +343,8 @@ npm test:report
 
 ## 🔐 Security Considerations
 
-- ✅ No XSS vulnerabilities (uses textContent, not innerHTML)
-- ✅ No injection risks (proper escaping)
+- ⚠️ Breadcrumbs are built using innerHTML (see js/navigation.js lines 81–85, 101–121); ensure only trusted content is inserted to avoid XSS.
+- ✅ No injection risks elsewhere (proper escaping)
 - ✅ localStorage validation
 - ✅ Input sanitization in tests
 - ✅ CORS-compliant
