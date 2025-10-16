@@ -1841,10 +1841,11 @@ class DocentePlusPlus {
     // NEW: Save class management settings
     saveClassManagementSettings() {
         const selectedClasses = [];
+        const currentYear = new Date().getFullYear();
         document.querySelectorAll('#generated-classes-list input[type="checkbox"]:checked').forEach(checkbox => {
             selectedClasses.push({
                 name: checkbox.value,
-                schoolYear: state.settings.schoolYear || new Date().getFullYear() + '/' + (new Date().getFullYear() + 1)
+                schoolYear: state.settings.schoolYear || currentYear + '/' + (currentYear + 1)
             });
         });
         
