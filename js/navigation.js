@@ -251,25 +251,9 @@ function setupBrowserHistoryManagement() {
     window.addEventListener('popstate', (e) => {
         if (e.state && e.state.tab) {
             if (window.app) {
-                // Don't push to history since we're navigating through history
+                // Delegate to centralized tab switching logic, skipping history push
                 const tab = e.state.tab;
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-                
-                const content = document.getElementById(tab);
-                if (content) content.classList.add('active');
-                
-                const button = document.querySelector(`.nav-item[data-tab="${tab}"]`);
-                if (button) button.classList.add('active');
-                
-                updateBreadcrumbs(tab);
-                currentTab = tab;
-                
-                // Render the tab
-                const renderFunction = `render${tab.charAt(0).toUpperCase() + tab.slice(1)}`;
-                if (typeof window.app[renderFunction] === 'function') {
-                    window.app[renderFunction]();
-                }
+                window.app.switchTab(tab, { fromHistory: true });
             }
         }
     });
