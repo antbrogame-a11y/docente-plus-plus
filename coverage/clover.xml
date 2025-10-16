@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1760603276333" clover="3.2.0">
-  <project timestamp="1760603276333" name="All files">
+<coverage generated="1760626021123" clover="3.2.0">
+  <project timestamp="1760626021124" name="All files">
     <metrics statements="2259" coveredstatements="0" conditionals="1534" coveredconditionals="0" methods="492" coveredmethods="0" elements="4285" coveredelements="0" complexity="0" loc="2259" ncloc="2259" packages="1" files="18" classes="18"/>
     <file name="agenda.js" path="/home/runner/work/docente-plus-plus/docente-plus-plus/js/agenda.js">
       <metrics statements="75" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="26" coveredmethods="0"/>
