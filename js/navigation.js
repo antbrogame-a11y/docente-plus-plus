@@ -204,7 +204,7 @@ function setupKeyboardNavigation() {
         // Alt + Left Arrow: Navigate back
         if (e.altKey && e.key === 'ArrowLeft') {
             e.preventDefault();
-            navigateBack();
+            window.history.back();
         }
         
         // Alt + H: Go to Home
