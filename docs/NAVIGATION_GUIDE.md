@@ -99,7 +99,6 @@ http://localhost:8000/?tab=classes  # Classes page
 **Features**:
 - ✅ Hamburger menu for collapsible sidebar
 - ✅ Touch-optimized hit areas (minimum 48x48px)
-- ✅ Swipe gestures supported
 - ✅ Breadcrumb optimized (icons only, labels hidden)
 - ✅ Tap-friendly navigation cards on home page
 
