@@ -5,6 +5,7 @@ import { createToastContainer, showToast, switchTab, updateActiveClassBadge, sho
 import { setupEventListeners } from './js/events.js';
 import { initializeTheme, setupThemePicker } from './js/theme.js';
 import { initAppBar } from './js/appbar.js';
+import { initNavigation, updateBreadcrumbs, pushToHistory, pushState, getCurrentTabFromURL, navigateToHome } from './js/navigation.js';
 import { 
     showModal, hideModal, 
     createClass, editClass, deleteClass,
@@ -88,6 +89,9 @@ class DocentePlusPlus {
             // Initialize theme first (before loading data)
             initializeTheme();
             
+            // Initialize navigation system
+            initNavigation();
+            
             const dataLoaded = loadData();
             if (!dataLoaded) {
                 showToast('Dati corrotti rilevati. App ripristinata ai valori predefiniti.', 'warning', 5000);
@@ -124,6 +128,12 @@ class DocentePlusPlus {
             // Initialize notification system
             notificationSystem.startAutoCheck();
             
+            // Navigate to tab from URL if present
+            const initialTab = getCurrentTabFromURL();
+            if (initialTab !== 'home' && isProfileComplete()) {
+                this.switchTab(initialTab);
+            }
+            
             console.log("Docente++ v1.2.0 (Intelligent Base) initialized.");
         } catch (error) {
             console.error("Error during init:", error);
@@ -152,6 +162,16 @@ class DocentePlusPlus {
     
     // Public method to switch tabs - used by landing page cards
     switchTab(tabName) {
+        // Push to navigation history
+        pushToHistory(tabName);
+        
+        // Update browser history
+        pushState(tabName);
+        
+        // Update breadcrumbs
+        updateBreadcrumbs(tabName);
+        
+        // Switch the tab
         switchTab(tabName);
     }
 

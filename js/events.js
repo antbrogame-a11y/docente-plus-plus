@@ -13,6 +13,13 @@ export function setupEventListeners() {
     });
     document.getElementById('menu-backdrop')?.addEventListener('click', () => document.getElementById('menu-toggle').click());
     
+    // Home button in header - always visible
+    document.getElementById('home-button')?.addEventListener('click', () => {
+        if (window.app) {
+            window.app.switchTab('home');
+        }
+    });
+    
     // Handle nav-item clicks
     document.querySelectorAll('.nav-item[data-tab]').forEach(button => {
         button.addEventListener('click', () => {
@@ -21,7 +28,12 @@ export function setupEventListeners() {
                 showToast('Completa il profilo per accedere a questa funzionalità', 'warning');
                 return;
             }
-            switchTab(button.dataset.tab);
+            // Use app's switchTab method to handle navigation properly
+            if (window.app) {
+                window.app.switchTab(button.dataset.tab);
+            } else {
+                switchTab(button.dataset.tab);
+            }
         });
     });
     

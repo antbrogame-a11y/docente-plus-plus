@@ -6684,3 +6684,206 @@ body.dark-theme .info-box strong {
         font-size: var(--font-size-md);
     }
 }
+
+/* =================================================================
+   NAVIGATION & BREADCRUMB STYLES
+   ================================================================= */
+
+/* Breadcrumb Navigation */
+.breadcrumb-nav {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--md-surface-container-low);
+    border-bottom: 1px solid var(--md-divider);
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin: 0;
+    padding: 0;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+}
+
+.breadcrumb-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: var(--md-radius-small);
+    border: none;
+    background: transparent;
+    color: var(--md-primary);
+    cursor: pointer;
+    transition: background-color var(--md-transition-duration) var(--md-transition-timing);
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+}
+
+.breadcrumb-link:hover {
+    background-color: var(--md-primary-container);
+    text-decoration: underline;
+}
+
+.breadcrumb-link:focus {
+    outline: 2px solid var(--md-primary);
+    outline-offset: 2px;
+}
+
+.breadcrumb-current {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    color: var(--md-text-primary);
+    font-weight: 500;
+}
+
+.breadcrumb-icon {
+    font-size: 18px;
+}
+
+.breadcrumb-separator {
+    color: var(--md-text-secondary);
+    margin: 0 4px;
+    user-select: none;
+}
+
+/* Back Button */
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: 8px 16px;
+    margin-bottom: var(--spacing-md);
+    border: 1px solid var(--md-divider);
+    border-radius: var(--md-radius-medium);
+    background: var(--md-surface-container-low);
+    color: var(--md-text-primary);
+    cursor: pointer;
+    transition: all var(--md-transition-duration) var(--md-transition-timing);
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-base);
+}
+
+.back-button:hover {
+    background: var(--md-surface-container);
+    box-shadow: var(--md-elevation-1);
+    transform: translateX(-2px);
+}
+
+.back-button:focus {
+    outline: 2px solid var(--md-primary);
+    outline-offset: 2px;
+}
+
+.back-button:active {
+    transform: translateX(-1px);
+}
+
+.back-button .material-symbols-outlined {
+    font-size: 20px;
+}
+
+/* Button with icon and text */
+.btn-icon-text {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+/* Keyboard navigation hints */
+.keyboard-hint {
+    display: none;
+    position: fixed;
+    bottom: var(--spacing-md);
+    right: var(--spacing-md);
+    background: var(--md-surface-container-high);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--md-radius-medium);
+    box-shadow: var(--md-elevation-3);
+    font-size: var(--font-size-sm);
+    color: var(--md-text-secondary);
+    z-index: 1000;
+}
+
+.keyboard-hint.show {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.keyboard-hint kbd {
+    display: inline-block;
+    padding: 2px 6px;
+    background: var(--md-surface-container);
+    border: 1px solid var(--md-divider);
+    border-radius: 4px;
+    font-family: var(--font-family-monospace);
+    font-size: var(--font-size-xs);
+    color: var(--md-text-primary);
+}
+
+/* Mobile Navigation Improvements */
+@media (max-width: 768px) {
+    .breadcrumb-nav {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+    
+    .breadcrumb-item {
+        font-size: var(--font-size-xs);
+    }
+    
+    .breadcrumb-icon {
+        font-size: 16px;
+    }
+    
+    .breadcrumb-label {
+        display: none;
+    }
+    
+    .breadcrumb-current .breadcrumb-label {
+        display: inline;
+    }
+    
+    .back-button {
+        padding: 6px 12px;
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* Accessibility - High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .breadcrumb-link {
+        border: 1px solid currentColor;
+    }
+    
+    .back-button {
+        border-width: 2px;
+    }
+}
+
+/* Accessibility - Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .breadcrumb-link,
+    .back-button,
+    .keyboard-hint {
+        transition: none;
+        animation: none;
+    }
+    
+    .back-button:hover {
+        transform: none;
+    }
+}

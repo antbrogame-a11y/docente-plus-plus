@@ -53,9 +53,11 @@ Docente++ è progettato per funzionare senza un backend complesso. Puoi eseguirl
 
 - **[Guida Rapida](docs/QUICK_START.md)**: Per iniziare subito
 - **[Guida Flusso Onboarding](docs/ONBOARDING_FLOW_GUIDE.md)**: Informazioni dettagliate sul nuovo flusso di onboarding ⭐ NUOVO
+- **[Guida Navigazione](docs/NAVIGATION_GUIDE.md)**: Sistema di navigazione con breadcrumb, scorciatoie da tastiera e accessibilità ⭐ NUOVO
 - **[Guida Configurazione](docs/CONFIGURATION_GUIDE.md)**: Come configurare orario, classi e impostazioni IA
 - **[Guida Utente](docs/user-guide.md)**: Manuale completo
 - **[Guida Sviluppatore](docs/dev-guide.md)**: Per chi vuole contribuire
+- **[Test Automatici](tests/README.md)**: Come eseguire e scrivere test ⭐ NUOVO
 - **[Risoluzione Problemi](docs/TROUBLESHOOTING.md)**: Soluzioni ai problemi comuni
 
 ## 🔮 Roadmap Funzionalità Future
