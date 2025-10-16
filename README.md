@@ -57,7 +57,7 @@ Docente++ è progettato per funzionare senza un backend complesso. Puoi eseguirl
 - **[Guida Configurazione](docs/CONFIGURATION_GUIDE.md)**: Come configurare orario, classi e impostazioni IA
 - **[Guida Utente](docs/user-guide.md)**: Manuale completo
 - **[Guida Sviluppatore](docs/dev-guide.md)**: Per chi vuole contribuire
-- **[Test Automatici](tests/README.md)**: Come eseguire e scrivere test ⭐ NUOVO
+- **[Test Manuali](tests/README.md)**: Procedure di test manuale (nessuna dipendenza richiesta) ⭐ NUOVO
 - **[Risoluzione Problemi](docs/TROUBLESHOOTING.md)**: Soluzioni ai problemi comuni
 
 ## 🔮 Roadmap Funzionalità Future

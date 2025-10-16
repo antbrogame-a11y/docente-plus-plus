@@ -6,14 +6,17 @@ contextual-ai.js
 onboarding_test.html
 test_pwa.sh
 
-# Node modules and dependencies
+# Node modules and dependencies (not used in this project)
 node_modules/
 package-lock.json
+package.json
+playwright.config.*
 
 # Test results and artifacts
 test-results/
 playwright-report/
 playwright/.cache/
+*.test.js.archived
 
 # Build artifacts
 dist/

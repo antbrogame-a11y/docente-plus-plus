@@ -1,81 +1,246 @@
 # Tests - Docente++
 
-This directory contains automated tests for the Docente++ application.
+This directory contains test documentation and manual testing procedures for the Docente++ application.
 
 ## Test Infrastructure
 
-The project uses **Playwright** for end-to-end testing. Playwright is already used in the project for PWA verification, so we're using the same framework for consistency.
+The project uses **manual testing** procedures that don't require any external dependencies or npm packages. All tests can be performed using just a web browser.
 
-## Running Tests
+## Running the Application
 
-### Prerequisites
+### Start the Development Server
 
-Install Playwright if not already installed:
-
-```bash
-npm install -D @playwright/test
-npx playwright install
-```
-
-### Run All Tests
+No npm or node dependencies required. Just use Python's built-in HTTP server:
 
 ```bash
-npx playwright test
+# Navigate to the project directory
+cd /path/to/docente-plus-plus
+
+# Start the server on port 8000
+python3 -m http.server 8000
+
+# Or on Windows
+python -m http.server 8000
 ```
 
-### Run Specific Test File
+Then open your browser to: http://localhost:8000
 
-```bash
-npx playwright test tests/navigation.test.js
-```
+## Manual Testing Procedures
 
-### Run Tests in UI Mode (Interactive)
+### Test 1: Onboarding Flow
 
-```bash
-npx playwright test --ui
-```
+**Objective**: Verify that onboarding modal appears on first visit and menu items are locked
 
-### Run Tests with Browser Visible
+**Steps**:
+1. Open browser DevTools (F12)
+2. Go to Application/Storage → Local Storage
+3. Clear all data for localhost:8000
+4. Reload the page (Ctrl+R or Cmd+R)
+5. **Expected**: Onboarding modal appears with form fields
+6. **Expected**: Menu items show lock icon (🔒) and are disabled
+7. **Expected**: Orange banner shows "Configurazione incompleta"
 
-```bash
-npx playwright test --headed
-```
+**Pass Criteria**:
+- ✅ Modal displays "Benvenuto in Docente++"
+- ✅ Name field is required (marked with *)
+- ✅ Lock icons visible on menu items
+- ✅ Clicking disabled menu items shows warning toast
 
-### Generate Test Report
+### Test 2: Profile Completion
 
-```bash
-npx playwright test --reporter=html
-npx playwright show-report
-```
+**Objective**: Verify menu unlocks after completing onboarding
 
-## Test Files
+**Steps**:
+1. In the onboarding modal, enter "Test" in the Name field
+2. Optionally fill Last Name and School Year
+3. Click "Inizia ad Usare Docente++"
+4. **Expected**: Modal closes
+5. **Expected**: All menu items become enabled (no lock icons)
+6. **Expected**: Orange banner disappears
+7. **Expected**: Success toast appears
 
-### `navigation.test.js`
+**Pass Criteria**:
+- ✅ Modal closes successfully
+- ✅ No lock icons on menu items
+- ✅ Toast: "Profilo configurato! Benvenuto in Docente++."
+- ✅ Can navigate to all sections
 
-Tests for the navigation system including:
+### Test 3: Breadcrumb Navigation
 
-- **Onboarding Flow Tests**
-  - Onboarding modal display on first visit
-  - Menu items disabled before onboarding completion
-  - Profile completion enables all features
-  - Corrupted data handling
+**Objective**: Verify breadcrumbs update and work correctly
 
-- **Breadcrumb Navigation Tests**
-  - Breadcrumb display and updates
-  - Clickable breadcrumb links
-  - Home navigation via breadcrumb
+**Steps**:
+1. Complete onboarding if not already done
+2. Observe breadcrumb shows: "Home"
+3. Click "Studenti" in the menu
+4. **Expected**: Breadcrumb updates to "Home / Studenti"
+5. **Expected**: URL shows "?tab=students"
+6. Click "Home" in the breadcrumb
+7. **Expected**: Returns to home page
+8. **Expected**: Breadcrumb shows only "Home"
 
-- **Navigation Features Tests**
-  - Home button in header
-  - Browser back/forward buttons
-  - Keyboard shortcuts (Alt+Left to go back)
-  - URL-based navigation
-  - Tab switching via menu
+**Pass Criteria**:
+- ✅ Breadcrumbs visible at top of page
+- ✅ Current page shown in breadcrumb trail
+- ✅ Breadcrumb links are clickable
+- ✅ Clicking breadcrumb navigates correctly
 
-- **Accessibility Tests**
-  - Keyboard navigation in menu (Arrow keys)
-  - ARIA labels and attributes
-  - Focus management
+### Test 4: Home Button
+
+**Objective**: Verify Home button is always accessible
+
+**Steps**:
+1. Navigate to any section (e.g., Classi, Lezioni, etc.)
+2. Look for Home icon button in top-right of header
+3. Click the Home button
+4. **Expected**: Returns to home page
+5. **Expected**: URL updates to "?tab=home"
+
+**Pass Criteria**:
+- ✅ Home button visible in header
+- ✅ Home button has house icon
+- ✅ Tooltip shows "Vai alla Home"
+- ✅ Click navigates to home
+
+### Test 5: Keyboard Navigation - Back
+
+**Objective**: Verify Alt+Left arrow goes back
+
+**Steps**:
+1. Navigate to "Studenti" section
+2. Then navigate to "Classi" section
+3. Press `Alt + Left Arrow`
+4. **Expected**: Goes back to "Studenti"
+5. Press `Alt + Left Arrow` again
+6. **Expected**: Goes back to "Home"
+
+**Pass Criteria**:
+- ✅ Alt+Left navigates back
+- ✅ Breadcrumbs update correctly
+- ✅ URL updates correctly
+
+### Test 6: Keyboard Navigation - Home
+
+**Objective**: Verify Alt+H goes to home
+
+**Steps**:
+1. Navigate to any section (e.g., "Agenda")
+2. Press `Alt + H`
+3. **Expected**: Returns to home page immediately
+
+**Pass Criteria**:
+- ✅ Alt+H navigates to home
+- ✅ Works from any page
+
+### Test 7: Browser Back/Forward
+
+**Objective**: Verify browser buttons work
+
+**Steps**:
+1. Navigate through several sections: Home → Studenti → Classi → Lezioni
+2. Click browser Back button
+3. **Expected**: Goes back to "Classi"
+4. Click browser Back button again
+5. **Expected**: Goes back to "Studenti"
+6. Click browser Forward button
+7. **Expected**: Goes forward to "Classi"
+
+**Pass Criteria**:
+- ✅ Browser back button works
+- ✅ Browser forward button works
+- ✅ Navigation history maintained
+- ✅ Breadcrumbs update with history
+
+### Test 8: Direct URL Navigation
+
+**Objective**: Verify URLs are bookmarkable
+
+**Steps**:
+1. Manually type in URL: http://localhost:8000/?tab=students
+2. **Expected**: Opens directly to Students page
+3. **Expected**: Breadcrumb shows "Home / Studenti"
+4. Try another URL: http://localhost:8000/?tab=classes
+5. **Expected**: Opens directly to Classes page
+
+**Pass Criteria**:
+- ✅ URLs with ?tab parameter work
+- ✅ Correct page loads
+- ✅ Breadcrumbs match current page
+
+### Test 9: Menu Keyboard Navigation
+
+**Objective**: Verify arrow keys navigate menu
+
+**Steps**:
+1. Click on first menu item to focus
+2. Press `Arrow Down` or `Arrow Right`
+3. **Expected**: Focus moves to next menu item
+4. Press `Arrow Up` or `Arrow Left`
+5. **Expected**: Focus moves to previous menu item
+6. Press `Enter` on focused item
+7. **Expected**: Navigates to that section
+
+**Pass Criteria**:
+- ✅ Arrow keys move focus
+- ✅ Focus indicator visible
+- ✅ Enter activates focused item
+
+### Test 10: Corrupted Data Handling
+
+**Objective**: Verify app handles corrupted localStorage
+
+**Steps**:
+1. Open DevTools → Application → Local Storage
+2. Set `onboardingComplete` to `true`
+3. Delete or clear `settings` key
+4. Reload page
+5. **Expected**: Orange banner appears
+6. **Expected**: Menu items locked with 🔒
+7. **Expected**: Toast: "Profilo incompleto. Completa i dati mancanti..."
+
+**Pass Criteria**:
+- ✅ App doesn't crash
+- ✅ Clear guidance shown to user
+- ✅ Can complete profile to fix issue
+
+### Test 11: Mobile Responsiveness
+
+**Objective**: Verify navigation works on mobile
+
+**Steps**:
+1. Open DevTools → Device Toolbar (Ctrl+Shift+M)
+2. Select "iPhone 12" or similar mobile device
+3. **Expected**: Hamburger menu icon visible
+4. Click hamburger menu
+5. **Expected**: Sidebar menu opens
+6. **Expected**: Breadcrumb shows icons only (no text labels except current)
+7. Navigate to a section
+8. **Expected**: Menu auto-closes after selection
+
+**Pass Criteria**:
+- ✅ Mobile layout activates
+- ✅ Hamburger menu works
+- ✅ Touch targets ≥ 48x48px
+- ✅ Breadcrumb optimized for mobile
+
+### Test 12: Accessibility - Screen Reader
+
+**Objective**: Verify screen reader compatibility
+
+**Steps**:
+1. Enable screen reader (NVDA on Windows, VoiceOver on Mac)
+2. Navigate through page with Tab key
+3. **Expected**: All interactive elements are announced
+4. Navigate to breadcrumb
+5. **Expected**: Announced as "Breadcrumb navigation"
+6. Navigate to menu items
+7. **Expected**: Each item announced with role and state
+
+**Pass Criteria**:
+- ✅ ARIA labels present
+- ✅ Landmarks announced
+- ✅ Focus order logical
+- ✅ Disabled state announced
 
 ## Test Coverage
 
