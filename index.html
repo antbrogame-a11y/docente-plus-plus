@@ -444,15 +444,147 @@
         <div id="settings" class="tab-content">
             <h2>Impostazioni</h2>
             
-            <!-- Profile Section -->
+            <!-- Profile Section (NEW: Enhanced with email) -->
             <div class="settings-section">
-                <h3>Profilo Docente</h3>
-                <p>Nome: <span id="settings-teacher-name">-</span></p>
-                <p>Anno Scolastico: <span id="settings-school-year">-</span></p>
-                <button id="edit-profile-btn" class="btn btn-secondary">
-                    <span class="material-symbols-outlined">edit</span>
-                    Modifica Profilo
-                </button>
+                <h3>👤 Profilo Docente</h3>
+                <form id="profile-settings-form">
+                    <div class="form-group">
+                        <label for="profile-first-name">Nome *</label>
+                        <input type="text" id="profile-first-name" required placeholder="Es: Mario">
+                        <p class="help-text">Il tuo nome</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-last-name">Cognome</label>
+                        <input type="text" id="profile-last-name" placeholder="Es: Rossi">
+                        <p class="help-text">Il tuo cognome (opzionale)</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-email">Email</label>
+                        <input type="email" id="profile-email" placeholder="mario.rossi@scuola.it">
+                        <p class="help-text">La tua email (opzionale)</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="material-symbols-outlined">save</span>
+                        Salva Profilo
+                    </button>
+                </form>
+            </div>
+            
+            <!-- School Year Configuration (NEW: Dropdown selection) -->
+            <div class="settings-section">
+                <h3>🎓 Anno Scolastico</h3>
+                <form id="school-year-settings-form">
+                    <div class="form-group">
+                        <label for="school-year-select">Anno Scolastico *</label>
+                        <select id="school-year-select" required>
+                            <option value="">-- Seleziona Anno Scolastico --</option>
+                            <option value="2023/2024">2023/2024</option>
+                            <option value="2024/2025">2024/2025</option>
+                            <option value="2025/2026">2025/2026</option>
+                            <option value="2026/2027">2026/2027</option>
+                            <option value="2027/2028">2027/2028</option>
+                        </select>
+                        <p class="help-text">Seleziona l'anno scolastico corrente</p>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <span class="material-symbols-outlined">save</span>
+                        Salva Anno Scolastico
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Class Management (NEW: Section and class generation) -->
+            <div class="settings-section">
+                <h3>🏫 Gestione Classi</h3>
+                <form id="class-management-form">
+                    <div class="form-group">
+                        <label>Sezioni Disponibili</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" class="section-checkbox" value="A" checked> Sezione A</label>
+                            <label><input type="checkbox" class="section-checkbox" value="B" checked> Sezione B</label>
+                            <label><input type="checkbox" class="section-checkbox" value="C"> Sezione C</label>
+                            <label><input type="checkbox" class="section-checkbox" value="D"> Sezione D</label>
+                            <label><input type="checkbox" class="section-checkbox" value="E"> Sezione E</label>
+                        </div>
+                        <p class="help-text">Seleziona le sezioni presenti nella tua scuola</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="class-levels">Anni Scolastici (livelli)</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" class="level-checkbox" value="1" checked> 1° Anno</label>
+                            <label><input type="checkbox" class="level-checkbox" value="2" checked> 2° Anno</label>
+                            <label><input type="checkbox" class="level-checkbox" value="3" checked> 3° Anno</label>
+                            <label><input type="checkbox" class="level-checkbox" value="4"> 4° Anno</label>
+                            <label><input type="checkbox" class="level-checkbox" value="5"> 5° Anno</label>
+                        </div>
+                        <p class="help-text">Seleziona i livelli presenti nella tua scuola</p>
+                    </div>
+                    
+                    <button type="button" class="btn btn-secondary" id="generate-classes-btn">
+                        <span class="material-symbols-outlined">auto_awesome</span>
+                        Genera Classi Automaticamente
+                    </button>
+                    
+                    <div id="generated-classes-preview" style="display: none; margin-top: 16px;">
+                        <h4>Classi Generate</h4>
+                        <p class="help-text">Deseleziona le classi che non insegni:</p>
+                        <div id="generated-classes-list" class="checkbox-group">
+                            <!-- Generated classes will appear here -->
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="margin-top: 16px;">
+                        <span class="material-symbols-outlined">save</span>
+                        Salva Classi Selezionate
+                    </button>
+                </form>
+                <p class="help-text" style="margin-top: 16px;">
+                    💡 <strong>Suggerimento:</strong> Puoi anche gestire manualmente le classi dalla sezione <a href="#" onclick="window.app.switchTab('classes'); return false;">Gestione Classi</a>
+                </p>
+            </div>
+            
+            <!-- AI Configuration Section (NEW: Enhanced with privacy and validation) -->
+            <div class="settings-section">
+                <h3>🤖 Configurazione Agente IA</h3>
+                <form id="ai-settings-form">
+                    <div class="form-group">
+                        <label for="ai-api-key-input">Chiave API IA (Opzionale)</label>
+                        <input type="password" id="ai-api-key-input" placeholder="sk-or-v1-...">
+                        <button type="button" class="btn btn-sm btn-secondary" id="toggle-api-key-visibility" style="margin-top: 8px;">
+                            <span class="material-symbols-outlined">visibility</span>
+                            Mostra/Nascondi
+                        </button>
+                        <p class="help-text">
+                            <strong>🔒 Privacy:</strong> La tua chiave API viene salvata localmente nel tuo browser e non viene mai condivisa con terze parti.
+                            Inserisci la tua chiave API di OpenRouter per abilitare le funzionalità IA avanzate.
+                            <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">Ottieni una chiave API</a>
+                        </p>
+                        <div id="api-key-status" style="margin-top: 8px; display: none;">
+                            <!-- Validation status will appear here -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ai-model-select">Modello IA</label>
+                        <select id="ai-model-select">
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Veloce ed Economico)</option>
+                            <option value="gpt-4">GPT-4 (Più Accurato)</option>
+                            <option value="claude-2">Claude 2</option>
+                            <option value="llama-2-70b">Llama 2 70B</option>
+                        </select>
+                        <p class="help-text">Seleziona il modello IA da utilizzare per le funzionalità avanzate</p>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <span class="material-symbols-outlined">save</span>
+                        Salva Impostazioni IA
+                    </button>
+                </form>
+                <p class="help-text" style="margin-top: 16px; padding: 12px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    ⚠️ <strong>Nota:</strong> Senza una chiave API, l'assistente IA funzionerà in modalità simulata con risposte predefinite.
+                </p>
             </div>
             
             <!-- Schedule Configuration Section -->
@@ -490,60 +622,6 @@
                         Salva Impostazioni Orario
                     </button>
                 </form>
-            </div>
-            
-            <!-- School Year Configuration -->
-            <div class="settings-section">
-                <h3>🎓 Anno Scolastico e Classi</h3>
-                <form id="school-year-settings-form">
-                    <div class="form-group">
-                        <label for="school-year-input">Anno Scolastico</label>
-                        <input type="text" id="school-year-input" placeholder="2024/2025" required>
-                        <p class="help-text">Inserisci l'anno scolastico corrente (es. 2024/2025)</p>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <span class="material-symbols-outlined">save</span>
-                        Salva Anno Scolastico
-                    </button>
-                </form>
-                <p class="help-text" style="margin-top: 16px;">
-                    💡 <strong>Suggerimento:</strong> Gestisci le classi disponibili dalla sezione <a href="#" onclick="window.app.switchTab('classes'); return false;">Gestione Classi</a>
-                </p>
-            </div>
-            
-            <!-- AI Configuration Section -->
-            <div class="settings-section">
-                <h3>🤖 Configurazione IA</h3>
-                <form id="ai-settings-form">
-                    <div class="form-group">
-                        <label for="ai-api-key-input">Chiave API OpenRouter (Opzionale)</label>
-                        <input type="password" id="ai-api-key-input" placeholder="sk-or-v1-...">
-                        <p class="help-text">
-                            Inserisci la tua chiave API di OpenRouter per abilitare le funzionalità IA avanzate.
-                            <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">Ottieni una chiave API</a>
-                        </p>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="ai-model-select">Modello IA</label>
-                        <select id="ai-model-select">
-                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Veloce ed Economico)</option>
-                            <option value="gpt-4">GPT-4 (Più Accurato)</option>
-                            <option value="claude-2">Claude 2</option>
-                            <option value="llama-2-70b">Llama 2 70B</option>
-                        </select>
-                        <p class="help-text">Seleziona il modello IA da utilizzare per le funzionalità avanzate</p>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <span class="material-symbols-outlined">save</span>
-                        Salva Impostazioni IA
-                    </button>
-                </form>
-                <p class="help-text" style="margin-top: 16px; padding: 12px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
-                    ⚠️ <strong>Nota:</strong> Senza una chiave API, l'assistente IA funzionerà in modalità simulata con risposte predefinite.
-                </p>
             </div>
             
             <!-- AI Agent FAB Settings -->

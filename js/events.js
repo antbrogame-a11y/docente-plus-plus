@@ -25,12 +25,11 @@ export function setupEventListeners() {
         });
     });
     
-    // Complete onboarding button in banner
+    // Complete onboarding button in banner (NEW: Navigate to settings)
     document.getElementById('complete-onboarding-btn')?.addEventListener('click', () => {
-        // Navigate to settings or show onboarding modal
-        import('./ui.js').then(({ showOnboarding }) => {
-            showOnboarding();
-        });
+        // Navigate to settings page
+        switchTab('settings');
+        showToast('Completa il tuo profilo nella sezione Impostazioni', 'info');
     });
 
     document.getElementById('onboarding-form')?.addEventListener('submit', e => {
@@ -117,11 +116,42 @@ export function setupEventListeners() {
         }
     });
     
+    // NEW: Profile settings form
+    document.getElementById('profile-settings-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (window.app) {
+            window.app.saveProfileSettings();
+        }
+    });
+    
     // School year settings form
     document.getElementById('school-year-settings-form')?.addEventListener('submit', (e) => {
         e.preventDefault();
         if (window.app) {
             window.app.saveSchoolYearSettings();
+        }
+    });
+    
+    // NEW: Class management form
+    document.getElementById('class-management-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (window.app) {
+            window.app.saveClassManagementSettings();
+        }
+    });
+    
+    // NEW: Generate classes button
+    document.getElementById('generate-classes-btn')?.addEventListener('click', () => {
+        if (window.app) {
+            window.app.generateClasses();
+        }
+    });
+    
+    // NEW: Toggle API key visibility
+    document.getElementById('toggle-api-key-visibility')?.addEventListener('click', () => {
+        const input = document.getElementById('ai-api-key-input');
+        if (input) {
+            input.type = input.type === 'password' ? 'text' : 'password';
         }
     });
     
@@ -133,7 +163,7 @@ export function setupEventListeners() {
         }
     });
     
-    // Edit profile button
+    // Edit profile button (LEGACY - can be removed)
     document.getElementById('edit-profile-btn')?.addEventListener('click', () => {
         if (window.app) {
             window.app.editProfile();

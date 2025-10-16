@@ -98,20 +98,26 @@ class DocentePlusPlus {
             const onboardingState = recoverOnboardingState();
             console.log('Onboarding state:', onboardingState);
             
+            // NEW: Always enable all menu items (sidebar always active)
+            enableAllMenuItems();
+            
             if (onboardingState.needsOnboarding) {
-                // Onboarding not complete - show modal and disable menu
-                showOnboarding();
-                disableMenuItems(['home', 'settings']);
+                // NEW: Instead of showing modal, initialize UI and redirect to settings
+                this.initializeAppUI();
+                showOnboardingBanner();
+                // Auto-open settings page
+                setTimeout(() => {
+                    switchTab('settings');
+                    showToast('👋 Benvenuto! Completa il tuo profilo per iniziare.', 'info', 5000);
+                }, 500);
             } else if (onboardingState.needsProfileCompletion) {
                 // Onboarding marked complete but profile is incomplete (corrupted data)
                 showOnboardingBanner();
-                disableMenuItems(['home', 'settings']);
                 this.initializeAppUI();
-                showToast('⚠️ Profilo incompleto rilevato. Completa i dati mancanti per accedere a tutte le funzionalità.', 'warning', 6000);
+                showToast('⚠️ Profilo incompleto rilevato. Completa i dati mancanti dalle Impostazioni.', 'warning', 6000);
             } else {
                 // Everything is OK - profile complete
                 hideOnboardingBanner();
-                enableAllMenuItems();
                 this.initializeAppUI();
                 
                 // Log success for debugging
@@ -136,7 +142,7 @@ class DocentePlusPlus {
             // Initialize notification system
             notificationSystem.startAutoCheck();
             
-            console.log("Docente++ v1.2.1 (Navigation & Improved Onboarding) initialized.");
+            console.log("Docente++ v1.2.2 (Always-Visible Sidebar & Unified Settings) initialized.");
         } catch (error) {
             console.error("Error during init:", error);
             // Try to recover by showing a minimal UI
@@ -152,13 +158,11 @@ class DocentePlusPlus {
         updateActiveClassBadge();
         switchTab('home');
         
-        // Check if profile is complete and update UI accordingly
+        // NEW: Check profile status and show banner if needed (but don't disable menu)
         if (isProfileComplete()) {
             hideOnboardingBanner();
-            enableAllMenuItems();
         } else {
             showOnboardingBanner();
-            disableMenuItems(['home', 'settings']);
         }
     }
     
@@ -1615,23 +1619,18 @@ class DocentePlusPlus {
     }
     
     renderSettings() { 
-        const nameElement = document.getElementById('settings-teacher-name');
-        const yearElement = document.getElementById('settings-school-year');
-        if (nameElement) {
-            nameElement.textContent = state.settings.teacherName && state.settings.teacherLastName 
-                ? `${state.settings.teacherName} ${state.settings.teacherLastName}`
-                : state.settings.teacherName || 'Non configurato';
-        }
-        if (yearElement) {
-            yearElement.textContent = state.settings.schoolYear || 'Non configurato';
-        }
-
+        // REMOVED: Legacy display elements (old profile section)
+        // NEW: Load all form fields with current values
+        
         // Load AI FAB settings
         const fabCheckbox = document.getElementById('ai-fab-enabled-checkbox');
         if (fabCheckbox) {
             const fabEnabled = localStorage.getItem('ai-fab-enabled');
             fabCheckbox.checked = fabEnabled !== 'false'; // Default to true if not set
         }
+        
+        // Load profile settings
+        this.loadProfileSettingsForm();
         
         // Load schedule settings
         this.loadScheduleSettingsForm();
@@ -1644,6 +1643,24 @@ class DocentePlusPlus {
 
         // Load notification settings
         this.loadNotificationSettingsForm();
+    }
+    
+    // NEW: Load profile settings form
+    loadProfileSettingsForm() {
+        const firstNameInput = document.getElementById('profile-first-name');
+        if (firstNameInput) {
+            firstNameInput.value = state.settings.teacherName || '';
+        }
+        
+        const lastNameInput = document.getElementById('profile-last-name');
+        if (lastNameInput) {
+            lastNameInput.value = state.settings.teacherLastName || '';
+        }
+        
+        const emailInput = document.getElementById('profile-email');
+        if (emailInput) {
+            emailInput.value = state.settings.teacherEmail || '';
+        }
     }
 
     loadNotificationSettingsForm() {
@@ -1704,9 +1721,9 @@ class DocentePlusPlus {
     }
     
     loadSchoolYearSettingsForm() {
-        const schoolYearInput = document.getElementById('school-year-input');
-        if (schoolYearInput) {
-            schoolYearInput.value = state.settings.schoolYear || '';
+        const schoolYearSelect = document.getElementById('school-year-select');
+        if (schoolYearSelect) {
+            schoolYearSelect.value = state.settings.schoolYear || '';
         }
     }
     
@@ -1765,10 +1782,10 @@ class DocentePlusPlus {
     }
     
     saveSchoolYearSettings() {
-        const schoolYear = document.getElementById('school-year-input').value.trim();
+        const schoolYear = document.getElementById('school-year-select').value.trim();
         
         if (!schoolYear) {
-            showToast('Inserisci un anno scolastico valido', 'error');
+            showToast('Seleziona un anno scolastico', 'error');
             return;
         }
         
@@ -1779,13 +1796,160 @@ class DocentePlusPlus {
         // Update display
         this.renderSettings();
         
+        // Check if profile is now complete
+        this.checkProfileCompleteness();
+        
         // Trigger auto-planning pipeline
         this.triggerAutoPlanning();
+    }
+    
+    // NEW: Save profile settings
+    saveProfileSettings() {
+        const firstName = document.getElementById('profile-first-name').value.trim();
+        const lastName = document.getElementById('profile-last-name').value.trim();
+        const email = document.getElementById('profile-email').value.trim();
+        
+        if (!firstName) {
+            showToast('Il nome è obbligatorio', 'error');
+            return;
+        }
+        
+        // Validate email if provided
+        if (email && !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            showToast('Inserisci un indirizzo email valido', 'error');
+            return;
+        }
+        
+        state.settings.teacherName = firstName;
+        state.settings.teacherLastName = lastName;
+        state.settings.teacherEmail = email;
+        
+        saveData();
+        showToast('Profilo salvato!', 'success');
+        
+        // Mark onboarding as complete if first time
+        if (!isOnboardingComplete()) {
+            localStorage.setItem('onboardingComplete', 'true');
+        }
+        
+        // Check if profile is now complete
+        this.checkProfileCompleteness();
+        
+        this.renderSettings();
+    }
+    
+    // NEW: Save class management settings
+    saveClassManagementSettings() {
+        const selectedClasses = [];
+        document.querySelectorAll('#generated-classes-list input[type="checkbox"]:checked').forEach(checkbox => {
+            selectedClasses.push({
+                name: checkbox.value,
+                schoolYear: state.settings.schoolYear || new Date().getFullYear() + '/' + (new Date().getFullYear() + 1)
+            });
+        });
+        
+        if (selectedClasses.length === 0) {
+            showToast('Seleziona almeno una classe', 'warning');
+            return;
+        }
+        
+        // Add selected classes to state.classes if not already present
+        selectedClasses.forEach(classData => {
+            const exists = state.classes.find(c => c.name === classData.name);
+            if (!exists) {
+                state.classes.push({
+                    id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                    name: classData.name,
+                    schoolYear: classData.schoolYear,
+                    description: `Generata automaticamente`,
+                    createdAt: new Date().toISOString()
+                });
+            }
+        });
+        
+        saveData();
+        showToast(`${selectedClasses.length} classi salvate!`, 'success');
+        
+        // Re-render classes and settings
+        this.renderClasses();
+        this.renderSettings();
+    }
+    
+    // NEW: Generate classes based on selected sections and levels
+    generateClasses() {
+        const selectedSections = [];
+        document.querySelectorAll('.section-checkbox:checked').forEach(checkbox => {
+            selectedSections.push(checkbox.value);
+        });
+        
+        const selectedLevels = [];
+        document.querySelectorAll('.level-checkbox:checked').forEach(checkbox => {
+            selectedLevels.push(checkbox.value);
+        });
+        
+        if (selectedSections.length === 0 || selectedLevels.length === 0) {
+            showToast('Seleziona almeno una sezione e un livello', 'warning');
+            return;
+        }
+        
+        // Generate class names (e.g., 1A, 1B, 2A, 2B, etc.)
+        const generatedClasses = [];
+        selectedLevels.forEach(level => {
+            selectedSections.forEach(section => {
+                generatedClasses.push(`${level}${section}`);
+            });
+        });
+        
+        // Display generated classes in preview
+        const previewDiv = document.getElementById('generated-classes-preview');
+        const listDiv = document.getElementById('generated-classes-list');
+        
+        if (previewDiv && listDiv) {
+            previewDiv.style.display = 'block';
+            listDiv.innerHTML = generatedClasses.map(className => `
+                <label>
+                    <input type="checkbox" value="${className}" checked>
+                    Classe ${className}
+                </label>
+            `).join('');
+            
+            showToast(`Generate ${generatedClasses.length} classi`, 'success');
+        }
+    }
+    
+    // NEW: Check profile completeness and update UI
+    checkProfileCompleteness() {
+        if (isProfileComplete()) {
+            hideOnboardingBanner();
+            enableAllMenuItems();
+            showToast('✅ Profilo completo! Tutte le funzionalità sono disponibili.', 'success');
+        }
     }
     
     saveAISettings() {
         const apiKey = document.getElementById('ai-api-key-input').value.trim();
         const model = document.getElementById('ai-model-select').value;
+        
+        // Validate API key format if provided
+        const statusDiv = document.getElementById('api-key-status');
+        if (apiKey) {
+            // Basic validation (OpenRouter keys typically start with 'sk-or-v1-')
+            if (apiKey.startsWith('sk-or-v1-')) {
+                if (statusDiv) {
+                    statusDiv.style.display = 'block';
+                    statusDiv.innerHTML = '<span style="color: var(--md-success);">✓ Formato chiave API valido</span>';
+                }
+            } else {
+                if (statusDiv) {
+                    statusDiv.style.display = 'block';
+                    statusDiv.innerHTML = '<span style="color: var(--md-warning);">⚠️ Formato chiave non standard. Verifica che sia corretto.</span>';
+                }
+            }
+        } else {
+            if (statusDiv) {
+                statusDiv.style.display = 'none';
+            }
+        }
         
         state.settings.aiApiKey = apiKey;
         state.settings.aiModel = model;
