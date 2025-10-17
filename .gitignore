@@ -5,6 +5,7 @@
 contextual-ai.js
 onboarding_test.html
 test_pwa.sh
+test-schedule-grid.html
 
 # Testing
 node_modules/
