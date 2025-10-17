@@ -18,6 +18,12 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="css/in-classe.css">
     <link rel="stylesheet" href="css/floating-assistant.css">
+    
+    <!-- Theme Manager - Load early to avoid theme flicker -->
+    <script type="module">
+        import { initializeTheme } from './js/theme.js';
+        initializeTheme();
+    </script>
 </head>
 <body>
     <!-- Header with Lesson Info -->
@@ -89,6 +95,11 @@
 
     <!-- Main Content -->
     <main id="in-classe-main" class="in-classe-main">
+        
+        <!-- Schedule Container - Shown when no lesson is selected -->
+        <div id="schedule-container" class="schedule-container" style="display: none;">
+            <!-- Schedule view will be rendered here when no lessonKey is present -->
+        </div>
         
         <!-- Activities Section -->
         <section class="collapsible-section" data-section="activities">

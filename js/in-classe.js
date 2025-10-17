@@ -7,17 +7,46 @@
 class InClasseDataManager {
     constructor() {
         this.lessonKey = this.getLessonKeyFromURL();
-        this.lessonData = this.loadLessonData();
-        this.activities = this.loadActivities();
-        this.homework = this.loadHomework();
-        this.evaluations = this.loadEvaluations();
-        this.recordings = this.loadRecordings();
-        this.summary = this.loadSummary();
+        
+        // If no lessonKey, initialize empty structures and don't load default data
+        if (!this.lessonKey) {
+            this.lessonData = null;
+            this.activities = [];
+            this.homework = [];
+            this.evaluations = {};
+            this.recordings = [];
+            this.summary = { text: '', nextSteps: [] };
+        } else {
+            this.lessonData = this.loadLessonData();
+            this.activities = this.loadActivities();
+            this.homework = this.loadHomework();
+            this.evaluations = this.loadEvaluations();
+            this.recordings = this.loadRecordings();
+            this.summary = this.loadSummary();
+        }
     }
 
     getLessonKeyFromURL() {
         const params = new URLSearchParams(window.location.search);
-        return params.get('lesson') || null;
+        const urlParam = params.get('lesson');
+        if (urlParam) return urlParam;
+        
+        // Try localStorage.lastOpenedLesson
+        const lastOpened = localStorage.getItem('lastOpenedLesson');
+        if (lastOpened) return lastOpened;
+        
+        // Try window.opener.getCurrentLessonKey() if available
+        if (window.opener && typeof window.opener.getCurrentLessonKey === 'function') {
+            try {
+                const openerLesson = window.opener.getCurrentLessonKey();
+                if (openerLesson) return openerLesson;
+            } catch (e) {
+                console.warn('Could not get lesson key from opener:', e);
+            }
+        }
+        
+        // Return null instead of fallback to default
+        return null;
     }
 
     loadLessonData() {
@@ -25,11 +54,74 @@ class InClasseDataManager {
             return null; // No lesson selected yet
         }
 
+        return this.loadLessonDataForKey(this.lessonKey);
+    }
+
+    getScheduleFromStorage() {
+        try {
+            const scheduleStr = localStorage.getItem('schedule');
+            return scheduleStr ? JSON.parse(scheduleStr) : {};
+        } catch (e) {
+            console.error('Error loading schedule:', e);
+            return {};
+        }
+    }
+
+    getStudentsForClass(classId) {
+        if (!classId) return [];
+        try {
+            const studentsStr = localStorage.getItem('students');
+            const students = studentsStr ? JSON.parse(studentsStr) : [];
+            return students.filter(s => s.classId === classId).map(s => ({
+                id: s.id,
+                firstName: s.firstName,
+                lastName: s.lastName,
+                avatar: `${s.firstName?.charAt(0) || ''}${s.lastName?.charAt(0) || ''}`
+            }));
+        } catch (e) {
+            console.error('Error loading students:', e);
+            return [];
+        }
+    }
+
+    loadScheduleFromStorageOrOpener() {
+        // Try multiple localStorage keys
+        const keys = ['teacherSchedule', 'schedule', 'appSchedule', 'stateSchedule'];
+        for (const key of keys) {
+            try {
+                const scheduleStr = localStorage.getItem(key);
+                if (scheduleStr) {
+                    const schedule = JSON.parse(scheduleStr);
+                    if (schedule && typeof schedule === 'object' && Object.keys(schedule).length > 0) {
+                        return schedule;
+                    }
+                }
+            } catch (e) {
+                console.warn(`Error loading schedule from ${key}:`, e);
+            }
+        }
+        
+        // Try window.opener.getSchedule() if available
+        if (window.opener && typeof window.opener.getSchedule === 'function') {
+            try {
+                const openerSchedule = window.opener.getSchedule();
+                if (openerSchedule && typeof openerSchedule === 'object' && Object.keys(openerSchedule).length > 0) {
+                    return openerSchedule;
+                }
+            } catch (e) {
+                console.warn('Could not get schedule from opener:', e);
+            }
+        }
+        
+        return null;
+    }
+
+    loadLessonDataForKey(lessonKey) {
         // Try to load from localStorage schedule first
         const schedule = this.getScheduleFromStorage();
-        if (schedule && schedule[this.lessonKey]) {
-            const slot = schedule[this.lessonKey];
-            const [day, time] = this.lessonKey.split('-');
+        if (schedule && schedule[lessonKey]) {
+            const slot = schedule[lessonKey];
+            const [day, time] = lessonKey.split('-');
             return {
                 classId: slot.classId || '',
                 className: slot.className || `Classe ${slot.classId}`,
@@ -59,34 +151,7 @@ class InClasseDataManager {
             }
         };
         
-        return mockData[this.lessonKey] || null;
-    }
-
-    getScheduleFromStorage() {
-        try {
-            const scheduleStr = localStorage.getItem('schedule');
-            return scheduleStr ? JSON.parse(scheduleStr) : {};
-        } catch (e) {
-            console.error('Error loading schedule:', e);
-            return {};
-        }
-    }
-
-    getStudentsForClass(classId) {
-        if (!classId) return [];
-        try {
-            const studentsStr = localStorage.getItem('students');
-            const students = studentsStr ? JSON.parse(studentsStr) : [];
-            return students.filter(s => s.classId === classId).map(s => ({
-                id: s.id,
-                firstName: s.firstName,
-                lastName: s.lastName,
-                avatar: `${s.firstName?.charAt(0) || ''}${s.lastName?.charAt(0) || ''}`
-            }));
-        } catch (e) {
-            console.error('Error loading students:', e);
-            return [];
-        }
+        return mockData[lessonKey] || null;
     }
 
     loadActivities() {
@@ -325,6 +390,15 @@ class InClasseUI {
     }
 
     init() {
+        // If no lessonKey, show schedule view instead of lesson UI
+        if (!this.dataManager.lessonKey) {
+            this.renderScheduleView();
+            // Still set up basic event listeners for navigation
+            document.getElementById('back-button')?.addEventListener('click', () => this.exit());
+            document.getElementById('exit-button')?.addEventListener('click', () => this.exit());
+            return;
+        }
+
         this.renderHeader();
         this.renderActivities();
         this.renderHomework();
@@ -511,6 +585,181 @@ Esempio di trascrizione:
     renderSummary() {
         document.getElementById('lesson-summary').value = this.dataManager.summary.text || '';
         this.renderNextSteps();
+    }
+
+    renderScheduleView() {
+        const container = document.getElementById('schedule-container');
+        if (!container) {
+            console.error('Schedule container not found');
+            return;
+        }
+
+        // Load schedule from storage or opener
+        const schedule = this.dataManager.loadScheduleFromStorageOrOpener();
+        
+        if (!schedule || Object.keys(schedule).length === 0) {
+            // No schedule available - show inline picker fallback
+            this.showLessonPickerInline();
+            return;
+        }
+
+        // Hide lesson header and show schedule container
+        const lessonHeader = document.getElementById('lesson-header');
+        if (lessonHeader) {
+            lessonHeader.style.display = 'none';
+        }
+        
+        // Hide all lesson sections
+        document.querySelectorAll('.collapsible-section').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        container.style.display = 'block';
+
+        // Group slots by day
+        const dayOrder = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
+        const slotsByDay = {};
+        
+        Object.entries(schedule).forEach(([key, slot]) => {
+            if (slot.classId && slot.subject) {
+                const [day, time] = key.split('-');
+                if (!slotsByDay[day]) {
+                    slotsByDay[day] = [];
+                }
+                slotsByDay[day].push({ key, time, ...slot });
+            }
+        });
+
+        // Sort days
+        const sortedDays = Object.keys(slotsByDay).sort((a, b) => 
+            dayOrder.indexOf(a) - dayOrder.indexOf(b)
+        );
+
+        // Render schedule
+        container.innerHTML = `
+            <div class="schedule-view-header">
+                <h2>Il Tuo Orario</h2>
+                <p>Seleziona una lezione per entrare in classe</p>
+            </div>
+            <div class="schedule-days">
+                ${sortedDays.map(day => {
+                    const slots = slotsByDay[day].sort((a, b) => a.time.localeCompare(b.time));
+                    return `
+                        <div class="schedule-day">
+                            <h3>${day}</h3>
+                            <div class="schedule-slots">
+                                ${slots.map(slot => `
+                                    <div class="schedule-slot">
+                                        <div class="slot-info">
+                                            <div class="slot-time">${slot.time}</div>
+                                            <div class="slot-subject">${slot.subject}</div>
+                                            <div class="slot-class">${slot.className || slot.classId}</div>
+                                            ${slot.activityType ? `<div class="slot-activity-type">${slot.activityType}</div>` : ''}
+                                        </div>
+                                        <button class="btn btn-primary btn-enter-lesson" 
+                                                data-lesson-key="${slot.key}" 
+                                                data-class-id="${slot.classId}"
+                                                aria-label="Entra in classe ${slot.className || slot.classId}">
+                                            <span class="material-symbols-outlined">login</span>
+                                            <span>Entra in Classe</span>
+                                        </button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+
+        // Attach event listeners to "Entra in Classe" buttons
+        container.querySelectorAll('.btn-enter-lesson').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lessonKey = btn.dataset.lessonKey;
+                const classId = btn.dataset.classId;
+                this.enterLessonFromSchedule(lessonKey, classId);
+            });
+        });
+    }
+
+    showLessonPickerInline() {
+        const container = document.getElementById('schedule-container');
+        if (!container) return;
+
+        // Hide lesson header
+        const lessonHeader = document.getElementById('lesson-header');
+        if (lessonHeader) {
+            lessonHeader.style.display = 'none';
+        }
+        
+        // Hide all lesson sections
+        document.querySelectorAll('.collapsible-section').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        container.style.display = 'block';
+        container.innerHTML = `
+            <div class="inline-lesson-picker">
+                <div class="empty-state">
+                    <span class="material-symbols-outlined">event_busy</span>
+                    <h2>Nessuna lezione disponibile</h2>
+                    <p>Non hai ancora configurato il tuo orario.</p>
+                    <p>Torna alla <a href="index.html#schedule">pagina dell'orario</a> per configurarlo.</p>
+                    <div style="margin-top: 24px;">
+                        <button class="btn btn-secondary" onclick="window.location.href='index.html#schedule'">
+                            <span class="material-symbols-outlined">calendar_month</span>
+                            <span>Vai all'Orario</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="window.location.href='index.html#home'" style="margin-left: 8px;">
+                            <span class="material-symbols-outlined">home</span>
+                            <span>Vai alla Home</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    enterLessonFromSchedule(lessonKey, classId) {
+        // Save to localStorage
+        localStorage.setItem('lastOpenedLesson', lessonKey);
+        if (classId) {
+            localStorage.setItem('lastOpenedClassId', classId);
+        }
+
+        // Update dataManager with the selected lesson
+        this.dataManager.lessonKey = lessonKey;
+        this.dataManager.lessonData = this.dataManager.loadLessonDataForKey(lessonKey);
+        this.dataManager.activities = this.dataManager.loadActivities();
+        this.dataManager.homework = this.dataManager.loadHomework();
+        this.dataManager.evaluations = this.dataManager.loadEvaluations();
+        this.dataManager.recordings = this.dataManager.loadRecordings();
+        this.dataManager.summary = this.dataManager.loadSummary();
+
+        // Hide schedule view
+        const scheduleContainer = document.getElementById('schedule-container');
+        if (scheduleContainer) {
+            scheduleContainer.style.display = 'none';
+        }
+
+        // Show lesson header
+        const lessonHeader = document.getElementById('lesson-header');
+        if (lessonHeader) {
+            lessonHeader.style.display = 'block';
+        }
+
+        // Show all lesson sections
+        document.querySelectorAll('.collapsible-section').forEach(section => {
+            section.style.display = 'block';
+        });
+
+        // Render the lesson UI
+        this.renderHeader();
+        this.renderActivities();
+        this.renderHomework();
+        this.renderEvaluations();
+        this.setupVoiceRecorder();
+        this.renderSummary();
     }
 
     renderNextSteps() {
