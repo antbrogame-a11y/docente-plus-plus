@@ -16,6 +16,32 @@
     }
     function encodeHtmlAttr(str) { return escapeHtml(str).replace(/"/g,'&quot;'); }
 
+    function loadScheduleFromStorageOrOpener() {
+        // Try localStorage first
+        try {
+            const scheduleStr = localStorage.getItem('schedule');
+            if (scheduleStr) {
+                const schedule = JSON.parse(scheduleStr);
+                if (schedule && typeof schedule === 'object') {
+                    return schedule;
+                }
+            }
+        } catch (e) {
+            console.warn('Error loading schedule from localStorage:', e);
+        }
+
+        // Try window.opener if available
+        if (window.opener && window.opener.state && window.opener.state.schedule) {
+            try {
+                return window.opener.state.schedule;
+            } catch (e) {
+                console.warn('Error accessing schedule from opener:', e);
+            }
+        }
+
+        return null;
+    }
+
     function buildSlotsArray(schedule) {
         if (!schedule) return [];
         if (Array.isArray(schedule.slots)) return schedule.slots;
@@ -34,7 +60,7 @@
             if (legacyModal) legacyModal.style.display = 'none';
         } catch (e) {}
 
-        const schedule = (typeof loadScheduleFromStorageOrOpener === 'function') ? loadScheduleFromStorageOrOpener() : null;
+        const schedule = loadScheduleFromStorageOrOpener();
         const container = document.getElementById('schedule-container');
         if (!container) return;
 
