@@ -1,6 +1,7 @@
 /* schedule-patch.js - improved renderer: normalize, dedupe and stacked lessons */
 (function () {
     const DAY_ORDER = ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'];
+
     function sortDays(days) {
         return Array.from(days).sort((a,b) => {
             const ia = DAY_ORDER.indexOf(a), ib = DAY_ORDER.indexOf(b);
@@ -10,11 +11,29 @@
             return ia - ib;
         });
     }
+
     function escapeHtml(str) {
         if (!str && str !== 0) return '';
         return String(str).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
     }
     function encodeHtmlAttr(str) { return escapeHtml(str).replace(/"/g,'&quot;'); }
+
+    function buildSlotsArray(schedule) {
+        if (!schedule) return [];
+        if (Array.isArray(schedule.slots)) return schedule.slots;
+        const arr = [];
+        for (const k of Object.keys(schedule)) {
+            if (Array.isArray(schedule[k])) arr.push(...schedule[k]);
+        }
+        return arr;
+    }
+
+    function hideLegacyModal() {
+        try {
+            const legacyModal = document.getElementById('lesson-picker-modal');
+            if (legacyModal) legacyModal.style.display = 'none';
+        } catch (e) { /* ignore */ }
+    }
 
     function loadScheduleFromStorageOrOpener() {
         // Try localStorage first
@@ -42,32 +61,17 @@
         return null;
     }
 
-    function buildSlotsArray(schedule) {
-        if (!schedule) return [];
-        if (Array.isArray(schedule.slots)) return schedule.slots;
-        // if schedule is object with day keys -> concat arrays
-        const arr = [];
-        for (const k of Object.keys(schedule)) {
-            if (Array.isArray(schedule[k])) arr.push(...schedule[k]);
-        }
-        return arr;
-    }
-
     function newRenderScheduleView() {
-        try {
-            // hide legacy modal to avoid blocking UI
-            const legacyModal = document.getElementById('lesson-picker-modal');
-            if (legacyModal) legacyModal.style.display = 'none';
-        } catch (e) {}
+        hideLegacyModal();
 
         const schedule = loadScheduleFromStorageOrOpener();
         const container = document.getElementById('schedule-container');
         if (!container) return;
 
         console.debug('schedule-patch: raw schedule', schedule);
+
         let slots = buildSlotsArray(schedule);
 
-        // normalize fields
         slots = slots.map(s => ({
             day: (s.day || s.giorno || '').toString().trim(),
             time: (s.time || s.orario || s.hour || '').toString().trim(),
@@ -76,7 +80,6 @@
             lessonKey: s.lessonKey || s.key || `${s.day || s.giorno || ''}-${s.time || s.orario || ''}`
         })).filter(s => s.day && s.time);
 
-        // build map[time][day] = array of slots (dedup by lessonKey)
         const map = {};
         const daysSet = new Set();
         const timesSet = new Set();
@@ -121,7 +124,6 @@
                 if (bucket.length === 0) {
                     html += `<div class="slot-cell" role="cell" aria-label="Nessuna lezione"></div>`;
                 } else {
-                    // render stacked items
                     html += `<div class="slot-cell" role="cell">`;
                     bucket.forEach(slot => {
                         const lessonKey = slot.lessonKey;
@@ -157,6 +159,13 @@
     function tryPatch() {
         if (window.InClasseUI && window.InClasseUI.prototype) {
             window.InClasseUI.prototype.renderScheduleView = newRenderScheduleView;
+            if (typeof window.InClasseUI.prototype.init === 'function') {
+                const originalInit = window.InClasseUI.prototype.init;
+                window.InClasseUI.prototype.init = function(...args) {
+                    try { hideLegacyModal(); } catch(e){}
+                    return originalInit.apply(this, args);
+                };
+            }
             return true;
         }
         return false;
@@ -165,7 +174,10 @@
     if (!tryPatch()) {
         window.addEventListener('DOMContentLoaded', () => {
             const maxAttempts = 12; let attempts = 0;
-            const timer = setInterval(() => { attempts++; if (tryPatch() || attempts >= maxAttempts) clearInterval(timer); }, 200);
+            const timer = setInterval(() => {
+                attempts++;
+                if (tryPatch() || attempts >= maxAttempts) clearInterval(timer);
+            }, 200);
         });
     }
 })();
