@@ -22,6 +22,8 @@ import {
     resetFABPosition, 
     toggleFABVisibility 
 } from './js/ai-agent.js';
+import { initFloatingAssistant } from './src/ui/floating-assistant/floating-assistant.js';
+import { initBreadcrumbs } from './src/components/breadcrumbs/breadcrumbs.js';
 import { importPipeline } from './js/import-pipeline.js';
 import { smartPlanner } from './js/planner.js';
 import { notificationSystem } from './js/notifications.js';
@@ -135,8 +137,18 @@ class DocentePlusPlus {
             // Initialize Navigation system
             initNavigation();
             
+            // Initialize breadcrumbs (optional, for pages that need it)
+            const breadcrumbContainer = document.getElementById('breadcrumbs-container');
+            if (breadcrumbContainer) {
+                initBreadcrumbs('breadcrumbs-container');
+            }
+            
             // Initialize AI Agent FAB
             initAIAgentFAB();
+            
+            // Initialize new Floating Assistant (optional alternative to existing FAB)
+            // Uncomment the following line to use the new floating assistant instead
+            // initFloatingAssistant();
             
             // Initialize notification system
             notificationSystem.startAutoCheck();

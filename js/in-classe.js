@@ -3,6 +3,9 @@
  * Mobile First, Vanilla JS, Ready for API Integration
  */
 
+// Import breadcrumbs
+import { initBreadcrumbs } from '../src/components/breadcrumbs/breadcrumbs.js';
+
 // Mock Data Management
 class InClasseDataManager {
     constructor() {
@@ -743,6 +746,9 @@ ${this.dataManager.summary.nextSteps.map((s, i) => `${i + 1}. ${s.text}`).join('
 let inClasseApp;
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize breadcrumbs
+    initBreadcrumbs('breadcrumbs-container');
+    
     const dataManager = new InClasseDataManager();
     const audioRecorder = new AudioRecorder();
     const analytics = new AnalyticsManager(dataManager);

@@ -16,11 +16,13 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="src/components/breadcrumbs/breadcrumbs.css">
     <link rel="stylesheet" href="css/in-classe.css">
 </head>
 <body>
     <!-- Header with Lesson Info -->
     <header id="lesson-header" class="lesson-header">
+        <div id="breadcrumbs-container" class="breadcrumbs"></div>
         <div class="lesson-header-content">
             <button id="back-button" class="icon-btn" title="Torna all'orario" aria-label="Torna all'orario">
                 <span class="material-symbols-outlined">arrow_back</span>
@@ -323,6 +325,7 @@
 
     <!-- Scripts -->
     <script src="js/icons.js"></script>
+    <script type="module" src="src/components/breadcrumbs/breadcrumbs.js"></script>
     <script type="module" src="js/in-classe.js"></script>
 </body>
 </html>
