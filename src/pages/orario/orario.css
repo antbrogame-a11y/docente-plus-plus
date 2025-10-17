@@ -1,0 +1,182 @@
+/**
+ * Orario (Schedule) Page - Styles
+ * Mobile-first responsive design with CSS Grid
+ */
+
+:root {
+  --orario-header-bg: var(--md-primary, #4a90e2);
+  --orario-header-text: #ffffff;
+  --orario-grid-border: var(--md-divider, #e0e0e0);
+  --orario-cell-bg: var(--md-surface, #ffffff);
+  --orario-time-bg: var(--md-background, #fafafa);
+  --orario-header-cell-bg: var(--md-primary-light, #64b5f6);
+}
+
+/* Header */
+.orario-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--orario-header-bg);
+  color: var(--orario-header-text);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  padding: 1rem;
+}
+
+.header-content h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+/* Main Content */
+.orario-main {
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.orario-container {
+  min-width: 600px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Schedule Grid */
+.schedule-grid {
+  display: grid;
+  gap: 1px;
+  background: var(--orario-grid-border);
+  border: 1px solid var(--orario-grid-border);
+  /* Grid template will be set dynamically in JS */
+}
+
+.schedule-cell {
+  background: var(--orario-cell-bg);
+  padding: 0.75rem;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+/* Header cells (days) */
+.schedule-cell--header {
+  background: var(--orario-header-cell-bg);
+  color: white;
+  font-weight: 500;
+  font-size: 0.875rem;
+  min-height: 40px;
+}
+
+/* Time cells */
+.schedule-cell--time {
+  background: var(--orario-time-bg);
+  font-weight: 500;
+  font-size: 0.875rem;
+  min-height: 60px;
+}
+
+/* Lesson cells */
+.schedule-cell--lesson {
+  background: var(--md-surface, #ffffff);
+  border: 2px solid var(--md-primary, #4a90e2);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.schedule-cell--lesson:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.schedule-cell--lesson:focus {
+  outline: 2px solid var(--md-primary, #4a90e2);
+  outline-offset: 2px;
+  z-index: 10;
+}
+
+.lesson-class {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  color: var(--md-primary, #4a90e2);
+}
+
+.lesson-subject {
+  font-size: 0.875rem;
+  color: var(--md-text-primary, #212121);
+}
+
+.lesson-time {
+  font-size: 0.75rem;
+  color: var(--md-text-secondary, #757575);
+  margin-top: 0.25rem;
+}
+
+/* Empty cells */
+.schedule-cell--empty {
+  background: var(--orario-cell-bg);
+  cursor: default;
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .orario-main {
+    padding: 1.5rem;
+  }
+  
+  .header-content h1 {
+    font-size: 1.75rem;
+  }
+  
+  .schedule-cell {
+    padding: 1rem;
+    min-height: 80px;
+  }
+  
+  .schedule-cell--time {
+    min-height: 80px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .orario-main {
+    padding: 2rem;
+  }
+  
+  .orario-container {
+    min-width: 800px;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --orario-cell-bg: var(--md-surface-dark, #1e1e1e);
+    --orario-time-bg: var(--md-background-dark, #121212);
+    --orario-grid-border: var(--md-divider-dark, #3e3e3e);
+  }
+  
+  .schedule-cell--lesson {
+    background: var(--md-surface-dark, #1e1e1e);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .schedule-cell--lesson {
+    transition: none;
+  }
+  
+  .schedule-cell--lesson:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interfaccia In Classe - Docente++">
+    <meta name="theme-color" content="#4a90e2">
+    <title>In Classe - Docente++</title>
+    
+    <!-- Material Design Icons -->
+    <link href="../../fonts/material-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <!-- Roboto Font -->
+    <link href="../../fonts/roboto.css" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../src/components/breadcrumbs/breadcrumbs.css">
+    <link rel="stylesheet" href="in-classe.css">
+</head>
+<body>
+    <!-- Header with Breadcrumbs -->
+    <header class="in-classe-header">
+        <div id="breadcrumbs-container" class="breadcrumbs"></div>
+        <div class="lesson-header-content">
+            <button id="back-button" class="icon-btn" title="Torna all'orario" aria-label="Torna all'orario">
+                <span class="material-symbols-outlined">arrow_back</span>
+            </button>
+            <div class="lesson-info">
+                <h1 id="lesson-title">In Classe</h1>
+                <div class="lesson-meta" id="lesson-meta">
+                    <span id="lesson-class">Classe</span>
+                    <span id="lesson-subject">Materia</span>
+                    <span id="lesson-datetime">Data e ora</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="in-classe-main" class="in-classe-main">
+        
+        <!-- Activities Section -->
+        <section class="collapsible-section" data-section="activities">
+            <div class="section-header" role="button" tabindex="0" aria-expanded="true" aria-controls="activities-content">
+                <div class="section-title">
+                    <span class="material-symbols-outlined">assignment</span>
+                    <h2>Attività</h2>
+                    <span class="section-count" id="activities-count">0</span>
+                </div>
+                <span class="material-symbols-outlined expand-icon">expand_more</span>
+            </div>
+            <div class="section-content" id="activities-content">
+                <div class="section-actions">
+                    <button class="btn btn-primary" id="add-activity-btn">
+                        <span class="material-symbols-outlined">add</span>
+                        Nuova Attività
+                    </button>
+                </div>
+                <div class="activities-list" id="activities-list"></div>
+            </div>
+        </section>
+
+        <!-- Assignments Section -->
+        <section class="collapsible-section" data-section="assignments">
+            <div class="section-header" role="button" tabindex="0" aria-expanded="true" aria-controls="assignments-content">
+                <div class="section-title">
+                    <span class="material-symbols-outlined">book</span>
+                    <h2>Compiti</h2>
+                    <span class="section-count" id="assignments-count">0</span>
+                </div>
+                <span class="material-symbols-outlined expand-icon">expand_more</span>
+            </div>
+            <div class="section-content" id="assignments-content">
+                <div class="section-actions">
+                    <button class="btn btn-primary" id="add-assignment-btn">
+                        <span class="material-symbols-outlined">add</span>
+                        Assegna Compito
+                    </button>
+                </div>
+                <div class="assignments-list" id="assignments-list"></div>
+            </div>
+        </section>
+
+        <!-- Grades Section -->
+        <section class="collapsible-section" data-section="grades">
+            <div class="section-header" role="button" tabindex="0" aria-expanded="true" aria-controls="grades-content">
+                <div class="section-title">
+                    <span class="material-symbols-outlined">grade</span>
+                    <h2>Valutazioni</h2>
+                    <span class="section-count" id="grades-count">0</span>
+                </div>
+                <span class="material-symbols-outlined expand-icon">expand_more</span>
+            </div>
+            <div class="section-content" id="grades-content">
+                <div class="section-actions">
+                    <button class="btn btn-primary" id="add-grade-btn">
+                        <span class="material-symbols-outlined">add</span>
+                        Aggiungi Valutazione
+                    </button>
+                </div>
+                <div class="grades-list" id="grades-list"></div>
+            </div>
+        </section>
+
+        <!-- Voice Notes Section -->
+        <section class="collapsible-section" data-section="voice-notes">
+            <div class="section-header" role="button" tabindex="0" aria-expanded="false" aria-controls="voice-notes-content">
+                <div class="section-title">
+                    <span class="material-symbols-outlined">mic</span>
+                    <h2>Note Vocali</h2>
+                    <span class="section-count" id="voice-notes-count">0</span>
+                </div>
+                <span class="material-symbols-outlined expand-icon">expand_more</span>
+            </div>
+            <div class="section-content" id="voice-notes-content" style="display: none;">
+                <div class="section-actions">
+                    <button class="btn btn-primary" id="record-note-btn">
+                        <span class="material-symbols-outlined">mic</span>
+                        Registra Nota
+                    </button>
+                </div>
+                <div class="voice-notes-list" id="voice-notes-list"></div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section class="collapsible-section" data-section="analytics">
+            <div class="section-header" role="button" tabindex="0" aria-expanded="false" aria-controls="analytics-content">
+                <div class="section-title">
+                    <span class="material-symbols-outlined">analytics</span>
+                    <h2>Analisi</h2>
+                </div>
+                <span class="material-symbols-outlined expand-icon">expand_more</span>
+            </div>
+            <div class="section-content" id="analytics-content" style="display: none;">
+                <div class="analytics-dashboard" id="analytics-dashboard">
+                    <p class="info-text">Statistiche e analisi della sessione (Demo)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Agenda Section -->
+        <section class="collapsible-section" data-section="agenda">
+            <div class="section-header" role="button" tabindex="0" aria-expanded="false" aria-controls="agenda-content">
+                <div class="section-title">
+                    <span class="material-symbols-outlined">event_note</span>
+                    <h2>Agenda</h2>
+                </div>
+                <span class="material-symbols-outlined expand-icon">expand_more</span>
+            </div>
+            <div class="section-content" id="agenda-content" style="display: none;">
+                <div class="agenda-view" id="agenda-view">
+                    <p class="info-text">Agenda della lezione</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
+    <script type="module" src="../../src/components/breadcrumbs/breadcrumbs.js"></script>
+    <script type="module" src="in-classe.js"></script>
+</body>
+</html>

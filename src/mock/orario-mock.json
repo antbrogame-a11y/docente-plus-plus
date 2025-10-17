@@ -1,0 +1,175 @@
+{
+  "weekStart": "2024-10-14",
+  "lessons": [
+    {
+      "id": "lesson-mon-1",
+      "day": "Lunedì",
+      "startTime": "08:00",
+      "endTime": "09:00",
+      "class": "3A",
+      "subject": "Matematica",
+      "type": "Teoria",
+      "room": "Aula 101"
+    },
+    {
+      "id": "lesson-mon-2",
+      "day": "Lunedì",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "class": "3B",
+      "subject": "Matematica",
+      "type": "Esercizi",
+      "room": "Aula 102"
+    },
+    {
+      "id": "lesson-mon-3",
+      "day": "Lunedì",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "class": "4A",
+      "subject": "Fisica",
+      "type": "Laboratorio",
+      "room": "Lab Fisica"
+    },
+    {
+      "id": "lesson-tue-1",
+      "day": "Martedì",
+      "startTime": "08:00",
+      "endTime": "09:00",
+      "class": "3A",
+      "subject": "Italiano",
+      "type": "Teoria",
+      "room": "Aula 101"
+    },
+    {
+      "id": "lesson-tue-2",
+      "day": "Martedì",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "class": "5A",
+      "subject": "Storia",
+      "type": "Seminario",
+      "room": "Aula Magna"
+    },
+    {
+      "id": "lesson-tue-3",
+      "day": "Martedì",
+      "startTime": "14:00",
+      "endTime": "15:00",
+      "class": "3B",
+      "subject": "Geografia",
+      "type": "Teoria",
+      "room": "Aula 103"
+    },
+    {
+      "id": "lesson-wed-1",
+      "day": "Mercoledì",
+      "startTime": "08:00",
+      "endTime": "10:00",
+      "class": "4B",
+      "subject": "Chimica",
+      "type": "Laboratorio",
+      "room": "Lab Chimica"
+    },
+    {
+      "id": "lesson-wed-2",
+      "day": "Mercoledì",
+      "startTime": "11:00",
+      "endTime": "12:00",
+      "class": "3A",
+      "subject": "Inglese",
+      "type": "Conversazione",
+      "room": "Aula 101"
+    },
+    {
+      "id": "lesson-wed-3",
+      "day": "Mercoledì",
+      "startTime": "14:00",
+      "endTime": "16:00",
+      "class": "5B",
+      "subject": "Filosofia",
+      "type": "Dibattito",
+      "room": "Aula 205"
+    },
+    {
+      "id": "lesson-thu-1",
+      "day": "Giovedì",
+      "startTime": "08:00",
+      "endTime": "09:00",
+      "class": "3A",
+      "subject": "Matematica",
+      "type": "Verifica",
+      "room": "Aula 101"
+    },
+    {
+      "id": "lesson-thu-2",
+      "day": "Giovedì",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "class": "4A",
+      "subject": "Scienze",
+      "type": "Laboratorio",
+      "room": "Lab Scienze"
+    },
+    {
+      "id": "lesson-thu-3",
+      "day": "Giovedì",
+      "startTime": "15:00",
+      "endTime": "16:00",
+      "class": "3B",
+      "subject": "Arte",
+      "type": "Pratica",
+      "room": "Aula Arte"
+    },
+    {
+      "id": "lesson-fri-1",
+      "day": "Venerdì",
+      "startTime": "08:00",
+      "endTime": "09:00",
+      "class": "3A",
+      "subject": "Educazione Fisica",
+      "type": "Pratica",
+      "room": "Palestra"
+    },
+    {
+      "id": "lesson-fri-2",
+      "day": "Venerdì",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "class": "4A",
+      "subject": "Matematica",
+      "type": "Recupero",
+      "room": "Aula 104"
+    },
+    {
+      "id": "lesson-fri-3",
+      "day": "Venerdì",
+      "startTime": "11:00",
+      "endTime": "12:00",
+      "class": "5A",
+      "subject": "Latino",
+      "type": "Teoria",
+      "room": "Aula 201"
+    },
+    {
+      "id": "lesson-fri-4",
+      "day": "Venerdì",
+      "startTime": "14:00",
+      "endTime": "17:00",
+      "class": "Tutti",
+      "subject": "Collegio Docenti",
+      "type": "Riunione",
+      "room": "Aula Magna"
+    }
+  ],
+  "deepLinkExamples": [
+    {
+      "description": "Link to Monday 8:00 Math class 3A",
+      "url": "/in-classe?date=2024-10-14&time=08:00&class=3A&subject=Matematica&slotId=lesson-mon-1"
+    },
+    {
+      "description": "Link to Wednesday afternoon Philosophy debate",
+      "url": "/in-classe?date=2024-10-16&time=14:00&class=5B&subject=Filosofia&slotId=lesson-wed-3"
+    }
+  ]
+}
