@@ -90,6 +90,8 @@
 
     <!-- Main Content -->
     <main id="in-classe-main" class="in-classe-main">
+        <!-- Schedule Container -->
+        <div id="schedule-container" class="schedule-container" aria-live="polite"></div>
         
         <!-- Activities Section -->
         <section class="collapsible-section" data-section="activities">
@@ -370,13 +372,13 @@
 
     <!-- Scripts -->
     <script src="js/icons.js"></script>
-    <script src="js/schedule-patch.js"></script>
     <script type="module">
         // Import floating assistant
         import { initFloatingAssistant } from './js/floating-assistant.js';
         window.initFloatingAssistant = initFloatingAssistant;
     </script>
     <script type="module" src="js/in-classe.js"></script>
+    <script src="js/schedule-patch.js"></script>
 
     <!-- AI Agent Floating Action Button (FAB) -->
     <button id="ai-fab" class="ai-fab" title="Apri Assistente IA" aria-label="Apri Assistente IA">

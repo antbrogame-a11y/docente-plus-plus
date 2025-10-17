@@ -1,4 +1,107 @@
 /* Schedule Grid Styles */
+.schedule-container {
+  margin: 20px 0;
+  padding: 0;
+}
+
+.schedule-table {
+  display: grid;
+  grid-template-columns: 80px repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1px;
+  background: #e0e0e0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.header-cell {
+  background: #6750A4;
+  color: white;
+  font-weight: 600;
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.time-cell {
+  background: #f5f5f5;
+  font-weight: 600;
+  color: #333;
+  padding: 12px 8px;
+  text-align: center;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.slot-cell {
+  background: white;
+  padding: 8px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.slot-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.slot-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.slot-subject {
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 14px;
+}
+
+.slot-class {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.slot-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.enter-lesson-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.empty-schedule {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-schedule h3 {
+  margin: 16px 0 8px;
+  color: #333;
+}
+
+.empty-schedule p {
+  color: #666;
+  margin-bottom: 24px;
+}
+
 .schedule-table-wrapper {
   overflow-x: auto;
   margin: 20px 0;
@@ -128,6 +231,29 @@
     padding: 8px 4px;
   }
 
+  .slot-cell {
+    min-height: 60px;
+    padding: 6px;
+  }
+
+  .slot-item {
+    padding: 6px;
+    gap: 4px;
+  }
+
+  .slot-subject {
+    font-size: 12px;
+  }
+
+  .slot-class {
+    font-size: 11px;
+  }
+
+  .enter-lesson-btn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
   .schedule-slot-content {
     padding: 6px;
     gap: 4px;
@@ -167,6 +293,23 @@ body.dark-theme .schedule-table td {
 body.dark-theme .schedule-time {
   background: #2a2a2a;
   color: #e0e0e0;
+}
+
+body.dark-theme .slot-cell {
+  background: #1e1e1e;
+}
+
+body.dark-theme .slot-item {
+  background: #2a2a2a;
+  border-color: #333;
+}
+
+body.dark-theme .slot-subject {
+  color: #e0e0e0;
+}
+
+body.dark-theme .slot-class {
+  color: #aaa;
 }
 
 body.dark-theme .schedule-slot-content {
