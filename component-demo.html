@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Demo - Breadcrumbs & Floating Assistant</title>
+    
+    <!-- Material Design Icons -->
+    <link href="fonts/material-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <link href="fonts/roboto.css" rel="stylesheet">
+    
+    <!-- Component Styles -->
+    <link rel="stylesheet" href="src/components/breadcrumbs/breadcrumbs.css">
+    <link rel="stylesheet" href="src/ui/floating-assistant/floating-assistant.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --md-primary: #4a90e2;
+            --md-primary-dark: #3d7ac2;
+            --md-primary-light: #64b5f6;
+            --md-secondary: #ff6b6b;
+            --md-secondary-dark: #e05555;
+            --md-surface: #ffffff;
+            --md-background: #fafafa;
+            --md-text-primary: #212121;
+            --md-text-secondary: #757575;
+            --md-text-disabled: #bdbdbd;
+            --md-divider: #e0e0e0;
+        }
+        
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--md-background);
+            color: var(--md-text-primary);
+        }
+        
+        .demo-header {
+            background: var(--md-primary);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-header h1 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .demo-header p {
+            opacity: 0.9;
+        }
+        
+        .demo-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .demo-section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-section h2 {
+            margin-bottom: 1rem;
+            color: var(--md-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .demo-section p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: var(--md-text-secondary);
+        }
+        
+        .demo-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: var(--md-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--md-primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--md-secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--md-secondary-dark);
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            border: 1px solid var(--md-divider);
+            border-radius: 4px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid var(--md-primary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--md-primary);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        <h1>Component Demo</h1>
+        <p>Breadcrumbs & Floating AI Assistant</p>
+    </div>
+    
+    <!-- Breadcrumbs Demo -->
+    <div id="breadcrumbs-container" class="breadcrumbs"></div>
+    
+    <div class="demo-content">
+        <!-- Breadcrumbs Section -->
+        <section class="demo-section">
+            <h2>
+                <span class="material-symbols-outlined">navigation</span>
+                Breadcrumbs Component
+            </h2>
+            <p>
+                A mobile-first, responsive breadcrumb navigation component with accessibility features.
+                It automatically builds the breadcrumb trail from URL parameters and query strings.
+            </p>
+            
+            <div class="info-box">
+                <strong>Features:</strong>
+                <ul class="feature-list">
+                    <li>Mobile-first responsive design</li>
+                    <li>Accessibility-first with aria-current support</li>
+                    <li>Auto-hides on Home page</li>
+                    <li>Router/query parameter-based generation</li>
+                    <li>Dark mode and high contrast support</li>
+                    <li>Keyboard navigation</li>
+                </ul>
+            </div>
+            
+            <div class="demo-controls">
+                <button class="btn btn-primary" onclick="testBreadcrumbHome()">
+                    <span class="material-symbols-outlined">home</span>
+                    Simulate Home
+                </button>
+                <button class="btn btn-primary" onclick="testBreadcrumbInClasse()">
+                    <span class="material-symbols-outlined">school</span>
+                    Simulate In Classe
+                </button>
+                <button class="btn btn-primary" onclick="testBreadcrumbOrario()">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    Simulate Orario
+                </button>
+                <button class="btn btn-primary" onclick="testBreadcrumbDeepLink()">
+                    <span class="material-symbols-outlined">link</span>
+                    Simulate Deep Link
+                </button>
+            </div>
+            
+            <div class="code-block">
+// Usage Example:<br>
+import { initBreadcrumbs } from './src/components/breadcrumbs/breadcrumbs.js';<br>
+<br>
+// Initialize<br>
+initBreadcrumbs('breadcrumbs-container');<br>
+<br>
+// Or manually update<br>
+const breadcrumbs = getBreadcrumbs();<br>
+breadcrumbs.update([<br>
+&nbsp;&nbsp;{ label: 'Home', href: 'index.html', isCurrent: false },<br>
+&nbsp;&nbsp;{ label: 'In Classe', href: null, isCurrent: true }<br>
+]);
+            </div>
+        </section>
+        
+        <!-- Floating Assistant Section -->
+        <section class="demo-section">
+            <h2>
+                <span class="material-symbols-outlined">psychology</span>
+                Floating AI Assistant
+            </h2>
+            <p>
+                A responsive AI assistant panel that appears as a full-screen modal on mobile and a right drawer on desktop.
+                Includes voice input (mock), text chat, and accessibility features like focus trap and screen reader support.
+            </p>
+            
+            <div class="info-box">
+                <strong>Features:</strong>
+                <ul class="feature-list">
+                    <li>Mobile: Full-screen modal</li>
+                    <li>Desktop: Right-side drawer</li>
+                    <li>Text input with auto-resize</li>
+                    <li>Mock voice recording with transcription</li>
+                    <li>Mock AI responses with typing indicator</li>
+                    <li>ESC key to close</li>
+                    <li>Focus trap for accessibility</li>
+                    <li>aria-live regions for screen readers</li>
+                    <li>TODO comments for real API integration</li>
+                </ul>
+            </div>
+            
+            <div class="demo-controls">
+                <button class="btn btn-secondary" onclick="openFloatingAssistant()">
+                    <span class="material-symbols-outlined">psychology</span>
+                    Open Floating Assistant
+                </button>
+            </div>
+            
+            <div class="code-block">
+// Usage Example:<br>
+import { initFloatingAssistant } from './src/ui/floating-assistant/floating-assistant.js';<br>
+<br>
+// Initialize<br>
+initFloatingAssistant();<br>
+<br>
+// The FAB will be created and click handlers attached automatically<br>
+// To integrate real APIs, set MOCK_AI = false and implement:<br>
+// - startRecording() for real speech-to-text<br>
+// - callAIAPI() for real AI responses
+            </div>
+        </section>
+        
+        <!-- Integration Section -->
+        <section class="demo-section">
+            <h2>
+                <span class="material-symbols-outlined">integration_instructions</span>
+                Integration Guide
+            </h2>
+            <p>
+                Both components are designed to be easily integrated into existing applications.
+                See <code>docs/PR-128-UPDATES.md</code> for detailed integration instructions.
+            </p>
+            
+            <h3 style="margin: 1.5rem 0 1rem;">Quick Integration Steps:</h3>
+            <ol style="line-height: 2; color: var(--md-text-secondary);">
+                <li>Add CSS imports to your HTML head</li>
+                <li>Add a container div for breadcrumbs (if needed)</li>
+                <li>Import and initialize the components in your JavaScript</li>
+                <li>Customize styles using CSS variables</li>
+            </ol>
+            
+            <div class="info-box" style="margin-top: 1.5rem;">
+                <strong>Pages Available:</strong><br>
+                • <a href="src/pages/in-classe/in-classe.html">In Classe Page</a> - Full implementation with breadcrumbs and deep-linking<br>
+                • <a href="src/pages/orario/orario.html">Orario Page</a> - Schedule grid with CSS Grid layout
+            </div>
+        </section>
+    </div>
+    
+    <!-- Scripts -->
+    <script type="module">
+        import { initBreadcrumbs, getBreadcrumbs } from './src/components/breadcrumbs/breadcrumbs.js';
+        import { initFloatingAssistant, getFloatingAssistant } from './src/ui/floating-assistant/floating-assistant.js';
+        
+        // Initialize components
+        const breadcrumbs = initBreadcrumbs('breadcrumbs-container');
+        const floatingAssistant = initFloatingAssistant();
+        
+        // Make functions available globally for demo buttons
+        window.testBreadcrumbHome = () => {
+            breadcrumbs.update([
+                { label: 'Home', href: 'index.html', isCurrent: true }
+            ]);
+        };
+        
+        window.testBreadcrumbInClasse = () => {
+            breadcrumbs.update([
+                { label: 'Home', href: 'index.html', isCurrent: false },
+                { label: 'In Classe', href: null, isCurrent: true }
+            ]);
+        };
+        
+        window.testBreadcrumbOrario = () => {
+            breadcrumbs.update([
+                { label: 'Home', href: 'index.html', isCurrent: false },
+                { label: 'Orario', href: null, isCurrent: true }
+            ]);
+        };
+        
+        window.testBreadcrumbDeepLink = () => {
+            breadcrumbs.update([
+                { label: 'Home', href: 'index.html', isCurrent: false },
+                { label: 'In Classe', href: 'in-classe.html', isCurrent: false },
+                { label: '3A - Lunedì, 14 Ottobre - 08:00', href: null, isCurrent: true }
+            ]);
+        };
+        
+        window.openFloatingAssistant = () => {
+            floatingAssistant.open();
+        };
+        
+        // Initialize with a default breadcrumb
+        testBreadcrumbInClasse();
+        
+        console.log('Component demo initialized');
+    </script>
+</body>
+</html>
