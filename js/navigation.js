@@ -2,6 +2,7 @@
 // Navigation utilities for breadcrumb, back button, and browser history management
 
 import { showToast } from './ui.js';
+import { updateBreadcrumbs, triggerBreadcrumbUpdate } from '../components/breadcrumbs/breadcrumbs.js';
 
 /**
  * Navigation state manager
@@ -36,6 +37,14 @@ class NavigationManager {
             history.replaceState({ page: 'home', params: null }, '', '#home');
         }
 
+        // Listen for navigate-to-page events from breadcrumbs
+        window.addEventListener('navigate-to-page', (e) => {
+            const { page } = e.detail || {};
+            if (page) {
+                this.navigateToPage(page, null, true);
+            }
+        });
+
         this.initialized = true;
         console.log('Navigation manager initialized');
     }
@@ -58,8 +67,8 @@ class NavigationManager {
             history.pushState(state, '', url);
         }
 
-        // Update breadcrumb
-        this.updateBreadcrumb();
+        // Update breadcrumb using new component
+        triggerBreadcrumbUpdate(pageName, params);
 
         // Trigger page switch
         if (window.app && typeof window.app.switchTab === 'function') {

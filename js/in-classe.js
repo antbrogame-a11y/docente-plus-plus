@@ -1,12 +1,17 @@
 /**
  * In Classe Page - Modular JavaScript
  * Mobile First, Vanilla JS, Ready for API Integration
+ * Supports deep-linking from schedule: /in-classe?date=...&time=...&class=...&slotId=...
  */
+
+import { updateBreadcrumbs } from '../components/breadcrumbs/breadcrumbs.js';
 
 // Mock Data Management
 class InClasseDataManager {
     constructor() {
-        this.lessonKey = this.getLessonKeyFromURL();
+        // Get lesson info from URL params for deep-linking support
+        this.lessonParams = this.parseLessonFromURL();
+        this.lessonKey = this.generateLessonKey();
         this.lessonData = this.loadLessonData();
         this.activities = this.loadActivities();
         this.homework = this.loadHomework();
@@ -15,13 +20,55 @@ class InClasseDataManager {
         this.summary = this.loadSummary();
     }
 
-    getLessonKeyFromURL() {
+    /**
+     * Parse lesson info from URL parameters
+     * Supports: ?date=2024-10-17&time=08:00&class=3A&slotId=slot-mon-08-3a-math
+     */
+    parseLessonFromURL() {
         const params = new URLSearchParams(window.location.search);
-        return params.get('lesson') || 'Lunedì-08:00';
+        return {
+            date: params.get('date') || null,
+            time: params.get('time') || '08:00',
+            class: params.get('class') || '3A',
+            slotId: params.get('slotId') || null,
+            subject: params.get('subject') || null
+        };
+    }
+
+    generateLessonKey() {
+        // Generate key from params or use legacy lesson param
+        const params = new URLSearchParams(window.location.search);
+        const legacyLesson = params.get('lesson');
+        
+        if (legacyLesson) {
+            return legacyLesson;
+        }
+        
+        // Use date if available, otherwise use day name from current date
+        const dayName = this.lessonParams.date 
+            ? this.getDayNameFromDate(this.lessonParams.date)
+            : 'Lunedì';
+        
+        return `${dayName}-${this.lessonParams.time}`;
+    }
+
+    getDayNameFromDate(dateString) {
+        const date = new Date(dateString);
+        const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+        return days[date.getDay()];
+    }
+
+    getLessonKeyFromURL() {
+        return this.lessonKey;
     }
 
     loadLessonData() {
-        // Mock lesson data - in production, fetch from API
+        // Try to load from mock data file if slotId provided
+        if (this.lessonParams.slotId) {
+            return this.loadLessonFromMock(this.lessonParams.slotId);
+        }
+        
+        // Otherwise use legacy mock data
         const mockData = {
             'Lunedì-08:00': {
                 classId: '3A',
@@ -40,6 +87,55 @@ class InClasseDataManager {
         };
         
         return mockData[this.lessonKey] || mockData['Lunedì-08:00'];
+    }
+
+    /**
+     * Load lesson data from mock JSON file
+     * TODO: Replace with real API call
+     */
+    async loadLessonFromMock(slotId) {
+        try {
+            const response = await fetch('/mock/orario-mock.json');
+            const data = await response.json();
+            const slot = data.schedule.find(s => s.id === slotId);
+            
+            if (slot) {
+                return {
+                    classId: slot.classId,
+                    className: slot.className,
+                    subject: slot.subject,
+                    day: slot.day,
+                    time: `${slot.time} - ${slot.endTime}`,
+                    activityType: this.getActivityTypeName(slot.activityType),
+                    students: slot.students || []
+                };
+            }
+        } catch (error) {
+            console.error('Error loading lesson from mock:', error);
+        }
+        
+        // Fallback to default
+        return {
+            classId: this.lessonParams.class,
+            className: `Classe ${this.lessonParams.class}`,
+            subject: this.lessonParams.subject || 'Lezione',
+            day: this.getDayNameFromDate(this.lessonParams.date || new Date().toISOString()),
+            time: this.lessonParams.time,
+            activityType: 'Teoria',
+            students: []
+        };
+    }
+
+    getActivityTypeName(activityType) {
+        const types = {
+            theory: 'Teoria',
+            practice: 'Pratica',
+            lab: 'Laboratorio',
+            test: 'Verifica',
+            group: 'Lavoro di Gruppo',
+            other: 'Altro'
+        };
+        return types[activityType] || 'Teoria';
     }
 
     loadActivities() {
@@ -742,13 +838,19 @@ ${this.dataManager.summary.nextSteps.map((s, i) => `${i + 1}. ${s.text}`).join('
 // Initialize app
 let inClasseApp;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const dataManager = new InClasseDataManager();
     const audioRecorder = new AudioRecorder();
     const analytics = new AnalyticsManager(dataManager);
     
     inClasseApp = new InClasseUI(dataManager, audioRecorder, analytics);
-    inClasseApp.init();
+    await inClasseApp.init();
+    
+    // Update breadcrumbs for In Classe page
+    updateBreadcrumbs('schedule', {
+        class: dataManager.lessonData.className,
+        subject: dataManager.lessonData.subject
+    });
 });
 
 // Export for global access

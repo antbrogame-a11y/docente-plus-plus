@@ -34,6 +34,10 @@
     <link rel="stylesheet" href="css/schedule-component.css">
     <!-- Import System Styles -->
     <link rel="stylesheet" href="css/import-system.css">
+    <!-- Breadcrumbs Component Styles -->
+    <link rel="stylesheet" href="components/breadcrumbs/breadcrumbs.css">
+    <!-- Floating AI Assistant Styles -->
+    <link rel="stylesheet" href="ui/floating-assistant/floating-assistant.css">
     
     <!-- Third-party libraries for document processing -->
     <script src="libs/papaparse.min.js"></script>
@@ -113,6 +117,13 @@
             <h1>Docente++</h1>
         </div>
     </header>
+
+    <!-- Breadcrumbs Navigation -->
+    <nav class="breadcrumbs-container hidden" id="breadcrumbs-container" aria-label="Breadcrumb">
+        <ol class="breadcrumbs" id="breadcrumbs-list">
+            <!-- Breadcrumb items will be dynamically inserted here -->
+        </ol>
+    </nav>
 
     <!-- Notification Center Dropdown -->
     <div id="notification-center" class="notification-center" style="display: none;">
@@ -1279,8 +1290,67 @@
         </div>
     </div>
 
+    <!-- Floating AI Assistant Panel (NEW) -->
+    <div id="ai-assistant-backdrop" class="ai-assistant-backdrop"></div>
+    <div id="ai-assistant-panel" class="ai-assistant-panel" role="dialog" aria-labelledby="ai-assistant-title">
+        <div class="ai-assistant-header">
+            <h2 class="ai-assistant-title" id="ai-assistant-title">
+                <span class="material-symbols-outlined">smart_toy</span>
+                Assistente IA
+            </h2>
+            <button id="ai-assistant-close" class="ai-assistant-close" aria-label="Chiudi assistente IA">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="ai-assistant-body">
+            <div class="ai-responses-area" id="ai-responses-area" aria-live="polite">
+                <!-- AI responses will be displayed here -->
+                <div class="ai-response-item assistant">
+                    <div class="ai-response-label">🤖 Assistente IA</div>
+                    <div class="ai-response-text">Ciao! Sono il tuo assistente IA. Come posso aiutarti oggi?</div>
+                </div>
+            </div>
+        </div>
+        <div class="ai-input-area">
+            <div class="ai-recording-status" id="ai-recording-status">
+                <span class="ai-recording-dot"></span>
+                Registrazione in corso...
+            </div>
+            <div class="ai-input-wrapper">
+                <textarea 
+                    id="ai-text-input" 
+                    class="ai-text-input" 
+                    placeholder="Scrivi un messaggio..."
+                    aria-label="Messaggio per l'assistente IA"
+                    rows="2"></textarea>
+                <button 
+                    id="ai-mic-button" 
+                    class="ai-mic-button" 
+                    aria-label="Registra messaggio vocale"
+                    title="Registra messaggio vocale">
+                    <span class="material-symbols-outlined">mic</span>
+                </button>
+                <button 
+                    id="ai-send-button" 
+                    class="ai-send-button" 
+                    aria-label="Invia messaggio"
+                    title="Invia messaggio">
+                    <span class="material-symbols-outlined">send</span>
+                </button>
+            </div>
+        </div>
+        <!-- Screen reader live region -->
+        <div id="ai-live-region" class="ai-live-region" aria-live="assertive" aria-atomic="true"></div>
+    </div>
+
     <!-- Icon Component -->
     <script src="js/icons.js"></script>
+    
+    <!-- Breadcrumbs Component -->
+    <script type="module" src="components/breadcrumbs/breadcrumbs.js"></script>
+    
+    <!-- Floating AI Assistant -->
+    <script type="module" src="ui/floating-assistant/floating-assistant.js"></script>
     
     <!-- Main App -->
     <script type="module" src="app.js"></script>

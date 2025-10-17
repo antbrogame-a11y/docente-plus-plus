@@ -1,0 +1,128 @@
+{
+  "description": "Mock schedule data for deep-linking and In Classe integration",
+  "schedule": [
+    {
+      "id": "slot-mon-08-3a-math",
+      "day": "Lunedì",
+      "dayIndex": 1,
+      "time": "08:00",
+      "endTime": "09:00",
+      "classId": "3A",
+      "className": "Classe 3A",
+      "subject": "Matematica",
+      "activityType": "theory",
+      "teacher": "Prof. Mario Rossi",
+      "room": "Aula 12",
+      "students": [
+        { "id": "s1", "firstName": "Mario", "lastName": "Rossi" },
+        { "id": "s2", "firstName": "Laura", "lastName": "Bianchi" },
+        { "id": "s3", "firstName": "Giuseppe", "lastName": "Verdi" },
+        { "id": "s4", "firstName": "Anna", "lastName": "Neri" }
+      ]
+    },
+    {
+      "id": "slot-mon-09-3a-italian",
+      "day": "Lunedì",
+      "dayIndex": 1,
+      "time": "09:00",
+      "endTime": "10:00",
+      "classId": "3A",
+      "className": "Classe 3A",
+      "subject": "Italiano",
+      "activityType": "theory",
+      "teacher": "Prof. Mario Rossi",
+      "room": "Aula 12"
+    },
+    {
+      "id": "slot-tue-08-4b-history",
+      "day": "Martedì",
+      "dayIndex": 2,
+      "time": "08:00",
+      "endTime": "09:00",
+      "classId": "4B",
+      "className": "Classe 4B",
+      "subject": "Storia",
+      "activityType": "theory",
+      "teacher": "Prof. Mario Rossi",
+      "room": "Aula 15"
+    },
+    {
+      "id": "slot-tue-10-3a-math",
+      "day": "Martedì",
+      "dayIndex": 2,
+      "time": "10:00",
+      "endTime": "11:00",
+      "classId": "3A",
+      "className": "Classe 3A",
+      "subject": "Matematica",
+      "activityType": "practice",
+      "teacher": "Prof. Mario Rossi",
+      "room": "Aula 12"
+    },
+    {
+      "id": "slot-wed-08-3a-science",
+      "day": "Mercoledì",
+      "dayIndex": 3,
+      "time": "08:00",
+      "endTime": "09:00",
+      "classId": "3A",
+      "className": "Classe 3A",
+      "subject": "Scienze",
+      "activityType": "lab",
+      "teacher": "Prof. Mario Rossi",
+      "room": "Laboratorio A"
+    },
+    {
+      "id": "slot-wed-11-5a-test",
+      "day": "Mercoledì",
+      "dayIndex": 3,
+      "time": "11:00",
+      "endTime": "12:00",
+      "classId": "5A",
+      "className": "Classe 5A",
+      "subject": "Matematica",
+      "activityType": "test",
+      "teacher": "Prof. Mario Rossi",
+      "room": "Aula 20"
+    },
+    {
+      "id": "slot-thu-09-3a-english",
+      "day": "Giovedì",
+      "dayIndex": 4,
+      "time": "09:00",
+      "endTime": "10:00",
+      "classId": "3A",
+      "className": "Classe 3A",
+      "subject": "Inglese",
+      "activityType": "theory",
+      "teacher": "Prof. Mario Rossi",
+      "room": "Aula 12"
+    },
+    {
+      "id": "slot-fri-08-3a-art",
+      "day": "Venerdì",
+      "dayIndex": 5,
+      "time": "08:00",
+      "endTime": "09:00",
+      "classId": "3A",
+      "className": "Classe 3A",
+      "subject": "Arte",
+      "activityType": "practice",
+      "teacher": "Prof. Mario Rossi",
+      "room": "Aula Arte"
+    },
+    {
+      "id": "slot-fri-10-4b-group",
+      "day": "Venerdì",
+      "dayIndex": 5,
+      "time": "10:00",
+      "endTime": "11:00",
+      "classId": "4B",
+      "className": "Classe 4B",
+      "subject": "Progetto Interdisciplinare",
+      "activityType": "group",
+      "teacher": "Prof. Mario Rossi",
+      "room": "Aula Multimediale"
+    }
+  ]
+}

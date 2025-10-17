@@ -1,0 +1,113 @@
+/**
+ * Breadcrumbs Component Styles
+ * Mobile-first, responsive, accessible breadcrumb navigation
+ */
+
+.breadcrumbs-container {
+    background: var(--md-surface-container-low, #f5f5f5);
+    border-bottom: 1px solid var(--md-outline-variant, #e0e0e0);
+    padding: 8px 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    min-height: 32px;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.breadcrumb-link {
+    color: var(--md-primary, #6750A4);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.breadcrumb-link:hover,
+.breadcrumb-link:focus {
+    background-color: var(--md-surface-container, #e8e8e8);
+    outline: 2px solid var(--md-primary, #6750A4);
+    outline-offset: 2px;
+}
+
+.breadcrumb-link .material-symbols-outlined {
+    font-size: 18px;
+}
+
+.breadcrumb-separator {
+    color: var(--md-outline, #79747E);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-current {
+    color: var(--md-on-surface, #1C1B1F);
+    font-weight: 500;
+    padding: 4px 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.breadcrumb-current .material-symbols-outlined {
+    font-size: 18px;
+}
+
+/* Hidden state for Home page */
+.breadcrumbs-container.hidden {
+    display: none;
+}
+
+/* Responsive: Tablet and above */
+@media (min-width: 768px) {
+    .breadcrumbs-container {
+        padding: 12px 24px;
+    }
+    
+    .breadcrumbs {
+        font-size: 15px;
+        gap: 12px;
+    }
+    
+    .breadcrumb-item {
+        gap: 12px;
+    }
+}
+
+/* Accessibility: Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+    .breadcrumb-link {
+        transition: none;
+    }
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .breadcrumbs-container {
+        background: var(--md-surface-container-low, #1e1e1e);
+        border-bottom-color: var(--md-outline-variant, #3a3a3a);
+    }
+    
+    .breadcrumb-link:hover,
+    .breadcrumb-link:focus {
+        background-color: var(--md-surface-container, #2a2a2a);
+    }
+}

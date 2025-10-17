@@ -17,6 +17,8 @@
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="css/in-classe.css">
+    <!-- Breadcrumbs Component Styles -->
+    <link rel="stylesheet" href="components/breadcrumbs/breadcrumbs.css">
 </head>
 <body>
     <!-- Header with Lesson Info -->
@@ -40,6 +42,13 @@
             </button>
         </div>
     </header>
+
+    <!-- Breadcrumbs Navigation -->
+    <nav class="breadcrumbs-container" id="breadcrumbs-container" aria-label="Breadcrumb">
+        <ol class="breadcrumbs" id="breadcrumbs-list">
+            <!-- Breadcrumb items will be dynamically inserted here -->
+        </ol>
+    </nav>
 
     <!-- Main Content -->
     <main id="in-classe-main" class="in-classe-main">
@@ -323,6 +332,8 @@
 
     <!-- Scripts -->
     <script src="js/icons.js"></script>
+    <!-- Breadcrumbs Component -->
+    <script type="module" src="components/breadcrumbs/breadcrumbs.js"></script>
     <script type="module" src="js/in-classe.js"></script>
 </body>
 </html>
