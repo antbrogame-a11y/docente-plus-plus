@@ -47,6 +47,11 @@ export function switchTab(tabName) {
         window.app.currentActiveTab = tabName;
     }
 
+    // Trigger breadcrumb update
+    window.dispatchEvent(new CustomEvent('breadcrumb-update', {
+        detail: { page: tabName, params: {} }
+    }));
+
     const renderFunction = `render${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`;
     if (typeof window.app[renderFunction] === 'function') {
         window.app[renderFunction]();
