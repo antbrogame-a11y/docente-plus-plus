@@ -1,100 +1,153 @@
-:root{
-  /* Removed local variables - using theme tokens directly */
-}
+/* Schedule CSS - Aligned with theme tokens */
 
 /* Wrapper */
-.schedule-wrapper { padding: 12px; box-sizing: border-box; background: var(--schedule-surface, var(--md-surface)); }
+.schedule-wrapper { 
+  padding: var(--spacing-md, 12px); 
+  box-sizing: border-box; 
+  background: var(--md-surface, #FEF7FF); 
+}
 
 /* Table */
 .schedule-grid {
   width: 100%;
   border-collapse: collapse;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  color: var(--schedule-text-primary, var(--md-on-surface));
-  background: var(--schedule-surface, var(--md-surface));
+  font-family: var(--font-family-primary, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial);
+  color: var(--md-on-surface, #1C1B1F);
+  background: var(--md-surface, #FEF7FF);
 }
+
 .schedule-grid thead th {
-  background: var(--schedule-surface-container-low, var(--md-surface-container-low));
-  padding: 8px;
+  background: var(--md-surface-container-low, #F7F2FA);
+  padding: var(--spacing-sm, 8px);
   text-align: center;
   font-weight: 700;
-  border: 1px solid var(--schedule-divider, var(--md-divider));
+  border: 1px solid var(--md-divider, rgba(28, 27, 31, 0.12));
 }
+
 .schedule-grid .time-col,
 .schedule-grid .time-cell {
   width: 80px;
   text-align: right;
-  padding-right: 12px;
+  padding-right: var(--spacing-md, 12px);
   vertical-align: middle;
-  background: var(--schedule-surface-container, var(--md-surface-container));
-  border: 1px solid var(--schedule-divider, var(--md-divider));
-  color: var(--schedule-text-secondary, var(--md-on-surface-variant));
+  background: var(--md-surface-container, #F3EDF7);
+  border: 1px solid var(--md-divider, rgba(28, 27, 31, 0.12));
+  color: var(--md-on-surface-variant, #49454F);
 }
+
 .schedule-grid td[role="gridcell"],
 .schedule-grid td[data-day] {
   min-height: 56px;
-  padding: 6px;
+  padding: var(--spacing-xs, 6px);
   vertical-align: top;
-  border: 1px solid var(--schedule-divider, var(--md-divider));
-  background: var(--schedule-surface, var(--md-surface));
+  border: 1px solid var(--md-divider, rgba(28, 27, 31, 0.12));
+  background: var(--md-surface, #FEF7FF);
 }
+
 .schedule-grid td[role="gridcell"]:focus,
 .schedule-grid td[data-day]:focus {
-  outline: 3px solid var(--schedule-primary, var(--md-primary));
+  outline: 3px solid var(--md-primary, #6750A4);
   outline-offset: 2px;
 }
 
 /* Slot items */
 .slot-item {
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  padding:6px 8px;
-  border-radius:6px;
-  background: var(--schedule-primary-container, var(--md-primary-container));
-  margin-bottom:6px;
-  color: var(--schedule-text-primary, var(--md-on-surface));
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-sm, 8px);
+  padding: var(--spacing-xs, 6px) var(--spacing-sm, 8px);
+  border-radius: var(--md-radius-small, 6px);
+  background: var(--md-primary-container, #EADDFF);
+  margin-bottom: var(--spacing-xs, 6px);
+  color: var(--md-on-surface, #1C1B1F);
 }
-.slot-subject { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+.slot-subject { 
+  font-weight: 600; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+}
+
 .slot-actions button {
-  font-size:0.9rem;
-  padding:6px 10px;
-  background: var(--schedule-primary, var(--md-primary));
-  color: var(--schedule-on-primary, var(--md-on-primary));
+  font-size: 0.9rem;
+  padding: var(--spacing-xs, 6px) 10px;
+  background: var(--md-primary, #6750A4);
+  color: var(--md-on-primary, #FFFFFF);
   border: none;
-  border-radius:6px;
+  border-radius: var(--md-radius-small, 6px);
   cursor: pointer;
+  transition: background-color var(--md-transition-duration, 280ms) var(--md-transition-timing, cubic-bezier(0.4, 0, 0.2, 1));
 }
+
+.slot-actions button:hover {
+  background: var(--md-primary-container, #EADDFF);
+  color: var(--md-on-primary-container, #21005D);
+}
+
 .slot-actions button:focus { 
-  outline: 3px solid var(--schedule-primary, var(--md-primary));
+  outline: 3px solid var(--md-primary, #6750A4);
   outline-offset: 2px;
 }
 
 /* Empty cell placeholder */
-.empty-slot { color: var(--schedule-text-secondary, var(--md-on-surface-variant)); font-size:0.95rem; padding:6px; }
+.empty-slot { 
+  color: var(--md-on-surface-variant, #49454F); 
+  font-size: 0.95rem; 
+  padding: var(--spacing-xs, 6px); 
+}
 
-/* Topbar adjustments to match site theme and reduce density */
+/* Topbar adjustments to match site theme */
 .topbar {
   padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
   height: 48px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  background: var(--schedule-surface, var(--md-surface));
-  color: var(--schedule-text-primary, var(--md-on-surface));
-  border-bottom: 1px solid var(--schedule-divider, var(--md-divider));
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 12px);
+  background: var(--md-surface, #FEF7FF);
+  color: var(--md-on-surface, #1C1B1F);
+  border-bottom: 1px solid var(--md-divider, rgba(28, 27, 31, 0.12));
 }
-.topbar .title { font-size: 1rem; font-weight: 600; }
-.topbar .subtitle { font-size: 0.85rem; color: var(--schedule-text-secondary, var(--md-on-surface-variant)); }
+
+.topbar .title { 
+  font-size: 1rem; 
+  font-weight: 600; 
+}
+
+.topbar .subtitle { 
+  font-size: 0.85rem; 
+  color: var(--md-on-surface-variant, #49454F); 
+}
 
 /* Lesson-mode: show detail panel, hide schedule */
-body.lesson-mode .schedule-wrapper { display:none; }
-body.lesson-mode #lesson-panel { display:block; }
-#lesson-panel { display:none; padding:12px; background: var(--schedule-surface-container, var(--md-surface-container)); border-radius:8px; margin-top:12px; }
+body.lesson-mode .schedule-wrapper { 
+  display: none; 
+}
+
+body.lesson-mode #lesson-panel { 
+  display: block; 
+}
+
+#lesson-panel { 
+  display: none; 
+  padding: var(--spacing-md, 12px); 
+  background: var(--md-surface-container, #F3EDF7); 
+  border-radius: var(--md-radius-small, 8px); 
+  margin-top: var(--spacing-md, 12px); 
+}
 
 /* Responsive tweaks */
 @media (max-width: 700px) {
-  .schedule-grid thead th:not(.time-col) { font-size:0.85rem; }
-  .schedule-grid .time-col { width:60px; font-size:0.9rem; }
-  .slot-item { padding:6px; }
+  .schedule-grid thead th:not(.time-col) { 
+    font-size: 0.85rem; 
+  }
+  
+  .schedule-grid .time-col { 
+    width: 60px; 
+    font-size: 0.9rem; 
+  }
+  
+  .slot-item { 
+    padding: var(--spacing-xs, 6px); 
+  }
 }

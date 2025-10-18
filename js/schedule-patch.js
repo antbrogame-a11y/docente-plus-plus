@@ -120,6 +120,14 @@
             btn.addEventListener('click', (e) => {
                 const lessonKey = e.currentTarget.getAttribute('data-lesson-key');
                 const classId = e.currentTarget.getAttribute('data-class-id') || null;
+                
+                // Mark that user has clicked "Entra" to activate the class session
+                try {
+                    sessionStorage.setItem('activeClassSession', 'true');
+                } catch (err) {
+                    console.warn('Could not set active session flag:', err);
+                }
+                
                 if (this && typeof this.enterLessonFromSchedule === 'function') {
                     this.enterLessonFromSchedule(lessonKey, classId);
                 } else {

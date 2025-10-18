@@ -336,12 +336,44 @@ class InClasseUI {
     }
 
     renderHeader() {
-        const data = this.dataManager.lessonData;
-        document.getElementById('lesson-title').textContent = `In Classe: ${data.className}`;
-        document.getElementById('lesson-class').textContent = data.className;
-        document.getElementById('lesson-subject').textContent = data.subject;
-        document.getElementById('lesson-datetime').textContent = `${data.day}, ${data.time}`;
-        document.getElementById('lesson-type').textContent = data.activityType;
+        // Check if user has entered the class session (clicked "Entra")
+        const activeSessionClass = this.getActiveSessionClass();
+        
+        if (!activeSessionClass) {
+            // User has only selected a class but not pressed "Entra" yet
+            // Show generic header
+            document.getElementById('lesson-title').textContent = 'In Classe';
+            document.getElementById('lesson-meta').style.display = 'none';
+        } else {
+            // User has pressed "Entra" - show full class details
+            const data = this.dataManager.lessonData;
+            document.getElementById('lesson-title').textContent = `In Classe: ${data.className}`;
+            document.getElementById('lesson-class').textContent = data.className;
+            document.getElementById('lesson-subject').textContent = data.subject;
+            document.getElementById('lesson-datetime').textContent = `${data.day}, ${data.time}`;
+            document.getElementById('lesson-type').textContent = data.activityType;
+            document.getElementById('lesson-meta').style.display = 'flex';
+        }
+    }
+    
+    getActiveSessionClass() {
+        // Check if there's an active session (user has clicked "Entra")
+        // This is marked by the presence of the lesson URL parameter AND a session flag
+        try {
+            const sessionFlag = sessionStorage.getItem('activeClassSession');
+            return sessionFlag === 'true' && this.dataManager.lessonKey;
+        } catch (e) {
+            return false;
+        }
+    }
+    
+    setActiveSessionClass() {
+        // Mark that user has entered the class session
+        try {
+            sessionStorage.setItem('activeClassSession', 'true');
+        } catch (e) {
+            console.error('Could not set active session:', e);
+        }
     }
 
     renderActivities() {
