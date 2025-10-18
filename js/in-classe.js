@@ -809,6 +809,13 @@ ${this.dataManager.summary.nextSteps.map((s, i) => `${i + 1}. ${s.text}`).join('
     }
 
     exit() {
+        // Clear the active session flag when exiting
+        try {
+            sessionStorage.removeItem('activeClassSession');
+        } catch (e) {
+            console.error('Could not clear active session:', e);
+        }
+        
         // Navigate back to schedule or main app
         if (window.opener) {
             window.close();
@@ -925,6 +932,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // User will use the static schedule grid to select a lesson
         console.debug('in-classe: No lesson selected. Use the schedule grid to select a lesson.');
         
+        // Hide lesson metadata since no lesson is selected
+        const lessonMeta = document.getElementById('lesson-meta');
+        if (lessonMeta) {
+            lessonMeta.style.display = 'none';
+        }
+        
+        // Set generic title
+        const lessonTitle = document.getElementById('lesson-title');
+        if (lessonTitle) {
+            lessonTitle.textContent = 'In Classe';
+        }
+        
         // Initialize breadcrumb navigation even without a lesson
         initBreadcrumbNavigation();
         
@@ -963,20 +982,32 @@ function initBreadcrumbNavigation() {
     const homeButton = document.getElementById('breadcrumb-home-button');
     const headerBackButton = document.getElementById('back-button');
     
+    // Clear session flag when navigating away
+    const clearSession = () => {
+        try {
+            sessionStorage.removeItem('activeClassSession');
+        } catch (e) {
+            console.error('Could not clear active session:', e);
+        }
+    };
+    
     if (backButton) {
         backButton.addEventListener('click', () => {
+            clearSession();
             window.location.href = 'index.html#schedule';
         });
     }
     
     if (homeButton) {
         homeButton.addEventListener('click', () => {
+            clearSession();
             window.location.href = 'index.html#home';
         });
     }
     
     if (headerBackButton) {
         headerBackButton.addEventListener('click', () => {
+            clearSession();
             window.location.href = 'index.html#schedule';
         });
     }

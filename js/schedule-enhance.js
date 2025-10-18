@@ -168,6 +168,13 @@
    * Enter a lesson using available APIs or fallback
    */
   function enterLesson(lessonKey, classId) {
+    // Mark that user has clicked "Entra" to activate the class session
+    try {
+      sessionStorage.setItem('activeClassSession', 'true');
+    } catch (err) {
+      console.warn('schedule-enhance: Could not set active session flag:', err);
+    }
+    
     // Try using the existing API if available
     if (typeof window.enterLessonFromSchedule === 'function') {
       try {
