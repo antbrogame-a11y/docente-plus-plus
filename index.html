@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Web app per la gestione della didattica dell'insegnante potenziata da IA OpenRouter">
-    <meta name="theme-color" content="#4a90e2">
+    <meta name="theme-color" content="#8657FF">
     <title>Docente++ - Gestione Didattica con IA</title>
     
     <!-- PWA Manifest -->
@@ -29,6 +29,9 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
+    <!-- MD3 Expressive Theme -->
+    <link rel="stylesheet" href="src/styles/theme-md3-expressive.css">
+    <link rel="stylesheet" href="src/styles/generated-md3-expressive.css">
     <!-- Schedule Component Styles -->
     <link rel="stylesheet" href="css/schedule-theme.css">
     <link rel="stylesheet" href="css/schedule-component.css">
@@ -1283,6 +1286,9 @@
 
     <!-- Icon Component -->
     <script src="js/icons.js"></script>
+    
+    <!-- MD3 Theme Hook (runtime theme integration) -->
+    <script type="module" src="src/js/theme-hook.js"></script>
     
     <!-- Main App -->
     <script type="module" src="app.js"></script>

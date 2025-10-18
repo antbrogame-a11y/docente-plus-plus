@@ -6,11 +6,11 @@ const THEME_AUTO = 'auto';
 const THEME_LIGHT = 'light';
 const THEME_DARK = 'dark';
 
-// Color palettes for Material Design 3
+// Color palettes for Material Design 3 (mapped to MD3 Expressive seed colors)
 const COLOR_PALETTES = {
     purple: {
-        light: { primary: '#6750A4', primaryContainer: '#EADDFF', onPrimary: '#FFFFFF', onPrimaryContainer: '#21005D' },
-        dark: { primary: '#D0BCFF', primaryContainer: '#4F378B', onPrimary: '#371E73', onPrimaryContainer: '#EADDFF' }
+        light: { primary: '#8657FF', primaryContainer: '#EDE6FF', onPrimary: '#FFFFFF', onPrimaryContainer: '#281A4D' },
+        dark: { primary: '#C3ABFF', primaryContainer: '#5E3DB3', onPrimary: '#221640', onPrimaryContainer: '#EDE6FF' }
     },
     blue: {
         light: { primary: '#1976D2', primaryContainer: '#BBDEFB', onPrimary: '#FFFFFF', onPrimaryContainer: '#0D47A1' },
@@ -97,7 +97,13 @@ function applyColorPalette(colorName, mode) {
     const colors = palette[mode];
     const root = document.documentElement;
     
-    // Apply colors as CSS variables
+    // Apply colors as CSS variables using MD3 naming
+    root.style.setProperty('--md-sys-color-primary', colors.primary);
+    root.style.setProperty('--md-sys-color-primary-container', colors.primaryContainer);
+    root.style.setProperty('--md-sys-color-on-primary', colors.onPrimary);
+    root.style.setProperty('--md-sys-color-on-primary-container', colors.onPrimaryContainer);
+    
+    // Also set legacy variable names for backward compatibility
     root.style.setProperty('--md-primary', colors.primary);
     root.style.setProperty('--md-primary-container', colors.primaryContainer);
     root.style.setProperty('--md-on-primary', colors.onPrimary);

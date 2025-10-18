@@ -3,7 +3,7 @@
 
 :root {
     /* Schedule uses app's Material Design 3 colors */
-    --schedule-primary: var(--md-primary);                    /* #6750A4 - Purple */
+    --schedule-primary: var(--md-primary);                    /* var(--md-sys-color-primary) - Purple */
     --schedule-primary-container: var(--md-primary-container); /* #EADDFF */
     --schedule-on-primary: var(--md-on-primary);              /* White */
     --schedule-secondary: var(--md-secondary);                 /* #625B71 */
@@ -28,24 +28,24 @@
     --schedule-divider: var(--md-divider);                    /* rgba(28, 27, 31, 0.12) */
     
     /* Activity type colors - Material Design 3 palette */
-    --schedule-activity-theory: #6750A4;       /* Primary purple - Theory */
+    --schedule-activity-theory: var(--md-sys-color-primary);       /* Primary purple - Theory */
     --schedule-activity-practice: #7D5260;     /* Tertiary rose - Practice */
     --schedule-activity-lab: #006A6A;          /* Teal - Lab */
     --schedule-activity-test: #984061;         /* Deep rose - Test */
-    --schedule-activity-group: #6750A4;        /* Primary - Group */
+    --schedule-activity-group: var(--md-sys-color-primary);        /* Primary - Group */
     --schedule-activity-other: #625B71;        /* Secondary gray - Other */
     
     /* Spacing - Use app's spacing system */
-    --schedule-spacing-xs: var(--spacing-xs);      /* 4px */
-    --schedule-spacing-sm: var(--spacing-sm);      /* 8px */
-    --schedule-spacing-md: var(--spacing-md);      /* 16px */
-    --schedule-spacing-lg: var(--spacing-lg);      /* 24px */
+    --schedule-spacing-xs: var(--spacing-xs);      /* var(--md-spacing-xs) */
+    --schedule-spacing-sm: var(--spacing-sm);      /* var(--md-spacing-sm) */
+    --schedule-spacing-md: var(--spacing-md);      /* var(--md-spacing-md) */
+    --schedule-spacing-lg: var(--spacing-lg);      /* 24px / var(--md-spacing-lg) */
     --schedule-spacing-xl: var(--spacing-xl);      /* 32px */
     
     /* Border radius - Use app's radius system */
-    --schedule-radius-sm: var(--md-radius-small);    /* 8px */
+    --schedule-radius-sm: var(--md-radius-small);    /* var(--md-spacing-sm) */
     --schedule-radius-md: var(--md-radius-medium);   /* 12px */
-    --schedule-radius-lg: var(--md-radius-large);    /* 16px */
+    --schedule-radius-lg: var(--md-radius-large);    /* var(--md-spacing-md) */
     
     /* Shadows - Use app's elevation system */
     --schedule-shadow-sm: var(--md-elevation-1);
@@ -61,7 +61,7 @@
     --schedule-font-family: var(--font-family-primary);  /* Roboto */
     --schedule-font-size-xs: var(--font-size-xs);        /* 12px */
     --schedule-font-size-sm: var(--font-size-sm);        /* 14px */
-    --schedule-font-size-base: var(--font-size-base);    /* 16px */
+    --schedule-font-size-base: var(--font-size-base);    /* var(--md-spacing-md) */
     --schedule-font-size-lg: var(--font-size-lg);        /* 18px */
     --schedule-font-size-xl: var(--font-size-xl);        /* 20px */
     

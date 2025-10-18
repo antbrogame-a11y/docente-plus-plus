@@ -73,7 +73,7 @@
 }
 
 .ai-assistant-close .material-symbols-outlined {
-    font-size: 24px;
+    font-size: var(--font-size-xl);
 }
 
 /* Panel Body */
@@ -165,7 +165,7 @@
 }
 
 .ai-empty-state .material-symbols-outlined {
-    font-size: 64px;
+    font-size: 48px;
     color: var(--md-primary);
     margin-bottom: var(--spacing-md);
     opacity: 0.5;
@@ -238,7 +238,7 @@
 
 .ai-text-input {
     width: 100%;
-    min-height: 44px;
+    min-height: calc(4 * var(--md-spacing-xs));
     max-height: 120px;
     padding: var(--spacing-sm) var(--spacing-md);
     border: 2px solid var(--md-border);
@@ -263,8 +263,8 @@
 
 /* Voice Recording Button */
 .ai-voice-button {
-    width: 44px;
-    height: 44px;
+    width: calc(11 * var(--md-spacing-xs));
+    height: calc(11 * var(--md-spacing-xs));
     background: var(--md-secondary-container);
     border: none;
     border-radius: 50%;
@@ -309,13 +309,13 @@
 }
 
 .ai-voice-button .material-symbols-outlined {
-    font-size: 24px;
+    font-size: var(--md-spacing-lg);
 }
 
 /* Send Button */
 .ai-send-button {
-    width: 44px;
-    height: 44px;
+    width: calc(11 * var(--md-spacing-xs));
+    height: calc(11 * var(--md-spacing-xs));
     background: var(--md-primary);
     border: none;
     border-radius: 50%;
@@ -353,7 +353,7 @@
 }
 
 .ai-send-button .material-symbols-outlined {
-    font-size: 24px;
+    font-size: var(--md-spacing-lg);
 }
 
 /* Recording Status */
@@ -419,18 +419,18 @@
 /* Loading State */
 .ai-message.loading .ai-message-text {
     display: flex;
-    gap: 4px;
+    gap: var(--md-spacing-xs);
     align-items: center;
 }
 
 .ai-typing-indicator {
     display: inline-flex;
-    gap: 4px;
+    gap: var(--md-spacing-xs);
 }
 
 .ai-typing-dot {
-    width: 8px;
-    height: 8px;
+    width: var(--md-spacing-sm);
+    height: var(--md-spacing-sm);
     background: var(--md-text-secondary);
     border-radius: 50%;
     animation: typing 1.4s infinite;

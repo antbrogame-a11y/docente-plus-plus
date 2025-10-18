@@ -14,30 +14,100 @@
   --md-sys-color-tertiary-container: #FFD8EC;
   --md-sys-color-on-tertiary-container: #3B1020;
 
+  /* Surface colors */
   --md-sys-color-background: #FFFBFF;
   --md-sys-color-on-background: #1B1224;
   --md-sys-color-surface: #FFFBFF;
   --md-sys-color-on-surface: #1B1224;
   --md-sys-color-surface-variant: #F4EEF9;
   --md-sys-color-on-surface-variant: #4B4456;
+  --md-sys-color-surface-container-lowest: #FFFFFF;
+  --md-sys-color-surface-container-low: #FEF7FF;
+  --md-sys-color-surface-container: #F8F1FC;
+  --md-sys-color-surface-container-high: #F3ECF6;
+  --md-sys-color-surface-container-highest: #EDE6F1;
 
+  /* Outline colors */
   --md-sys-color-outline: #8F8698;
+  --md-sys-color-outline-variant: #CDC4CE;
+
+  /* Inverse colors */
+  --md-sys-color-inverse-on-surface: #F6EEFF;
+  --md-sys-color-inverse-surface: #2B1E36;
+  --md-sys-color-inverse-primary: #C3ABFF;
+
+  /* Error colors */
   --md-sys-color-error: #D84B4B;
   --md-sys-color-on-error: #FFFFFF;
+  --md-sys-color-error-container: #FFDAD6;
+  --md-sys-color-on-error-container: #410002;
+
+  /* Shadow & Scrim */
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --md-sys-color-primary: #CDB6FF;
-    --md-sys-color-on-primary: #2B1733;
-    --md-sys-color-primary-container: #4A2E78;
-    --md-sys-color-on-primary-container: #F0E6FF;
+/* ==================== DARK THEME ==================== */
+:root.dark-theme,
+html.dark-theme,
+body.dark-theme {
+  /* Primary colors */
+  --md-sys-color-primary: #C3ABFF;
+  --md-sys-color-on-primary: #221640;
+  --md-sys-color-primary-container: #5E3DB3;
+  --md-sys-color-on-primary-container: #EDE6FF;
 
-    --md-sys-color-background: #15121A;
-    --md-sys-color-on-background: #EDE7F8;
-    --md-sys-color-surface: #1A1720;
-    --md-sys-color-on-surface: #EDE7F8;
-    --md-sys-color-surface-variant: #221927;
-    --md-sys-color-on-surface-variant: #D9D0E8;
-  }
+  /* Secondary colors */
+  --md-sys-color-secondary: #C9B3FF;
+  --md-sys-color-on-secondary: #281A4D;
+  --md-sys-color-secondary-container: #5739A6;
+  --md-sys-color-on-secondary-container: #F0EBFF;
+
+  /* Tertiary colors */
+  --md-sys-color-tertiary: #FFB1E3;
+  --md-sys-color-on-tertiary: #5D1139;
+  --md-sys-color-tertiary-container: #7E2A50;
+  --md-sys-color-on-tertiary-container: #FFD8EC;
+
+  /* Surface colors */
+  --md-sys-color-background: #141218;
+  --md-sys-color-on-background: #E6E0E9;
+  --md-sys-color-surface: #141218;
+  --md-sys-color-on-surface: #E6E0E9;
+  --md-sys-color-surface-variant: #49454F;
+  --md-sys-color-on-surface-variant: #CAC4D0;
+  --md-sys-color-surface-container-lowest: #0F0D13;
+  --md-sys-color-surface-container-low: #1D1B20;
+  --md-sys-color-surface-container: #211F26;
+  --md-sys-color-surface-container-high: #2B2930;
+  --md-sys-color-surface-container-highest: #36343B;
+
+  /* Outline colors */
+  --md-sys-color-outline: #938F99;
+  --md-sys-color-outline-variant: #49454F;
+
+  /* Inverse colors */
+  --md-sys-color-inverse-on-surface: #322F35;
+  --md-sys-color-inverse-surface: #E6E0E9;
+  --md-sys-color-inverse-primary: #8657FF;
+
+  /* Error colors */
+  --md-sys-color-error: #FFB4AB;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000A;
+  --md-sys-color-on-error-container: #FFDAD6;
+
+  /* Shadow & Scrim */
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
+}
+
+/* ==================== ELEVATION ==================== */
+:root {
+  --md-sys-elevation-level0: 0px 0px 0px 0px rgba(0,0,0,0.2), 0px 0px 0px 0px rgba(0,0,0,0.14), 0px 0px 0px 0px rgba(0,0,0,0.12);
+  --md-sys-elevation-level1: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+  --md-sys-elevation-level2: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+  --md-sys-elevation-level3: 0px 3px 3px -2px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14), 0px 1px 8px 0px rgba(0,0,0,0.12);
+  --md-sys-elevation-level4: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+  --md-sys-elevation-level5: 0px 3px 5px -1px rgba(0,0,0,0.2), 0px 5px 8px 0px rgba(0,0,0,0.14), 0px 1px 14px 0px rgba(0,0,0,0.12);
 }

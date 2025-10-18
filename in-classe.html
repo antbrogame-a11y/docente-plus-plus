@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Interfaccia In Classe - Docente++">
-    <meta name="theme-color" content="#4a90e2">
+    <meta name="theme-color" content="#8657FF">
     <title>In Classe - Docente++</title>
     
     <!-- Material Design Icons -->
@@ -16,6 +16,9 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
+    <!-- MD3 Expressive Theme -->
+    <link rel="stylesheet" href="src/styles/theme-md3-expressive.css">
+    <link rel="stylesheet" href="src/styles/generated-md3-expressive.css">
     <link rel="stylesheet" href="css/in-classe.css">
     <link rel="stylesheet" href="css/schedule.css">
     <link rel="stylesheet" href="css/floating-assistant.css">
@@ -439,6 +442,8 @@
     <!-- Scripts -->
     <script src="js/icons.js"></script>
     <script src="js/schedule-patch.js"></script>
+    <!-- MD3 Theme Hook (runtime theme integration) -->
+    <script type="module" src="src/js/theme-hook.js"></script>
     <script type="module">
         // Import floating assistant
         import { initFloatingAssistant } from './js/floating-assistant.js';

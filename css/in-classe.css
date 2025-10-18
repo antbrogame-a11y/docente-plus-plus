@@ -123,15 +123,15 @@ body {
 
 .section-title .material-symbols-outlined {
     color: var(--md-primary);
-    font-size: 24px;
+    font-size: var(--md-spacing-lg);
 }
 
 .section-count {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 24px;
-    height: 24px;
+    min-width: calc(2 * var(--md-spacing-xs));
+    height: calc(2 * var(--md-spacing-xs));
     padding: 0 var(--spacing-xs);
     background: var(--md-primary);
     color: var(--md-on-primary);
@@ -161,12 +161,12 @@ body {
 .ai-badge {
     display: inline-flex;
     align-items: center;
-    padding: 2px 8px;
+    padding: 2px var(--md-spacing-sm);
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     font-size: 10px;
     font-weight: 700;
-    border-radius: 4px;
+    border-radius: var(--md-spacing-xs);
     letter-spacing: 0.5px;
 }
 
@@ -177,7 +177,7 @@ body {
     color: white;
     font-size: 10px;
     font-weight: 700;
-    border-radius: 4px;
+    border-radius: var(--md-spacing-xs);
     margin-left: var(--spacing-xs);
 }
 
@@ -195,7 +195,7 @@ body {
     padding: var(--spacing-md);
     background: var(--md-surface);
     border-radius: var(--md-radius-small);
-    border-left: 4px solid var(--md-primary);
+    border-left: var(--md-spacing-xs) solid var(--md-primary);
 }
 
 .activity-info {
@@ -243,11 +243,11 @@ body {
     padding: var(--spacing-md);
     background: var(--md-surface);
     border-radius: var(--md-radius-small);
-    border-left: 4px solid var(--md-secondary);
+    border-left: var(--md-spacing-xs) solid var(--md-secondary);
 }
 
 .homework-checkbox {
-    margin-top: 4px;
+    margin-top: var(--md-spacing-xs);
 }
 
 .homework-info {
@@ -298,8 +298,8 @@ body {
 }
 
 .student-avatar {
-    width: 48px;
-    height: 48px;
+    width: calc(6 * var(--md-spacing-sm));
+    height: calc(6 * var(--md-spacing-sm));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -632,7 +632,7 @@ body {
 }
 
 .empty-state .material-symbols-outlined {
-    font-size: 64px;
+    font-size: calc(16 * var(--md-spacing-xs));
     opacity: 0.3;
     margin-bottom: var(--spacing-md);
 }
@@ -643,7 +643,7 @@ body {
 }
 
 /* Responsive - Tablet */
-@media (min-width: 768px) {
+@media (min-width: calc(76 * var(--md-spacing-sm))) {
     .lesson-header {
         padding: var(--spacing-lg);
     }
@@ -674,7 +674,7 @@ body {
 }
 
 /* Responsive - Desktop */
-@media (min-width: 1024px) {
+@media (min-width: 102var(--md-spacing-xs)) {
     .students-evaluation-grid {
         grid-template-columns: repeat(3, 1fr);
     }
