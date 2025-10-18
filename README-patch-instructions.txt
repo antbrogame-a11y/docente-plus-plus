@@ -1,139 +1,17 @@
-STATIC SCHEDULE GRID ENHANCEMENT - PATCH INSTRUCTIONS
-=====================================================
+Modifiche richieste e note:
 
-OVERVIEW
---------
-This enhancement adds a static, accessible weekly schedule grid to in-classe.html with 
-keyboard navigation and auto-population from localStorage schedule data.
+- È stata soppressa l'apertura automatica del lesson-picker. Questo significa che aprendo la pagina "in classe" dalla home non verrà automaticamente selezionata alcuna lezione. La selezione deve essere fatta nella pagina in-classe tramite la tabella.
 
-COMPONENTS ADDED
-----------------
-1. js/schedule-enhance.js - Enhancement script
-2. css/schedule.css - Updated with new styles for static grid
-3. in-classe.html - Modified to include static HTML grid and script reference
+- Per ripristinare temporaneamente il comportamento legacy chiamare le funzioni originali (se presenti):
+  window.__orig_showLessonPicker() or window.__orig_showLessonPickerInline()
 
-HOW IT WORKS
-------------
-The enhancement script (schedule-enhance.js):
-- Auto-initializes on DOMContentLoaded
-- Loads schedule data from multiple localStorage keys (teacherSchedule, schedule, appSchedule, stateSchedule)
-- Normalizes different schedule data shapes (slots array or per-day arrays)
-- Deduplicates lessons by lessonKey
-- Maps lessons to grid cells using data-day and data-time attributes
-- Renders lessons as stacked .slot-item elements inside cells
-- Adds "Entra" buttons that call window.enterLessonFromSchedule() when available
-- Falls back to localStorage (lastOpenedLesson, lastOpenedClassId) + reload if API not available
-- Provides keyboard navigation: Arrow keys to move between cells, Enter/Space to activate
-- Dispatches custom "open-lesson-list" event when multiple lessons exist in a cell
+- File modificati / aggiunti:
+  - js/schedule-enhance.js (nuovo o aggiornato)
+  - css/schedule.css (nuovo)
+  - in-classe.html (inserita tabella statica + link CSS + script include)
 
-KEYBOARD NAVIGATION
--------------------
-- Tab: Focus the grid and navigate to first cell
-- Arrow keys (Up/Down/Left/Right): Navigate between cells
-- Enter or Space: Activate the focused cell
-  - If cell has 1 lesson: enters that lesson
-  - If cell has multiple lessons: dispatches "open-lesson-list" event
-  - If cell is empty: no action
-
-ACCESSIBILITY FEATURES
-----------------------
-- Semantic HTML table structure with proper role attributes
-- ARIA labels for screen readers
-- Keyboard navigation fully supported
-- Focus indicators visible
-- Responsive design for mobile devices
-- Dark theme support
-
-HOW TO REVERT
--------------
-To remove the static grid enhancement:
-
-1. Remove the static grid HTML from in-classe.html:
-   Delete the entire <div class="schedule-table-wrapper"> block (lines ~93-165)
-
-2. Remove the script reference from in-classe.html:
-   Delete the line: <script src="js/schedule-enhance.js"></script>
-
-3. Remove or restore css/schedule.css:
-   Remove the "Static grid enhancements" section at the end
-
-4. Delete js/schedule-enhance.js file
-
-5. The original schedule-container div will still work with existing schedule-patch.js
-
-HOW TO CUSTOMIZE
-----------------
-
-Change grid time slots:
-- Edit the static HTML table in in-classe.html
-- Add or remove <tr> rows with appropriate data-time attributes
-- Ensure data-time values match the format in your schedule data
-
-Change grid days:
-- Edit the <th> headers and <td> cells in the table
-- Update data-day attributes to match your schedule data
-- Update DAY_ORDER array in schedule-enhance.js if needed
-
-Add more storage keys:
-- Edit STORAGE_KEYS array in schedule-enhance.js
-- Add your custom localStorage key to the array
-
-Customize styling:
-- Edit css/schedule.css
-- Modify .slot-item, .slot-subject, .slot-class, .slot-enter-btn classes
-- Adjust colors, spacing, borders as needed
-
-TESTING NOTES
--------------
-To test the enhancement:
-
-1. Clear localStorage entries:
-   localStorage.removeItem('lastOpenedLesson');
-   localStorage.removeItem('lastOpenedClassId');
-
-2. Load schedule data into localStorage:
-   localStorage.setItem('schedule', JSON.stringify({
-     slots: [
-       { day: 'Lunedì', time: '08:00', subject: 'Math', classId: '3A', lessonKey: 'Lunedì-08:00' },
-       { day: 'Martedì', time: '09:00', subject: 'Physics', classId: '3B', lessonKey: 'Martedì-09:00' }
-     ]
-   }));
-
-3. Open in-classe.html - the grid should populate automatically
-
-4. Test keyboard navigation:
-   - Tab to the grid
-   - Use arrow keys to navigate
-   - Press Enter on a cell with a lesson
-
-COMPATIBILITY
--------------
-- Works with existing schedule-patch.js
-- Compatible with window.loadScheduleFromStorageOrOpener() API
-- Compatible with window.enterLessonFromSchedule() API
-- Falls back gracefully when APIs are not available
-- Does not break existing app functionality
-- Does not auto-open lesson-picker modal on page load
-
-TROUBLESHOOTING
----------------
-Grid not populating:
-- Check browser console for debug messages
-- Verify schedule data exists in localStorage
-- Verify data format matches expected structure
-- Call window.initScheduleGrid() manually to re-populate
-
-Keyboard navigation not working:
-- Verify cells have data-day and data-time attributes
-- Verify cells are focusable (tabindex attribute)
-- Check for JavaScript errors in console
-
-Buttons not working:
-- Verify window.enterLessonFromSchedule() is available
-- Check localStorage for lastOpenedLesson key after clicking
-- Verify page reloads after clicking (fallback behavior)
-
-SUPPORT
--------
-For issues or questions, please check the TECHNICAL_DOC.md and IMPLEMENTATION_IN_CLASSE.md
-files in the repository root.
+Testing steps:
+1. Pulire localStorage: rimuovere lastOpenedLesson e lastOpenedClassId.
+2. Aprire index.html e cliccare "Entra in Classe" -> la pagina in-classe deve aprirsi senza modal che si apre automaticamente.
+3. Usare la griglia per scegliere orario/lezione e premere "Entra".
+4. Verificare che la selezione usi enterLessonFromSchedule quando disponibile.
