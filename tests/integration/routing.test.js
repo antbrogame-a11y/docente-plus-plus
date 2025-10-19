@@ -1,5 +1,5 @@
 // importa l'helper (aggiungi se non presente)
-import mockWindowLocation from '../helpers/mockWindowLocation';
+import mockWindowLocation from '../../helpers/mockWindowLocation';
 
 // variabile di modulo per mantenere la funzione di restore tra test
 let restoreWindowLocation = null;
