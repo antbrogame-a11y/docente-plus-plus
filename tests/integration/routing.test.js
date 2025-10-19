@@ -7,23 +7,21 @@ import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals
 import mockWindowLocation from '../helpers/mockWindowLocation';
 
 describe('SPA Routing', () => {
-    let originalLocation;
+    let restoreWindowLocation = null;
     let originalHistory;
     let pushStateSpy;
     let replaceStateSpy;
 
     beforeEach(() => {
         // Mock window.location
-        originalLocation = window.location;
-        delete window.location;
-        window.location = {
+        restoreWindowLocation = mockWindowLocation({
             href: 'http://localhost/',
             pathname: '/',
             hash: '#home',
             assign: jest.fn(),
             replace: jest.fn(),
             reload: jest.fn()
-        };
+        });
 
         // Mock history
         originalHistory = window.history;
@@ -44,7 +42,10 @@ describe('SPA Routing', () => {
     });
 
     afterEach(() => {
-        window.location = originalLocation;
+        if (restoreWindowLocation) {
+            restoreWindowLocation();
+            restoreWindowLocation = null;
+        }
         window.history = originalHistory;
     });
 
@@ -224,39 +225,27 @@ describe('SPA Routing', () => {
 
     describe('Safe Location Mocking', () => {
         it('should not trigger full page reload for tab navigation', () => {
-            const restore = mockWindowLocation({ assign: jest.fn() });
-
             // Simulate tab navigation (not calling window.location.assign)
             history.pushState({ page: 'home' }, '', '#home');
 
             expect(window.location.assign).not.toHaveBeenCalled();
-
-            restore();
         });
 
         it('should not call window.location.reload() for navigation', () => {
-            const restore = mockWindowLocation({ reload: jest.fn() });
-
             // Simulate various navigation actions
             history.pushState({ page: 'lessons' }, '', '#lessons');
             history.pushState({ page: 'students' }, '', '#students');
             history.pushState({ page: 'home' }, '', '#home');
 
             expect(window.location.reload).not.toHaveBeenCalled();
-
-            restore();
         });
 
         it('should not call window.location.assign() for same-app navigation', () => {
-            const restore = mockWindowLocation({ assign: jest.fn() });
-
             // Simulate internal tab switches
             history.pushState({ page: 'schedule' }, '', '#schedule');
             history.pushState({ page: 'agenda' }, '', '#agenda');
 
             expect(window.location.assign).not.toHaveBeenCalled();
-
-            restore();
         });
     });
 });
