@@ -109,7 +109,7 @@ function analyzeFile(filePath) {
   
   // Check for hardcoded colors
   Object.entries(COLOR_REPLACEMENTS).forEach(([color, variable]) => {
-    const regex = new RegExp(color.replace('#', '#'), 'gi');
+    const regex = new RegExp(escapeRegExp(color), 'gi');
     const matches = content.match(regex);
     
     if (matches) {

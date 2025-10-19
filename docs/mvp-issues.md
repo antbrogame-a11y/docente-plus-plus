@@ -18,7 +18,7 @@ Questo documento descrive l'Epic e gli Issue proposti per l'implementazione dell
 **Label**: `feature`, `frontend`, `core`
 
 ### Descrizione
-Implementare una vista calendario giornaliero (non c'e' un calendario nellapp non ci wino vincoli quondi il giorno che compare In Classe e' quello del sistema e pertanto compare lorario per quel giorno, che mostri gli slot delle lezioni. Ogni slot deve essere cliccabile per aprire la sessione corrispondente.
+Implementare una vista calendario giornaliero (non c'è un calendario nell'app, non ci sono vincoli quindi il giorno che compare In Classe è quello del sistema e pertanto compare l'orario per quel giorno), che mostri gli slot delle lezioni. Ogni slot deve essere cliccabile per aprire la sessione corrispondente.
 
 ### Acceptance Criteria
 - [ ] Vista giornaliera con le 6 ore del giorno) e orari
