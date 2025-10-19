@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, afterEach, jest } from '@jest/globals';
-import mockWindowLocation from '../../helpers/mockWindowLocation';
+import mockWindowLocation from '../helpers/mockWindowLocation';
 
 describe('Navigation System', () => {
   let mockHistory;
