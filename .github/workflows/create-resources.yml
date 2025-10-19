@@ -1,97 +1,46 @@
-name: Create GitHub Labels and Project
+name: Create resources
+
+# Trigger on pushes to main (change branches array if you need other branches)
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   create-resources:
+    name: Create resources
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      issues: write
-      metadata: read
-      projects: write
+      contents: read
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create labels and project
-        uses: actions/github-script@v6
+      - name: Set up Node.js (if needed)
+        uses: actions/setup-node@v4
         with:
-          script: |
-            const labels = [
-              { name: 'idea', color: 'BFD4FF', description: 'Idea / proposta' },
-              { name: 'backlog', color: 'FFE7BF', description: 'Backlog' },
-              { name: 'todo', color: 'FFF0B3', description: 'Da fare' },
-              { name: 'in-progress', color: 'A7FFB3', description: 'In lavorazione' },
-              { name: 'blocked', color: 'FFCCCB', description: 'Bloccato' },
-              { name: 'done', color: 'CDEFFB', description: 'Completato' },
-              { name: 'priority/high', color: 'FF9AA2', description: 'Alta priorità' },
-              { name: 'priority/medium', color: 'FFCB6E', description: 'Priorità media' },
-              { name: 'priority/low', color: 'D3E4FF', description: 'Bassa priorità' },
-              { name: 'enhancement', color: 'B7E4C7', description: 'Miglioramento' },
-              { name: 'bug', color: 'FFB1B1', description: 'Bug' }
-            ];
+          node-version: '18'
 
-            for (const label of labels) {
-              try {
-                // check if label exists
-                await github.rest.issues.getLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  name: label.name
-                });
-                console.log(`Label ${label.name} already exists`);
-              } catch (err) {
-                if (err.status === 404) {
-                  await github.rest.issues.createLabel({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    name: label.name,
-                    color: label.color,
-                    description: label.description
-                  });
-                  console.log(`Created label ${label.name}`);
-                } else {
-                  throw err;
-                }
-              }
-            }
+      - name: Install dependencies
+        run: |
+          if [ -f package.json ]; then
+            if [ -f package-lock.json ]; then
+              npm ci
+            else
+              npm install
+            fi
+          else
+            echo "No package.json found, skipping install"
+          fi
 
-            try {
-              const projectName = 'Class Page Planning';
-              const projectBody = 'Board per idee e attività: To do / In progress / Review / Done';
-
-              const projects = await github.rest.projects.listForRepo({
-                owner: context.repo.owner,
-                repo: context.repo.repo
-              });
-
-              const exists = projects.data.find(p => p.name === projectName);
-              if (exists) {
-                console.log(`Project "${projectName}" already exists (#${exists.number})`);
-              } else {
-                const project = await github.rest.projects.createForRepo({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  name: projectName,
-                  body: projectBody
-                });
-
-                console.log(`Created project ${project.data.name} #${project.data.number}`);
-
-                const columns = ['To do', 'In progress', 'Review', 'Done'];
-                for (const col of columns) {
-                  await github.rest.projects.createColumn({
-                    project_id: project.data.id,
-                    name: col
-                  });
-                  console.log(`Created column ${col}`);
-                }
-              }
-            } catch (err) {
-              console.log('Project creation skipped or failed: ' + err.message);
-            }
-
-            return 'Done';
-
-# ci: small tweak to trigger PR
+      - name: Create resources (idempotent)
+        run: |
+          if [ -f package.json ]; then
+            if npm run | grep -q create-resources; then
+              npm run create-resources
+            else
+              echo "No create-resources script; nothing to do"
+            fi
+          else
+            echo "No package.json found, skipping create-resources"
+          fi
