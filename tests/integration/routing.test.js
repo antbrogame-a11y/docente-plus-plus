@@ -13,7 +13,7 @@ afterEach(() => {
 });
 
 describe('SPA Routing', () => {
-    let originalLocation;
+    let restoreWindowLocation = null;
     let originalHistory;
     let pushStateSpy;
     let replaceStateSpy;
