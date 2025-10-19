@@ -1,0 +1,38 @@
+name: Validate Issue Templates
+
+on:
+  pull_request:
+    paths:
+      - '.github/ISSUE_TEMPLATE/**'
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/ISSUE_TEMPLATE/**'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate Issue Templates
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      
+      - name: Install PyYAML
+        run: pip install PyYAML
+      
+      - name: Validate templates
+        run: python3 .github/scripts/validate-issue-templates.py
+      
+      - name: Summary
+        if: success()
+        run: echo "✅ All issue templates are valid!"
