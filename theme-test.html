@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#8657FF">
+    <title>MD3 Expressive Theme Test</title>
+    
+    <!-- MD3 Expressive Theme -->
+    <link rel="stylesheet" href="src/styles/theme-md3-expressive.css">
+    <link rel="stylesheet" href="src/styles/generated-md3-expressive.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+            background: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            padding: var(--md-spacing-lg);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: var(--md-sys-color-primary);
+            margin-bottom: var(--md-spacing-lg);
+            font-size: 2.5rem;
+        }
+        
+        .theme-controls {
+            background: var(--md-sys-color-surface-container);
+            padding: var(--md-spacing-md);
+            border-radius: var(--md-shape-medium);
+            margin-bottom: var(--md-spacing-lg);
+        }
+        
+        .theme-controls h2 {
+            margin-bottom: var(--md-spacing-md);
+            color: var(--md-sys-color-on-surface);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: var(--md-spacing-sm);
+            flex-wrap: wrap;
+            margin-bottom: var(--md-spacing-md);
+        }
+        
+        button {
+            padding: 12px var(--md-spacing-lg);
+            border: none;
+            border-radius: 24px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+        }
+        
+        .btn-secondary {
+            background: var(--md-sys-color-secondary);
+            color: var(--md-sys-color-on-secondary);
+        }
+        
+        .btn-tertiary {
+            background: var(--md-sys-color-tertiary);
+            color: var(--md-sys-color-on-tertiary);
+        }
+        
+        .btn-surface {
+            background: var(--md-sys-color-surface-variant);
+            color: var(--md-sys-color-on-surface-variant);
+        }
+        
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        button:focus {
+            outline: var(--md-focus-width) solid var(--md-focus-outline);
+            outline-offset: var(--md-focus-offset);
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--md-spacing-md);
+            margin-bottom: var(--md-spacing-lg);
+        }
+        
+        .color-card {
+            background: var(--md-sys-color-surface);
+            border-radius: var(--md-shape-medium);
+            padding: var(--md-spacing-md);
+            border: 1px solid var(--md-sys-color-outline);
+        }
+        
+        .color-swatch {
+            height: 80px;
+            border-radius: var(--md-shape-small);
+            margin-bottom: var(--md-spacing-sm);
+        }
+        
+        .color-name {
+            font-weight: 600;
+            margin-bottom: var(--md-spacing-xs);
+            color: var(--md-sys-color-on-surface);
+        }
+        
+        .color-value {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+        
+        .surface-elevated {
+            background: var(--md-sys-color-surface);
+            box-shadow: 0 8px 20px rgba(16,24,40,0.08);
+            border-radius: var(--md-shape-medium);
+            padding: var(--md-spacing-lg);
+            margin-bottom: var(--md-spacing-lg);
+        }
+        
+        .pill-accent {
+            background: var(--md-sys-color-tertiary-container);
+            color: var(--md-sys-color-on-tertiary-container);
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-weight: 500;
+            display: inline-block;
+            margin-right: var(--md-spacing-sm);
+        }
+        
+        input[type="color"] {
+            width: 60px;
+            height: 40px;
+            border: none;
+            border-radius: var(--md-shape-small);
+            cursor: pointer;
+        }
+        
+        label {
+            display: inline-block;
+            margin-right: var(--md-spacing-sm);
+            color: var(--md-sys-color-on-surface-variant);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 MD3 Expressive Theme Test</h1>
+        
+        <div class="theme-controls">
+            <h2>Theme Controls</h2>
+            
+            <div class="button-group">
+                <button class="btn-primary" onclick="setMode('light')">☀️ Light Mode</button>
+                <button class="btn-primary" onclick="setMode('dark')">🌙 Dark Mode</button>
+            </div>
+            
+            <div style="margin-bottom: var(--md-spacing-md);">
+                <label for="seed-picker">Seed Color:</label>
+                <input type="color" id="seed-picker" value="#8657FF">
+                <button class="btn-secondary" onclick="applySeedColor()">Apply</button>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-surface" onclick="setSeed('#8657FF')">Purple</button>
+                <button class="btn-surface" onclick="setSeed('#1976D2')">Blue</button>
+                <button class="btn-surface" onclick="setSeed('#388E3C')">Green</button>
+                <button class="btn-surface" onclick="setSeed('#C62828')">Red</button>
+                <button class="btn-surface" onclick="setSeed('#EF6C00')">Orange</button>
+                <button class="btn-surface" onclick="setSeed('#00796B')">Teal</button>
+            </div>
+        </div>
+        
+        <div class="surface-elevated">
+            <h2 style="margin-bottom: var(--md-spacing-md);">Sample Components</h2>
+            <div class="button-group">
+                <button class="btn-primary">Primary Button</button>
+                <button class="btn-secondary">Secondary Button</button>
+                <button class="btn-tertiary">Tertiary Button</button>
+            </div>
+            <div style="margin-top: var(--md-spacing-md);">
+                <span class="pill-accent">Pill 1</span>
+                <span class="pill-accent">Pill 2</span>
+                <span class="pill-accent">Pill 3</span>
+            </div>
+        </div>
+        
+        <h2 style="margin-bottom: var(--md-spacing-md);">Color System</h2>
+        <div class="color-grid">
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--md-sys-color-primary);"></div>
+                <div class="color-name">Primary</div>
+                <div class="color-value" id="primary-value"></div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--md-sys-color-secondary);"></div>
+                <div class="color-name">Secondary</div>
+                <div class="color-value" id="secondary-value"></div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--md-sys-color-tertiary);"></div>
+                <div class="color-name">Tertiary</div>
+                <div class="color-value" id="tertiary-value"></div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--md-sys-color-surface-variant);"></div>
+                <div class="color-name">Surface Variant</div>
+                <div class="color-value" id="surface-variant-value"></div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--md-sys-color-primary-container);"></div>
+                <div class="color-name">Primary Container</div>
+                <div class="color-value" id="primary-container-value"></div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--md-sys-color-error);"></div>
+                <div class="color-name">Error</div>
+                <div class="color-value" id="error-value"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { setThemeSeed, setThemeMode, getCurrentTheme } from './src/js/theme-hook.js';
+        
+        // Make functions global for onclick handlers
+        window.setMode = (mode) => {
+            setThemeMode(mode);
+            updateColorValues();
+        };
+        
+        window.setSeed = (seed) => {
+            document.getElementById('seed-picker').value = seed;
+            setThemeSeed(seed);
+            updateColorValues();
+        };
+        
+        window.applySeedColor = () => {
+            const seed = document.getElementById('seed-picker').value;
+            setThemeSeed(seed);
+            updateColorValues();
+        };
+        
+        function updateColorValues() {
+            const style = getComputedStyle(document.documentElement);
+            document.getElementById('primary-value').textContent = style.getPropertyValue('--md-sys-color-primary').trim();
+            document.getElementById('secondary-value').textContent = style.getPropertyValue('--md-sys-color-secondary').trim();
+            document.getElementById('tertiary-value').textContent = style.getPropertyValue('--md-sys-color-tertiary').trim();
+            document.getElementById('surface-variant-value').textContent = style.getPropertyValue('--md-sys-color-surface-variant').trim();
+            document.getElementById('primary-container-value').textContent = style.getPropertyValue('--md-sys-color-primary-container').trim();
+            document.getElementById('error-value').textContent = style.getPropertyValue('--md-sys-color-error').trim();
+        }
+        
+        // Initial update
+        setTimeout(updateColorValues, 100);
+        
+        // Listen for theme changes
+        window.addEventListener('themechange', () => {
+            updateColorValues();
+            const theme = getCurrentTheme();
+            console.log('Theme changed:', theme);
+        });
+    </script>
+</body>
+</html>

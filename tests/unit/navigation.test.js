@@ -1,7 +1,8 @@
 // tests/unit/navigation.test.js
 // Unit tests for navigation system
 
-import { describe, test, expect, beforeEach, jest } from '@jest/globals';
+import { describe, test, expect, beforeEach, afterEach, jest } from '@jest/globals';
+import mockWindowLocation from '../helpers/mockWindowLocation';
 
 /**
  * Test suite for navigation system
@@ -9,6 +10,7 @@ import { describe, test, expect, beforeEach, jest } from '@jest/globals';
  */
 describe('Navigation System', () => {
   
+  let restoreWindowLocation = null;
   let mockHistory;
   
   beforeEach(() => {
@@ -26,8 +28,13 @@ describe('Navigation System', () => {
     global.history = mockHistory;
     
     // Mock window.location
-    delete window.location;
-    window.location = { hash: '#home' };
+    restoreWindowLocation = mockWindowLocation({ hash: '#home' });
+  });
+
+  afterEach(() => {
+    if (restoreWindowLocation) {
+      restoreWindowLocation();
+    }
   });
 
   describe('NavigationManager initialization', () => {
