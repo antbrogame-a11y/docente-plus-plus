@@ -3,6 +3,7 @@
 
 import { state, saveData } from './data.js';
 import { showToast } from './ui.js';
+import { MIME_TYPES } from './constants.js';
 
 /**
  * Show a modal dialog
@@ -691,7 +692,7 @@ export function exportStudentsCSV() {
     ).join('\n');
     
     // Create download link
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csvContent], { type: MIME_TYPES.TEXT_CSV });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `studenti_${new Date().toISOString().split('T')[0]}.csv`;

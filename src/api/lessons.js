@@ -4,6 +4,8 @@
  * @module api/lessons
  */
 
+import { MIME_TYPES } from '../../js/constants.js';
+
 /**
  * @typedef {Object} Lesson
  * @property {string} id - Unique lesson identifier
@@ -243,7 +245,7 @@ export class LessonsAPI {
             const response = await fetch(`${this.baseURL}/lessons/${lessonId}/enroll`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': MIME_TYPES.APPLICATION_JSON
                 }
             });
             

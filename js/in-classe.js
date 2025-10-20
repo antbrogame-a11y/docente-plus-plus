@@ -3,6 +3,8 @@
  * Mobile First, Vanilla JS, Ready for API Integration
  */
 
+import { MIME_TYPES } from './constants.js';
+
 // Mock Data Management
 class InClasseDataManager {
     constructor() {
@@ -728,7 +730,7 @@ Prossimi Passi:
 ${this.dataManager.summary.nextSteps.map((s, i) => `${i + 1}. ${s.text}`).join('\n')}
         `;
 
-        const blob = new Blob([content], { type: 'text/plain' });
+        const blob = new Blob([content], { type: MIME_TYPES.TEXT_PLAIN });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
