@@ -1,10 +1,17 @@
 import { describe, test, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import mockWindowLocation from '../helpers/mockWindowLocation';
 
+import { describe, test, expect, beforeEach, afterEach, jest } from '@jest/globals';
+import mockWindowLocation from '../helpers/mockWindowLocation';
+
+/**
+ * Test suite for navigation system
+ * Tests breadcrumb, back button, home button, and history integration
+ */
 describe('Navigation System', () => {
   let mockHistory;
   let restoreWindowLocation = null;
-
+  
   beforeEach(() => {
     // Clear DOM
     document.body.innerHTML = '';
@@ -18,14 +25,15 @@ describe('Navigation System', () => {
       state: null
     };
     global.history = mockHistory;
-
-    // Mock window.location using helper and keep restore handle
+    
+    // Mock window.location using helper
     restoreWindowLocation = mockWindowLocation({ hash: '#home' });
   });
-
+  
   afterEach(() => {
-    if (typeof restoreWindowLocation === 'function') {
-      try { restoreWindowLocation(); } catch (e) { /* ignore */ }
+    // Restore window.location
+    if (restoreWindowLocation) {
+      restoreWindowLocation();
       restoreWindowLocation = null;
     }
   });
