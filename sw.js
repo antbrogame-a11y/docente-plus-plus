@@ -1,6 +1,12 @@
 // Service Worker per Docente++
 // Versione: 3.0.0 (Forced Update)
 
+// MIME Types constants
+const MIME_TYPES = {
+    TEXT_PLAIN: 'text/plain',
+    TEXT_HTML: 'text/html'
+};
+
 const STATIC_CACHE = 'docente-static-v6';
 const DYNAMIC_CACHE = 'docente-dynamic-v6';
 
@@ -99,7 +105,7 @@ self.addEventListener('fetch', (event) => {
         console.log('[SW] Fetch failed, offline mode:', error);
         
         // Se è una richiesta HTML, ritorna la pagina principale dalla cache
-        if (request.headers.get('accept')?.includes('text/html')) {
+        if (request.headers.get('accept')?.includes(MIME_TYPES.TEXT_HTML)) {
           return caches.match('/index.html');
         }
         
@@ -108,7 +114,7 @@ self.addEventListener('fetch', (event) => {
           status: 503,
           statusText: 'Service Unavailable',
           headers: new Headers({
-            'Content-Type': 'text/plain'
+            'Content-Type': MIME_TYPES.TEXT_PLAIN
           })
         });
       });
