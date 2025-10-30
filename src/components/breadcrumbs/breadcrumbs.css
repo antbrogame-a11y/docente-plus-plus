@@ -1,0 +1,297 @@
+/**
+ * Breadcrumbs Component Styles
+ * Mobile-first, accessible breadcrumb navigation
+ */
+
+/* Breadcrumb Container */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: var(--surface-bg, #f5f5f5);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile: Smaller padding */
+@media (max-width: 640px) {
+  .breadcrumb {
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+    gap: 6px;
+  }
+}
+
+/* Breadcrumb Link */
+.breadcrumb-link {
+  color: var(--primary-color, #4a90e2);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.breadcrumb-link:hover {
+  color: var(--primary-hover, #357abd);
+  text-decoration: underline;
+}
+
+.breadcrumb-link:focus {
+  outline: 2px solid var(--primary-color, #4a90e2);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.breadcrumb-link:active {
+  color: var(--primary-active, #2d5f8d);
+}
+
+/* Breadcrumb Separator */
+.breadcrumb-separator {
+  color: var(--text-tertiary, #999999);
+  user-select: none;
+  font-weight: 300;
+}
+
+/* Current Page */
+.breadcrumb-current {
+  color: var(--text-primary, #333333);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Ellipsis */
+.breadcrumb-ellipsis {
+  color: var(--text-tertiary, #999999);
+  font-weight: 600;
+  cursor: default;
+  user-select: none;
+}
+
+/* Navigation Bar (contains breadcrumb and buttons) */
+.navigation-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: var(--surface, #ffffff);
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile: Stack vertically if needed */
+@media (max-width: 640px) {
+  .navigation-bar {
+    flex-wrap: wrap;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+}
+
+/* Back Button */
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background-color: transparent;
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  color: var(--text-secondary, #666666);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.back-button:hover {
+  background-color: var(--hover-bg, #f5f5f5);
+  border-color: var(--primary-color, #4a90e2);
+  color: var(--primary-color, #4a90e2);
+}
+
+.back-button:focus {
+  outline: 2px solid var(--primary-color, #4a90e2);
+  outline-offset: 2px;
+}
+
+.back-button:active {
+  background-color: var(--active-bg, #ebebeb);
+  transform: scale(0.98);
+}
+
+.back-button .material-symbols-outlined {
+  font-size: 1.25rem;
+}
+
+/* Mobile: Hide text, show only icon */
+@media (max-width: 480px) {
+  .back-button-text {
+    display: none;
+  }
+  
+  .back-button {
+    padding: 8px;
+  }
+}
+
+/* Home Button */
+.home-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background-color: transparent;
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  color: var(--text-secondary, #666666);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.home-button:hover {
+  background-color: var(--hover-bg, #f5f5f5);
+  border-color: var(--primary-color, #4a90e2);
+  color: var(--primary-color, #4a90e2);
+}
+
+.home-button:focus {
+  outline: 2px solid var(--primary-color, #4a90e2);
+  outline-offset: 2px;
+}
+
+.home-button:active {
+  background-color: var(--active-bg, #ebebeb);
+  transform: scale(0.98);
+}
+
+.home-button .material-symbols-outlined {
+  font-size: 1.25rem;
+}
+
+/* Mobile: Hide text, show only icon */
+@media (max-width: 480px) {
+  .home-button-text {
+    display: none;
+  }
+  
+  .home-button {
+    padding: 8px;
+  }
+}
+
+/* Breadcrumb in navigation bar - flex grow */
+.navigation-bar .breadcrumb {
+  flex: 1;
+  min-width: 0; /* Allow flex item to shrink below content size */
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .breadcrumb {
+    background-color: var(--surface-bg-dark, #1e1e1e);
+  }
+  
+  .breadcrumb-link {
+    color: var(--primary-color-dark, #64b5f6);
+  }
+  
+  .breadcrumb-link:hover {
+    color: var(--primary-hover-dark, #90caf9);
+  }
+  
+  .breadcrumb-current {
+    color: var(--text-primary-dark, #e0e0e0);
+  }
+  
+  .breadcrumb-separator,
+  .breadcrumb-ellipsis {
+    color: var(--text-tertiary-dark, #808080);
+  }
+  
+  .navigation-bar {
+    background-color: var(--surface-dark, #2d2d2d);
+    border-bottom-color: var(--border-color-dark, #404040);
+  }
+  
+  .back-button,
+  .home-button {
+    border-color: var(--border-color-dark, #404040);
+    color: var(--text-secondary-dark, #b0b0b0);
+  }
+  
+  .back-button:hover,
+  .home-button:hover {
+    background-color: var(--hover-bg-dark, #3a3a3a);
+    border-color: var(--primary-color-dark, #64b5f6);
+    color: var(--primary-color-dark, #64b5f6);
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .breadcrumb-link,
+  .back-button,
+  .home-button {
+    border: 2px solid currentColor;
+  }
+  
+  .breadcrumb-link:focus,
+  .back-button:focus,
+  .home-button:focus {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .breadcrumb-link,
+  .back-button,
+  .home-button {
+    transition: none;
+  }
+  
+  .back-button:active,
+  .home-button:active {
+    transform: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .navigation-bar {
+    display: none;
+  }
+  
+  .breadcrumb {
+    display: block;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+  }
+  
+  .breadcrumb-link {
+    color: #000;
+    text-decoration: none;
+  }
+  
+  .breadcrumb-current {
+    font-weight: 700;
+  }
+  
+  .back-button,
+  .home-button {
+    display: none;
+  }
+}

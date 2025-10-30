@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orario Demo - Docente++</title>
+    
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <!-- Roboto Font -->
+    <link href="fonts/roboto.css" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="src/pages/orario/orario.css">
+    <link rel="stylesheet" href="src/components/breadcrumbs/breadcrumbs.css">
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .demo-header {
+            background-color: #4a90e2;
+            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .demo-header h1 {
+            margin: 0 0 10px 0;
+        }
+        
+        .demo-controls {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .demo-controls button {
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .demo-controls button:hover {
+            background-color: #357abd;
+        }
+        
+        .schedule-wrapper {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .loading-indicator {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Breadcrumb Navigation -->
+    <nav class="navigation-bar">
+        <button id="breadcrumb-back-button" class="back-button" aria-label="Torna indietro">
+            <span class="material-symbols-outlined">arrow_back</span>
+            <span class="back-button-text">Indietro</span>
+        </button>
+        <div id="breadcrumb-container" class="breadcrumb">
+            <a href="index.html" class="breadcrumb-link">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Orario Demo</span>
+        </div>
+        <button id="breadcrumb-home-button" class="home-button" aria-label="Vai alla home">
+            <span class="material-symbols-outlined">home</span>
+            <span class="home-button-text">Home</span>
+        </button>
+    </nav>
+
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>📅 Orario Settimanale - Demo</h1>
+            <p>Dimostrazione del modulo di gestione orario con griglia CSS</p>
+        </div>
+
+        <div class="demo-controls">
+            <button id="load-schedule-btn">
+                <span class="material-symbols-outlined" style="vertical-align: middle;">refresh</span>
+                Carica Orario
+            </button>
+            <button id="clear-schedule-btn">
+                <span class="material-symbols-outlined" style="vertical-align: middle;">delete</span>
+                Pulisci Griglia
+            </button>
+            <button id="test-collision-btn">
+                <span class="material-symbols-outlined" style="vertical-align: middle;">warning</span>
+                Test Collisioni
+            </button>
+        </div>
+
+        <div id="error-container"></div>
+
+        <div class="schedule-wrapper">
+            <h2>Orario della Settimana</h2>
+            
+            <!-- Day Headers -->
+            <div class="timetable-header">
+                <div class="day-label">Lunedì</div>
+                <div class="day-label">Martedì</div>
+                <div class="day-label">Mercoledì</div>
+                <div class="day-label">Giovedì</div>
+                <div class="day-label">Venerdì</div>
+            </div>
+            
+            <!-- Schedule Grid -->
+            <div id="schedule-container" class="timetable">
+                <div class="loading-indicator">
+                    <p>Clicca "Carica Orario" per visualizzare l'orario settimanale</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { 
+            initializeScheduleGrid, 
+            loadScheduleData,
+            detectCollision,
+            renderSlotToGrid
+        } from './src/pages/orario/orario.js';
+        
+        import { breadcrumbsInstance } from './src/components/breadcrumbs/breadcrumbs.js';
+
+        // Initialize breadcrumbs
+        breadcrumbsInstance.init({
+            homeUrl: 'index.html',
+            homeLabel: 'Home'
+        });
+        
+        breadcrumbsInstance.setupBackButton();
+        breadcrumbsInstance.setupHomeButton();
+
+        let currentScheduleData = null;
+
+        // Load schedule button
+        document.getElementById('load-schedule-btn').addEventListener('click', async () => {
+            const container = document.getElementById('schedule-container');
+            const errorContainer = document.getElementById('error-container');
+            
+            // Clear previous errors
+            errorContainer.innerHTML = '';
+            
+            // Show loading
+            container.innerHTML = '<div class="loading-indicator"><div class="spinner"></div><p>Caricamento orario...</p></div>';
+            
+            try {
+                // Load schedule data
+                const data = await loadScheduleData();
+                currentScheduleData = data;
+                
+                if (!data || !data.schedule || data.schedule.length === 0) {
+                    throw new Error('Nessun dato di orario trovato');
+                }
+                
+                // Initialize the grid
+                initializeScheduleGrid(data.schedule, container, {
+                    startTime: '08:00',
+                    collisionDetection: true,
+                    onSlotClick: (slot) => {
+                        alert(`Lezione cliccata!\n\nMateria: ${slot.subject}\nClasse: ${slot.class}\nAula: ${slot.room}\nOrario: ${slot.startTime} - ${slot.endTime}`);
+                    }
+                });
+                
+                console.log('Schedule loaded successfully:', data);
+            } catch (error) {
+                console.error('Error loading schedule:', error);
+                errorContainer.innerHTML = `
+                    <div class="error-message">
+                        <strong>Errore nel caricamento dell'orario:</strong> ${error.message}
+                    </div>
+                `;
+                container.innerHTML = '<div class="timetable-empty"><span class="material-symbols-outlined">error</span><p>Impossibile caricare l\'orario</p></div>';
+            }
+        });
+
+        // Clear schedule button
+        document.getElementById('clear-schedule-btn').addEventListener('click', () => {
+            const container = document.getElementById('schedule-container');
+            container.innerHTML = '<div class="timetable-empty"><span class="material-symbols-outlined">event_busy</span><p>Nessun orario caricato</p></div>';
+        });
+
+        // Test collision detection
+        document.getElementById('test-collision-btn').addEventListener('click', () => {
+            if (!currentScheduleData || !currentScheduleData.schedule) {
+                alert('Carica prima l\'orario!');
+                return;
+            }
+
+            const schedule = currentScheduleData.schedule;
+            const collisions = [];
+            
+            // Check all pairs of slots for collisions
+            for (let i = 0; i < schedule.length; i++) {
+                for (let j = i + 1; j < schedule.length; j++) {
+                    if (detectCollision(schedule[i], schedule[j])) {
+                        collisions.push({
+                            slot1: schedule[i],
+                            slot2: schedule[j]
+                        });
+                    }
+                }
+            }
+            
+            if (collisions.length === 0) {
+                alert('✅ Nessuna collisione rilevata!\n\nTutti gli slot sono posizionati correttamente senza sovrapposizioni.');
+            } else {
+                let message = `⚠️ Rilevate ${collisions.length} collisioni:\n\n`;
+                collisions.forEach((collision, index) => {
+                    message += `${index + 1}. ${collision.slot1.subject} vs ${collision.slot2.subject}\n`;
+                    message += `   ${collision.slot1.day}, ${collision.slot1.startTime}-${collision.slot1.endTime}\n`;
+                });
+                alert(message);
+            }
+            
+            console.log('Collision detection results:', collisions);
+        });
+
+        // Auto-load on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('Orario demo page loaded');
+            // Uncomment to auto-load:
+            // document.getElementById('load-schedule-btn').click();
+        });
+    </script>
+</body>
+</html>

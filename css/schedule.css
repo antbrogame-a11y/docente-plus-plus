@@ -1,0 +1,130 @@
+:root{
+  /* Removed local variables - using theme tokens directly */
+}
+
+/* Wrapper */
+.schedule-wrapper { 
+  padding: var(--spacing-md); 
+  box-sizing: border-box; 
+  background: var(--schedule-surface, var(--md-surface)); 
+}
+
+/* Table */
+.schedule-grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: var(--schedule-text-primary, var(--md-on-surface));
+  background: var(--schedule-surface, var(--md-surface));
+}
+.schedule-grid thead th {
+  background: var(--schedule-surface-container-low, var(--md-surface-container-low));
+  padding: var(--spacing-sm);
+  text-align: center;
+  font-weight: 700;
+  border: 1px solid var(--schedule-divider, var(--md-divider));
+}
+.schedule-grid .time-col,
+.schedule-grid .time-cell {
+  width: 80px;
+  text-align: right;
+  padding-right: var(--spacing-md);
+  vertical-align: middle;
+  background: var(--schedule-surface-container, var(--md-surface-container));
+  border: 1px solid var(--schedule-divider, var(--md-divider));
+  color: var(--schedule-text-secondary, var(--md-on-surface-variant));
+}
+.schedule-grid td[role="gridcell"],
+.schedule-grid td[data-day] {
+  min-height: 56px;
+  padding: var(--spacing-xs);
+  vertical-align: top;
+  border: 1px solid var(--schedule-divider, var(--md-divider));
+  background: var(--schedule-surface, var(--md-surface));
+}
+.schedule-grid td[role="gridcell"]:focus,
+.schedule-grid td[data-day]:focus {
+  outline: 2px solid var(--schedule-primary, var(--md-primary));
+  outline-offset: 2px;
+}
+
+/* Slot items */
+.slot-item {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--md-radius-small);
+  background: var(--schedule-primary-container, var(--md-primary-container));
+  margin-bottom: var(--spacing-xs);
+  color: var(--schedule-text-primary, var(--md-on-surface));
+}
+.slot-subject { 
+  font-weight: 600; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+}
+.slot-actions button {
+  font-size: 0.9rem;
+  padding: var(--spacing-xs) 10px;
+  background: var(--schedule-primary, var(--md-primary));
+  color: var(--schedule-on-primary, var(--md-on-primary));
+  border: none;
+  border-radius: var(--md-radius-small);
+  cursor: pointer;
+}
+.slot-actions button:focus { 
+  outline: 2px solid var(--schedule-primary, var(--md-primary));
+  outline-offset: 2px;
+}
+
+/* Empty cell placeholder */
+.empty-slot { 
+  color: var(--schedule-text-secondary, var(--md-on-surface-variant)); 
+  font-size: 0.95rem; 
+  padding: var(--spacing-xs); 
+}
+
+/* Topbar adjustments to match site theme and reduce density */
+.topbar {
+  padding: var(--spacing-sm) var(--spacing-md);
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  background: var(--schedule-surface, var(--md-surface));
+  color: var(--schedule-text-primary, var(--md-on-surface));
+  border-bottom: 1px solid var(--schedule-divider, var(--md-divider));
+}
+.topbar .title { font-size: 1rem; font-weight: 600; }
+.topbar .subtitle { font-size: 0.85rem; color: var(--schedule-text-secondary, var(--md-on-surface-variant)); }
+
+/* Lesson-mode: show detail panel, hide schedule */
+body.lesson-mode .schedule-wrapper { 
+  display: none; 
+}
+body.lesson-mode #lesson-panel { 
+  display: block; 
+}
+#lesson-panel { 
+  display: none; 
+  padding: var(--spacing-md); 
+  background: var(--schedule-surface-container, var(--md-surface-container)); 
+  border-radius: var(--md-radius-small); 
+  margin-top: var(--spacing-md); 
+}
+
+/* Responsive tweaks */
+@media (max-width: 700px) {
+  .schedule-grid thead th:not(.time-col) { 
+    font-size: 0.85rem; 
+  }
+  .schedule-grid .time-col { 
+    width: 60px; 
+    font-size: 0.9rem; 
+  }
+  .slot-item { 
+    padding: var(--spacing-xs); 
+  }
+}

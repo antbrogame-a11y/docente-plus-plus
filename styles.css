@@ -17,6 +17,9 @@ body {
     color: var(--text-color);
     margin: 0;
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding-top: 56px; /* Account for fixed header */
 }
 
 .container {
@@ -25,8 +28,38 @@ body {
     padding: 20px;
 }
 
-/* Header */
+/* Header - Material Design */
+/* AppBar - Compact and Responsive Design */
 header {
+    background: var(--md-primary);
+    color: var(--md-text-on-primary);
+    box-shadow: var(--md-elevation-2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: transform var(--md-transition-duration) var(--md-transition-timing),
+                box-shadow var(--md-transition-duration) var(--md-transition-timing);
+}
+
+/* Hide header when scrolling down */
+header.header-hidden {
+    transform: translateY(-100%);
+}
+
+header .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 8px 16px;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+header h1 {
+    flex: 1;
     text-align: center;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--border-color);

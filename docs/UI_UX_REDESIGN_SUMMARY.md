@@ -1,20 +1,62 @@
 # 📋 UI/UX Redesign Summary - Quick Reference
 
+## Latest Changes (v1.2.2)
+
+### Key Improvements
+1. **Always-Active Menu**: All menu items accessible from first launch, no onboarding blocks
+2. **Mobile-Optimized Settings**: Settings moved higher in mobile menu for better accessibility
+3. **Unified Theme Settings**: Theme selection integrated in Settings page (Chiaro/Scuro/Automatico)
+
 ## What Changed?
 
-### Visual Changes
+### Navigation & Menu (v1.2.2)
+1. **Menu Accessibility**: From blocked menu → Always-active menu
+2. **Mobile Layout**: Settings positioned higher in mobile menu for easy access
+3. **Theme Selection**: Moved from sidebar to Settings page with color palette options
+
+### Visual Changes (v1.2.1)
 1. **Menu**: From grouped text-based menu → Compact icon-only horizontal menu
 2. **Class Selection**: From dropdown in home → Persistent badge + modal selector
 3. **Schedule Home**: From simple list → Interactive grid with visual symbols
 4. **New Modals**: Class Selector, Help Guide, App Info
 
-### Functional Changes
+### Functional Changes (v1.2.2)
+1. **No More Blocking**: Menu items never disabled, complete freedom to explore
+2. **Profile as Suggestion**: Profile completion suggested but not required
+3. **Theme Customization**: Full theme control from Settings (mode + color)
+
+### Functional Changes (v1.2.1)
 1. **Workspace Mode**: New default mode showing all classes aggregated
 2. **Always-Visible Badge**: Know your current context at a glance
 3. **Interactive Schedule**: Click cells to edit directly from home
 4. **Accessible Tooltips**: Hover/focus for function descriptions
 
 ## Before vs After
+
+### Menu Access (v1.2.2)
+**Before (v1.2.1)**: 
+- Menu items disabled until profile completion
+- Lock icons (🔒) on disabled items
+- Tooltips explaining blocks
+- Forced onboarding flow
+
+**After (v1.2.2)**:
+- All menu items always active
+- No lock icons or disabled states
+- Optional profile completion banner
+- Free exploration from first launch
+
+### Settings Access (v1.2.2)
+**Before**: 
+- Settings at bottom of mobile menu
+- Required scrolling on mobile
+- Theme picker in sidebar
+
+**After**:
+- Settings positioned higher (after main content sections)
+- Easier access on mobile devices
+- Theme settings integrated in Settings page
+- Includes mode (Chiaro/Scuro/Auto) and color selection
 
 ### Navigation
 **Before**: 

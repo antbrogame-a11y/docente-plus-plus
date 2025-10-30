@@ -11,7 +11,8 @@ export const state = {
     lessons: [],
     activities: [],
     evaluations: [],
-    schedule: {},
+    schedule: {}, // Teacher's personal weekly recurring schedule (key: "day-time" e.g., "Lunedì-08:00")
+    events: [], // Agenda events
     chatMessages: [],
     activeClass: null,
 };
@@ -101,6 +102,14 @@ export function isOnboardingComplete() {
     return localStorage.getItem('onboardingComplete') === 'true';
 }
 
+export function isProfileComplete() {
+    // NEW v1.2.2: Check if the user has completed the essential profile information
+    // This is independent of onboarding state - menu is always active
+    // This only affects whether the profile completion banner is shown
+    return state.settings.teacherName && 
+           state.settings.teacherName.trim() !== '';
+}
+
 export function completeOnboarding(settings) {
     state.settings = settings;
     localStorage.setItem('onboardingComplete', 'true');
@@ -108,3 +117,119 @@ export function completeOnboarding(settings) {
     // Salva le impostazioni iniziali anche su Firestore
     saveData();
 }
+
+export function skipOnboarding() {
+    // Don't allow skipping - user must complete onboarding
+    // This ensures we never have an intermediate unclear state
+    console.warn('Skipping onboarding is not allowed. User must complete profile setup.');
+    return false;
+}
+
+export function resetToDefaults() {
+    // Reset all state to defaults
+    state.settings = {};
+    state.classes = [];
+    state.students = [];
+    state.lessons = [];
+    state.activities = [];
+    state.evaluations = [];
+    state.schedule = {};
+    state.chatMessages = [];
+    state.activeClass = null;
+    
+    console.warn('State reset to defaults due to corrupted data');
+}
+
+export function clearAllData() {
+    // Clear all app data - for troubleshooting
+    try {
+        localStorage.clear();
+        resetToDefaults();
+        return true;
+    } catch (error) {
+        console.error('Error clearing localStorage:', error);
+        return false;
+    }
+}
+
+export function checkStorageHealth() {
+    // Check if localStorage is accessible and working
+    try {
+        const testKey = '__docente_storage_test__';
+        localStorage.setItem(testKey, 'test');
+        const value = localStorage.getItem(testKey);
+        localStorage.removeItem(testKey);
+        return value === 'test';
+    } catch (error) {
+        console.error('localStorage is not available:', error);
+        return false;
+    }
+}
+
+/**
+ * Recover from corrupted onboarding state
+ * This ensures the app is always in a valid state
+ */
+export function recoverOnboardingState() {
+    const onboardingComplete = isOnboardingComplete();
+    const profileComplete = isProfileComplete();
+    
+    console.log('Checking onboarding state:', { onboardingComplete, profileComplete });
+    
+    // Case 1: Onboarding marked complete but profile is actually incomplete (corrupted state)
+    if (onboardingComplete && !profileComplete) {
+        console.warn('Detected corrupted onboarding state. Profile is incomplete despite onboarding flag.');
+        // Keep onboarding flag but require profile completion
+        return {
+            needsOnboarding: false,
+            needsProfileCompletion: true,
+            reason: 'corrupted_profile'
+        };
+    }
+    
+    // Case 2: Normal incomplete onboarding
+    if (!onboardingComplete) {
+        return {
+            needsOnboarding: true,
+            needsProfileCompletion: false,
+            reason: 'not_started'
+        };
+    }
+    
+    // Case 3: Everything is OK
+    return {
+        needsOnboarding: false,
+        needsProfileCompletion: false,
+        reason: 'complete'
+    };
+}
+
+/**
+ * Validate and fix onboarding state
+ * @returns {boolean} True if state is valid or was fixed
+ */
+export function validateAndFixOnboardingState() {
+    try {
+        const recovery = recoverOnboardingState();
+        
+        if (recovery.reason === 'corrupted_profile') {
+            console.log('Attempting to fix corrupted profile state...');
+            // Check if we can recover any profile data
+            if (state.settings.teacherName && state.settings.teacherName.trim() !== '') {
+                console.log('Profile data recovered successfully');
+                return true;
+            } else {
+                // Reset onboarding flag to force re-completion
+                console.warn('Cannot recover profile data. Resetting onboarding flag.');
+                localStorage.removeItem('onboardingComplete');
+                return false;
+            }
+        }
+        
+        return recovery.reason === 'complete';
+    } catch (error) {
+        console.error('Error validating onboarding state:', error);
+        return false;
+    }
+}
+

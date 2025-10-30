@@ -1,0 +1,264 @@
+/**
+ * DailyTimeline Component Styles
+ * Material Design 3 compliant styles for the daily lessons timeline
+ */
+
+.daily-timeline {
+    background: var(--md-sys-color-surface);
+    border-radius: var(--md-sys-shape-corner-large, 16px);
+    padding: var(--spacing-md, 16px);
+    box-shadow: var(--md-sys-elevation-level1);
+    margin-bottom: var(--spacing-md, 16px);
+}
+
+.timeline-header {
+    margin-bottom: var(--spacing-md, 16px);
+    padding-bottom: var(--spacing-sm, 12px);
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.timeline-header h3 {
+    margin: 0 0 var(--spacing-xs, 8px) 0;
+    font-size: var(--font-size-lg, 1.25rem);
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface);
+}
+
+.timeline-date {
+    margin: 0;
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--md-sys-color-on-surface-variant);
+    text-transform: capitalize;
+}
+
+/* Loading State */
+.timeline-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl, 32px);
+    gap: var(--spacing-sm, 12px);
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+.timeline-loading .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--md-sys-color-primary);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.timeline-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl, 32px);
+    gap: var(--spacing-sm, 12px);
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+.timeline-empty .material-symbols-outlined {
+    font-size: 48px;
+    color: var(--md-sys-color-outline);
+}
+
+.timeline-empty p {
+    margin: 0;
+    font-size: var(--font-size-base, 1rem);
+    text-align: center;
+}
+
+/* Timeline Content */
+.timeline-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm, 12px);
+}
+
+/* Lesson Item */
+.timeline-lesson {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md, 16px);
+    padding: var(--spacing-sm, 12px);
+    border-radius: var(--md-sys-shape-corner-medium, 12px);
+    background: var(--md-sys-color-surface-variant);
+    border-left: 4px solid var(--md-sys-color-primary);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.timeline-lesson:hover {
+    background: var(--md-sys-color-surface-container-high);
+    box-shadow: var(--md-sys-elevation-level2);
+    transform: translateX(4px);
+}
+
+.timeline-lesson-current {
+    background: var(--md-sys-color-primary-container);
+    border-left-color: var(--md-sys-color-primary);
+    box-shadow: var(--md-sys-elevation-level2);
+}
+
+.timeline-lesson-current:hover {
+    background: var(--md-sys-color-primary-container);
+}
+
+/* Lesson Time */
+.timeline-lesson-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 60px;
+    padding: var(--spacing-xs, 8px);
+    background: var(--md-sys-color-surface);
+    border-radius: var(--md-sys-shape-corner-small, 8px);
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface);
+}
+
+.timeline-time-start,
+.timeline-time-end {
+    font-size: var(--font-size-sm, 0.875rem);
+    line-height: 1.2;
+}
+
+.timeline-time-separator {
+    font-size: 10px;
+    color: var(--md-sys-color-outline);
+}
+
+/* Lesson Info */
+.timeline-lesson-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs, 8px);
+}
+
+.timeline-lesson-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm, 12px);
+    flex-wrap: wrap;
+}
+
+.timeline-lesson-class {
+    margin: 0;
+    font-size: var(--font-size-base, 1rem);
+    font-weight: 600;
+    color: var(--md-sys-color-on-surface);
+}
+
+.timeline-lesson-subject {
+    margin: 0;
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+.timeline-lesson-type,
+.timeline-lesson-room {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: var(--md-sys-color-surface);
+    border-radius: var(--md-sys-shape-corner-small, 8px);
+    font-size: var(--font-size-xs, 0.75rem);
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+.timeline-lesson-room .material-symbols-outlined {
+    font-size: 16px;
+}
+
+.timeline-badge-now {
+    padding: 4px 12px;
+    background: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    border-radius: var(--md-sys-shape-corner-full, 999px);
+    font-size: var(--font-size-xs, 0.75rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Lesson Action Button */
+.timeline-lesson-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    border: none;
+    border-radius: var(--md-sys-shape-corner-full, 50%);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.timeline-lesson-action:hover {
+    background: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+    transform: scale(1.1);
+}
+
+.timeline-lesson-action:active {
+    transform: scale(0.95);
+}
+
+.timeline-lesson-action .material-symbols-outlined {
+    font-size: 20px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .daily-timeline {
+        padding: var(--spacing-sm, 12px);
+        border-radius: var(--md-sys-shape-corner-medium, 12px);
+    }
+    
+    .timeline-lesson {
+        flex-direction: column;
+        gap: var(--spacing-sm, 12px);
+    }
+    
+    .timeline-lesson-time {
+        flex-direction: row;
+        gap: 4px;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .timeline-time-separator {
+        align-self: center;
+    }
+    
+    .timeline-lesson-action {
+        align-self: flex-end;
+        margin-top: var(--spacing-xs, 8px);
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .timeline-lesson {
+        background: var(--md-sys-color-surface-container-low);
+    }
+    
+    .timeline-lesson:hover {
+        background: var(--md-sys-color-surface-container);
+    }
+}

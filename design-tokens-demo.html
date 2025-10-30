@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Tokens & Icon System - Demo</title>
+    
+    <!-- Material Design Icons -->
+    <link href="fonts/material-icons.css" rel="stylesheet">
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <!-- Roboto Font -->
+    <link href="fonts/roboto.css" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Demo-specific styles */
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-xl);
+        }
+        
+        .demo-section {
+            margin-bottom: var(--spacing-xxl);
+            padding: var(--spacing-lg);
+            background: var(--md-surface-container-low);
+            border-radius: var(--md-radius-medium);
+            box-shadow: var(--md-elevation-1);
+        }
+        
+        .demo-section h2 {
+            margin-bottom: var(--spacing-lg);
+            color: var(--md-primary);
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .demo-section h3 {
+            margin-top: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+        }
+        
+        .demo-item {
+            padding: var(--spacing-md);
+            background: var(--md-surface);
+            border-radius: var(--md-radius-small);
+            border: 1px solid var(--md-divider);
+        }
+        
+        .demo-item-label {
+            font-size: var(--font-size-sm);
+            color: var(--md-text-secondary);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .demo-item-value {
+            font-weight: var(--font-weight-medium);
+            font-family: var(--font-family-monospace);
+            font-size: var(--font-size-sm);
+        }
+        
+        .color-swatch {
+            width: 100%;
+            height: 60px;
+            border-radius: var(--md-radius-small);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .icon-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+        
+        .icon-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: var(--spacing-md);
+            background: var(--md-surface);
+            border-radius: var(--md-radius-small);
+            border: 1px solid var(--md-divider);
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .icon-card-name {
+            font-size: var(--font-size-xs);
+            color: var(--md-text-secondary);
+            margin-top: var(--spacing-sm);
+        }
+        
+        .spacing-demo {
+            display: flex;
+            gap: var(--spacing-sm);
+            align-items: flex-end;
+        }
+        
+        .spacing-box {
+            background: var(--md-primary);
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .typography-sample {
+            margin-bottom: var(--spacing-md);
+            padding: var(--spacing-sm);
+            border-left: 3px solid var(--md-primary);
+        }
+        
+        .code-block {
+            background: var(--md-surface-container);
+            padding: var(--spacing-md);
+            border-radius: var(--md-radius-small);
+            font-family: var(--font-family-monospace);
+            font-size: var(--font-size-sm);
+            overflow-x: auto;
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: var(--spacing-lg);
+            right: var(--spacing-lg);
+            z-index: var(--z-index-fixed);
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="icon-btn icon-btn-primary" id="theme-toggle" title="Toggle Theme">
+            <span class="material-symbols-outlined icon-lg">palette</span>
+        </button>
+    </div>
+
+    <div class="demo-container">
+        <header style="text-align: center; margin-bottom: var(--spacing-xxl);">
+            <h1 class="text-4xl font-medium" style="color: var(--md-primary); margin-bottom: var(--spacing-sm);">
+                🎨 Design Tokens & Icon System
+            </h1>
+            <p class="text-lg text-secondary">
+                Docente++ Comprehensive Design System Demo
+            </p>
+        </header>
+
+        <!-- Color System -->
+        <section class="demo-section">
+            <h2>🎨 Color System</h2>
+            
+            <h3>Primary Colors</h3>
+            <div class="demo-grid">
+                <div class="demo-item">
+                    <div class="color-swatch" style="background: var(--md-primary);"></div>
+                    <div class="demo-item-label">Primary</div>
+                    <div class="demo-item-value">--md-primary</div>
+                </div>
+                <div class="demo-item">
+                    <div class="color-swatch" style="background: var(--md-primary-container);"></div>
+                    <div class="demo-item-label">Primary Container</div>
+                    <div class="demo-item-value">--md-primary-container</div>
+                </div>
+                <div class="demo-item">
+                    <div class="color-swatch" style="background: var(--md-secondary);"></div>
+                    <div class="demo-item-label">Secondary</div>
+                    <div class="demo-item-value">--md-secondary</div>
+                </div>
+                <div class="demo-item">
+                    <div class="color-swatch" style="background: var(--md-tertiary);"></div>
+                    <div class="demo-item-label">Tertiary</div>
+                    <div class="demo-item-value">--md-tertiary</div>
+                </div>
+            </div>
+            
+            <h3>Semantic Colors</h3>
+            <div class="demo-grid">
+                <div class="demo-item">
+                    <div class="color-swatch" style="background: var(--md-error);"></div>
+                    <div class="demo-item-label">Error</div>
+                    <div class="demo-item-value">--md-error</div>
+                </div>
+                <div class="demo-item">
+                    <div class="color-swatch" style="background: var(--md-success);"></div>
+                    <div class="demo-item-label">Success</div>
+                    <div class="demo-item-value">--md-success</div>
+                </div>
+                <div class="demo-item">
+                    <div class="color-swatch" style="background: var(--md-warning);"></div>
+                    <div class="demo-item-label">Warning</div>
+                    <div class="demo-item-value">--md-warning</div>
+                </div>
+                <div class="demo-item">
+                    <div class="color-swatch" style="background: var(--md-info);"></div>
+                    <div class="demo-item-label">Info</div>
+                    <div class="demo-item-value">--md-info</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Spacing System -->
+        <section class="demo-section">
+            <h2>📏 Spacing System</h2>
+            <p class="mb-lg">Based on Material Design's 8px grid system</p>
+            
+            <div class="spacing-demo">
+                <div>
+                    <div class="spacing-box" style="width: var(--spacing-xs); height: var(--spacing-xs);">xs</div>
+                    <div class="demo-item-label">4px</div>
+                </div>
+                <div>
+                    <div class="spacing-box" style="width: var(--spacing-sm); height: var(--spacing-sm);">sm</div>
+                    <div class="demo-item-label">8px</div>
+                </div>
+                <div>
+                    <div class="spacing-box" style="width: var(--spacing-md); height: var(--spacing-md);">md</div>
+                    <div class="demo-item-label">16px</div>
+                </div>
+                <div>
+                    <div class="spacing-box" style="width: var(--spacing-lg); height: var(--spacing-lg);">lg</div>
+                    <div class="demo-item-label">24px</div>
+                </div>
+                <div>
+                    <div class="spacing-box" style="width: var(--spacing-xl); height: var(--spacing-xl);">xl</div>
+                    <div class="demo-item-label">32px</div>
+                </div>
+                <div>
+                    <div class="spacing-box" style="width: var(--spacing-xxl); height: var(--spacing-xxl);">xxl</div>
+                    <div class="demo-item-label">48px</div>
+                </div>
+            </div>
+            
+            <h3>Utility Classes</h3>
+            <div class="code-block">
+                p-xs, p-sm, p-md, p-lg, p-xl, p-xxl (padding)<br>
+                m-xs, m-sm, m-md, m-lg, m-xl, m-xxl (margin)<br>
+                gap-xs, gap-sm, gap-md, gap-lg, gap-xl (flex/grid gap)<br>
+                pt-*, pr-*, pb-*, pl-* (directional padding)<br>
+                mt-*, mr-*, mb-*, ml-* (directional margin)
+            </div>
+        </section>
+
+        <!-- Typography System -->
+        <section class="demo-section">
+            <h2>✍️ Typography System</h2>
+            
+            <h3>Font Sizes</h3>
+            <div class="typography-sample text-xs">Extra Small (12px) - --font-size-xs</div>
+            <div class="typography-sample text-sm">Small (14px) - --font-size-sm</div>
+            <div class="typography-sample text-base">Base (16px) - --font-size-base</div>
+            <div class="typography-sample text-lg">Large (18px) - --font-size-lg</div>
+            <div class="typography-sample text-xl">Extra Large (20px) - --font-size-xl</div>
+            <div class="typography-sample text-2xl">2XL (24px) - --font-size-2xl</div>
+            <div class="typography-sample text-3xl">3XL (32px) - --font-size-3xl</div>
+            <div class="typography-sample text-4xl">4XL (40px) - --font-size-4xl</div>
+            
+            <h3>Font Weights</h3>
+            <div class="typography-sample font-light text-lg">Light (300) - font-light</div>
+            <div class="typography-sample font-regular text-lg">Regular (400) - font-regular</div>
+            <div class="typography-sample font-medium text-lg">Medium (500) - font-medium</div>
+            <div class="typography-sample font-semibold text-lg">Semibold (600) - font-semibold</div>
+            <div class="typography-sample font-bold text-lg">Bold (700) - font-bold</div>
+        </section>
+
+        <!-- Icon System -->
+        <section class="demo-section">
+            <h2>🎭 Icon System</h2>
+            
+            <h3>Icon Sizes</h3>
+            <div class="icon-showcase">
+                <div class="icon-card">
+                    <span class="material-symbols-outlined icon-xs">home</span>
+                    <div class="icon-card-name">XS (16px)</div>
+                </div>
+                <div class="icon-card">
+                    <span class="material-symbols-outlined icon-sm">home</span>
+                    <div class="icon-card-name">SM (20px)</div>
+                </div>
+                <div class="icon-card">
+                    <span class="material-symbols-outlined icon-md">home</span>
+                    <div class="icon-card-name">MD (24px)</div>
+                </div>
+                <div class="icon-card">
+                    <span class="material-symbols-outlined icon-lg">home</span>
+                    <div class="icon-card-name">LG (32px)</div>
+                </div>
+                <div class="icon-card">
+                    <span class="material-symbols-outlined icon-xl">home</span>
+                    <div class="icon-card-name">XL (48px)</div>
+                </div>
+                <div class="icon-card">
+                    <span class="material-symbols-outlined icon-xxl">home</span>
+                    <div class="icon-card-name">XXL (64px)</div>
+                </div>
+            </div>
+            
+            <h3>Icon Colors</h3>
+            <div class="icon-showcase">
+                <div class="icon-card">
+                    <span class="material-symbols-outlined icon-lg icon-primary">star</span>
+                    <div class="icon-card-name">Primary</div>
+                </div>
+                <div class="icon-card">
+                    <span class="material-symbols-outlined icon-lg icon-secondary">star</span>
+                    <div class="icon-card-name">Secondary</div>
+                </div>
+                <div class="icon-card">
+                    <span class="material-symbols-outlined icon-lg icon-error">error</span>
+                    <div class="icon-card-name">Error</div>
+                </div>
+                <div class="icon-card">
+                    <span class="material-symbols-outlined icon-lg icon-success">check_circle</span>
+                    <div class="icon-card-name">Success</div>
+                </div>
+                <div class="icon-card">
+                    <span class="material-symbols-outlined icon-lg icon-warning">warning</span>
+                    <div class="icon-card-name">Warning</div>
+                </div>
+                <div class="icon-card">
+                    <span class="material-symbols-outlined icon-lg icon-info">info</span>
+                    <div class="icon-card-name">Info</div>
+                </div>
+            </div>
+            
+            <h3>Common Icons</h3>
+            <div class="icon-showcase" id="common-icons">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            
+            <h3>Icon Buttons</h3>
+            <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
+                <button class="icon-btn" title="Standard">
+                    <span class="material-symbols-outlined">home</span>
+                </button>
+                <button class="icon-btn icon-btn-primary" title="Primary">
+                    <span class="material-symbols-outlined">save</span>
+                </button>
+                <button class="icon-btn" disabled title="Disabled">
+                    <span class="material-symbols-outlined">delete</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Component Examples -->
+        <section class="demo-section">
+            <h2>🔲 Component Examples</h2>
+            
+            <h3>Buttons with Icons</h3>
+            <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap; margin-bottom: var(--spacing-lg);">
+                <button class="btn btn-primary gap-sm">
+                    <span class="material-symbols-outlined icon-sm">save</span>
+                    <span>Save</span>
+                </button>
+                <button class="btn btn-secondary gap-sm">
+                    <span class="material-symbols-outlined icon-sm">cancel</span>
+                    <span>Cancel</span>
+                </button>
+                <button class="btn gap-sm">
+                    <span class="material-symbols-outlined icon-sm">download</span>
+                    <span>Download</span>
+                </button>
+            </div>
+            
+            <h3>Cards with Icons</h3>
+            <div class="demo-grid">
+                <div class="demo-item">
+                    <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-md);">
+                        <span class="material-symbols-outlined icon-lg icon-primary">school</span>
+                        <h4 class="text-lg font-medium">Classes</h4>
+                    </div>
+                    <p class="text-sm text-secondary">Manage your classes and students</p>
+                </div>
+                <div class="demo-item">
+                    <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-md);">
+                        <span class="material-symbols-outlined icon-lg icon-success">assignment</span>
+                        <h4 class="text-lg font-medium">Assignments</h4>
+                    </div>
+                    <p class="text-sm text-secondary">Create and grade assignments</p>
+                </div>
+                <div class="demo-item">
+                    <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-md);">
+                        <span class="material-symbols-outlined icon-lg icon-warning">calendar_month</span>
+                        <h4 class="text-lg font-medium">Calendar</h4>
+                    </div>
+                    <p class="text-sm text-secondary">View and manage your schedule</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Examples -->
+        <section class="demo-section">
+            <h2>💻 Code Examples</h2>
+            
+            <h3>Using Design Tokens</h3>
+            <div class="code-block">
+/* CSS */<br>
+.my-component {<br>
+&nbsp;&nbsp;padding: var(--spacing-md);<br>
+&nbsp;&nbsp;margin-bottom: var(--spacing-lg);<br>
+&nbsp;&nbsp;color: var(--md-primary);<br>
+&nbsp;&nbsp;font-size: var(--font-size-base);<br>
+&nbsp;&nbsp;border-radius: var(--md-radius-medium);<br>
+}
+            </div>
+            
+            <h3>Using Icon Component (JavaScript)</h3>
+            <div class="code-block">
+// Create a simple icon<br>
+const icon = IconComponent.create('home', {<br>
+&nbsp;&nbsp;size: 'lg',<br>
+&nbsp;&nbsp;color: 'var(--md-primary)',<br>
+&nbsp;&nbsp;title: 'Home'<br>
+});<br>
+<br>
+// Create an icon button<br>
+const btn = IconComponent.createButton('edit', {<br>
+&nbsp;&nbsp;onClick: () => handleEdit(),<br>
+&nbsp;&nbsp;title: 'Edit'<br>
+});
+            </div>
+        </section>
+    </div>
+
+    <!-- Icon Component -->
+    <script src="js/icons.js"></script>
+    
+    <script>
+        // Populate common icons showcase
+        document.addEventListener('DOMContentLoaded', () => {
+            const commonIconsContainer = document.getElementById('common-icons');
+            
+            const commonIcons = [
+                { name: 'home', label: 'Home' },
+                { name: 'menu', label: 'Menu' },
+                { name: 'settings', label: 'Settings' },
+                { name: 'search', label: 'Search' },
+                { name: 'add', label: 'Add' },
+                { name: 'edit', label: 'Edit' },
+                { name: 'delete', label: 'Delete' },
+                { name: 'save', label: 'Save' },
+                { name: 'upload_file', label: 'Upload' },
+                { name: 'download', label: 'Download' },
+                { name: 'school', label: 'School' },
+                { name: 'assignment', label: 'Assignment' },
+                { name: 'calendar_month', label: 'Calendar' },
+                { name: 'psychology', label: 'AI' },
+                { name: 'help', label: 'Help' },
+                { name: 'info', label: 'Info' }
+            ];
+            
+            commonIcons.forEach(({ name, label }) => {
+                const card = document.createElement('div');
+                card.className = 'icon-card';
+                
+                const icon = IconComponent.create(name, {
+                    size: 'lg',
+                    title: label
+                });
+                
+                const nameEl = document.createElement('div');
+                nameEl.className = 'icon-card-name';
+                nameEl.textContent = label;
+                
+                card.appendChild(icon);
+                card.appendChild(nameEl);
+                commonIconsContainer.appendChild(card);
+            });
+            
+            // Theme toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+                const isDark = document.body.classList.contains('dark-theme');
+                const icon = themeToggle.querySelector('.material-symbols-outlined');
+                icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+            });
+        });
+    </script>
+</body>
+</html>

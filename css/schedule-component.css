@@ -1,0 +1,662 @@
+/* Schedule Component Styles - Material Design 3 Expressive */
+/* Consistent with app's design system */
+
+/* Main Schedule Wrapper */
+.schedule-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: var(--schedule-surface);
+    border-radius: var(--schedule-radius-lg);
+    box-shadow: var(--schedule-shadow-md);
+    padding: var(--schedule-spacing-lg);
+    margin: var(--schedule-spacing-lg) 0;
+}
+
+/* Schedule Table */
+.schedule-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: var(--schedule-font-family);
+    background: var(--schedule-surface);
+}
+
+/* Table Headers - Material Design 3 style */
+.schedule-header {
+    background: var(--schedule-primary-container);
+    color: var(--schedule-on-primary-container);
+    padding: var(--schedule-spacing-md) var(--schedule-spacing-sm);
+    text-align: center;
+    font-weight: var(--schedule-font-weight-semibold);
+    font-size: var(--schedule-font-size-base);
+    border: 1px solid var(--schedule-divider);
+    position: sticky;
+    top: 0;
+    z-index: var(--schedule-z-header);
+    line-height: 1.4;
+}
+
+.schedule-header--time {
+    background: var(--schedule-primary);
+    color: var(--schedule-on-primary);
+    min-width: 80px;
+    font-weight: var(--schedule-font-weight-bold);
+}
+
+.schedule-header--time .material-symbols-outlined {
+    vertical-align: middle;
+    margin-right: var(--schedule-spacing-xs);
+    font-size: 1.2em;
+}
+
+.schedule-header--day {
+    min-width: 150px;
+}
+
+.schedule-header__day-full {
+    display: inline;
+}
+
+.schedule-header__day-abbr {
+    display: none;
+}
+
+/* Time Cells */
+.schedule-time-cell {
+    background: var(--schedule-surface-container);
+    color: var(--schedule-text-primary);
+    padding: var(--schedule-spacing-md) var(--schedule-spacing-sm);
+    text-align: center;
+    font-weight: var(--schedule-font-weight-semibold);
+    font-size: var(--schedule-font-size-base);
+    border: 1px solid var(--schedule-divider);
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.schedule-time-cell__time {
+    display: block;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Schedule Cells - Material Design 3 */
+.schedule-cell {
+    background: var(--schedule-surface-container-low);
+    border: 2px solid var(--schedule-divider);
+    padding: var(--schedule-spacing-md);
+    cursor: pointer;
+    transition: all var(--schedule-transition-duration) var(--schedule-transition-timing);
+    vertical-align: middle;
+    min-height: 80px;
+    position: relative;
+    text-align: center;
+}
+
+.schedule-cell:hover {
+    background: var(--schedule-surface-container-high);
+    border-color: var(--schedule-primary);
+    box-shadow: var(--schedule-shadow-hover);
+    transform: translateY(-2px);
+}
+
+.schedule-cell:focus {
+    outline: 2px solid var(--schedule-primary);
+    outline-offset: 2px;
+}
+
+.schedule-cell--empty {
+    background: var(--schedule-surface-variant);
+    border-style: dashed;
+    opacity: 0.7;
+}
+
+.schedule-cell--empty:hover {
+    opacity: 1;
+    background: var(--schedule-surface-container);
+}
+
+.schedule-cell--filled:active {
+    background: var(--schedule-primary-container);
+    border-color: var(--schedule-primary);
+}
+
+/* Cell Content */
+.schedule-cell__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--schedule-spacing-sm);
+    min-height: 60px;
+}
+
+.schedule-cell__content--empty {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--schedule-text-secondary);
+    text-align: center;
+}
+
+.schedule-cell__icon {
+    flex-shrink: 0;
+}
+
+.schedule-cell__icon .material-symbols-outlined {
+    font-size: 1.75rem;
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.schedule-cell__info {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+}
+
+.schedule-cell__class {
+    font-weight: var(--schedule-font-weight-semibold);
+    font-size: var(--schedule-font-size-base);
+    color: var(--schedule-text-primary);
+    margin-bottom: var(--schedule-spacing-xs);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.schedule-cell__subject {
+    font-size: var(--schedule-font-size-sm);
+    color: var(--schedule-text-secondary);
+    line-height: 1.4;
+}
+
+.schedule-cell__add-icon {
+    font-size: 2rem;
+    color: var(--schedule-primary);
+    margin-bottom: var(--schedule-spacing-xs);
+    font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48;
+}
+
+.schedule-cell__add-text {
+    font-size: var(--schedule-font-size-sm);
+    font-weight: var(--schedule-font-weight-medium);
+    color: var(--schedule-text-primary);
+}
+
+/* Modal Styles - Material Design 3 */
+.schedule-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--md-overlay);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--schedule-z-modal);
+    padding: var(--schedule-spacing-lg);
+    backdrop-filter: blur(4px);
+    animation: scheduleModalFadeIn var(--schedule-transition-duration) var(--schedule-transition-timing);
+}
+
+@keyframes scheduleModalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.schedule-modal {
+    background: var(--schedule-surface);
+    border-radius: var(--schedule-radius-lg);
+    box-shadow: var(--schedule-shadow-lg);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: scheduleModalSlideUp var(--schedule-transition-duration) var(--schedule-transition-timing);
+}
+
+@keyframes scheduleModalSlideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.schedule-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--schedule-spacing-lg);
+    border-bottom: 1px solid var(--schedule-divider);
+    background: var(--schedule-primary-container);
+    border-radius: var(--schedule-radius-lg) var(--schedule-radius-lg) 0 0;
+}
+
+.schedule-modal__title {
+    color: var(--schedule-text-primary);
+    font-size: var(--schedule-font-size-xl);
+    font-weight: var(--schedule-font-weight-semibold);
+    display: flex;
+    align-items: center;
+    gap: var(--schedule-spacing-sm);
+    margin: 0;
+}
+
+.schedule-modal__title .material-symbols-outlined {
+    font-size: 1.5em;
+    color: var(--schedule-primary);
+}
+
+.schedule-modal__close {
+    background: transparent;
+    border: none;
+    color: var(--schedule-text-primary);
+    cursor: pointer;
+    padding: var(--schedule-spacing-xs);
+    border-radius: var(--schedule-radius-sm);
+    transition: background var(--schedule-transition-duration) var(--schedule-transition-timing);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+}
+
+.schedule-modal__close:hover {
+    background: rgba(103, 80, 164, 0.08);
+}
+
+body.dark-theme .schedule-modal__close:hover {
+    background: rgba(208, 188, 255, 0.08);
+}
+
+.schedule-modal__close .material-symbols-outlined {
+    font-size: 1.5rem;
+}
+
+.schedule-modal__body {
+    padding: var(--schedule-spacing-xl);
+}
+
+.schedule-modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--schedule-spacing-lg);
+    border-top: 1px solid var(--schedule-divider);
+    background: var(--schedule-surface-container-low);
+}
+
+.schedule-modal__actions {
+    display: flex;
+    gap: var(--schedule-spacing-sm);
+}
+
+/* Form Styles - Material Design 3 */
+.schedule-form-group {
+    margin-bottom: var(--schedule-spacing-lg);
+}
+
+.schedule-form-label {
+    display: flex;
+    align-items: center;
+    gap: var(--schedule-spacing-xs);
+    font-weight: var(--schedule-font-weight-medium);
+    font-size: var(--schedule-font-size-base);
+    color: var(--schedule-text-primary);
+    margin-bottom: var(--schedule-spacing-sm);
+}
+
+.schedule-form-label .material-symbols-outlined {
+    font-size: 1.2em;
+    color: var(--schedule-primary);
+}
+
+.schedule-form-control {
+    width: 100%;
+    padding: var(--schedule-spacing-md);
+    font-family: var(--schedule-font-family);
+    font-size: var(--schedule-font-size-base);
+    color: var(--schedule-text-primary);
+    background: var(--schedule-surface);
+    border: 1px solid var(--schedule-border);
+    border-radius: var(--schedule-radius-sm);
+    transition: all var(--schedule-transition-duration) var(--schedule-transition-timing);
+}
+
+.schedule-form-control:focus {
+    outline: none;
+    border-color: var(--schedule-primary);
+    box-shadow: 0 0 0 3px var(--schedule-primary-container);
+}
+
+/* Activity Type Selector - Material Design 3 */
+.schedule-activity-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--schedule-spacing-sm);
+}
+
+.schedule-activity-type {
+    display: block;
+    cursor: pointer;
+}
+
+.schedule-activity-type input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.schedule-activity-type__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--schedule-spacing-xs);
+    padding: var(--schedule-spacing-md);
+    border: 2px solid var(--schedule-divider);
+    border-radius: var(--schedule-radius-md);
+    background: var(--schedule-surface-container-low);
+    transition: all var(--schedule-transition-duration) var(--schedule-transition-timing);
+}
+
+.schedule-activity-type:hover .schedule-activity-type__content {
+    border-color: var(--schedule-primary);
+    background: var(--schedule-surface-container);
+}
+
+.schedule-activity-type input:checked + .schedule-activity-type__content {
+    border-color: var(--schedule-primary);
+    background: var(--schedule-primary-container);
+    box-shadow: var(--schedule-shadow-sm);
+}
+
+.schedule-activity-type__content .material-symbols-outlined {
+    font-size: 2rem;
+    color: var(--activity-color);
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.schedule-activity-type__label {
+    font-size: var(--schedule-font-size-sm);
+    font-weight: var(--schedule-font-weight-medium);
+    color: var(--schedule-text-primary);
+    text-align: center;
+}
+
+/* Buttons - Material Design 3 (using app button styles) */
+.schedule-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: var(--schedule-radius-lg);
+    cursor: pointer;
+    font-size: var(--schedule-font-size-sm);
+    font-weight: var(--schedule-font-weight-medium);
+    letter-spacing: 0.0071428571em;
+    text-transform: none;
+    transition: all var(--schedule-transition-duration) var(--schedule-transition-timing);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--schedule-spacing-xs);
+    min-height: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* State layer effect */
+.schedule-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity var(--schedule-transition-duration) var(--schedule-transition-timing);
+}
+
+.schedule-btn:hover::before {
+    opacity: 0.08;
+}
+
+.schedule-btn:active::before {
+    opacity: 0.12;
+}
+
+.schedule-btn .material-symbols-outlined {
+    font-size: 18px;
+}
+
+.schedule-btn--primary {
+    background: var(--schedule-primary);
+    color: var(--schedule-on-primary);
+    box-shadow: var(--schedule-shadow-sm);
+}
+
+.schedule-btn--primary:hover {
+    box-shadow: var(--schedule-shadow-md);
+}
+
+.schedule-btn--secondary {
+    background: transparent;
+    color: var(--schedule-primary);
+    border: 1px solid var(--schedule-border);
+}
+
+.schedule-btn--secondary:hover {
+    background: rgba(103, 80, 164, 0.08);
+}
+
+body.dark-theme .schedule-btn--secondary:hover {
+    background: rgba(208, 188, 255, 0.08);
+}
+
+.schedule-btn--danger {
+    background: var(--md-error);
+    color: var(--md-on-error);
+    box-shadow: var(--schedule-shadow-sm);
+}
+
+.schedule-btn--danger:hover {
+    box-shadow: var(--schedule-shadow-md);
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .schedule-wrapper {
+        padding: var(--schedule-spacing-md);
+    }
+    
+    .schedule-header--day {
+        min-width: 120px;
+    }
+    
+    .schedule-cell {
+        padding: var(--schedule-spacing-sm);
+        min-height: 70px;
+    }
+    
+    .schedule-activity-types {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .schedule-wrapper {
+        padding: var(--schedule-spacing-sm);
+        border-radius: var(--schedule-radius-md);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .schedule-header__day-full {
+        display: none;
+    }
+    
+    .schedule-header__day-abbr {
+        display: inline;
+    }
+    
+    .schedule-header--day {
+        min-width: 100px;
+        padding: var(--schedule-spacing-sm);
+        font-size: var(--schedule-font-size-sm);
+    }
+    
+    .schedule-time-cell {
+        padding: var(--schedule-spacing-sm);
+        font-size: var(--schedule-font-size-sm);
+    }
+    
+    .schedule-cell {
+        padding: var(--schedule-spacing-sm);
+        min-height: 60px;
+    }
+    
+    .schedule-cell__content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: var(--schedule-spacing-xs);
+    }
+    
+    .schedule-cell__icon .material-symbols-outlined {
+        font-size: 1.5rem;
+    }
+    
+    .schedule-cell__class {
+        font-size: var(--schedule-font-size-sm);
+    }
+    
+    .schedule-cell__subject {
+        font-size: var(--schedule-font-size-xs);
+    }
+    
+    .schedule-modal {
+        max-width: 100%;
+        margin: 0;
+        border-radius: var(--schedule-radius-md);
+    }
+    
+    .schedule-modal__header {
+        padding: var(--schedule-spacing-md);
+    }
+    
+    .schedule-modal__title {
+        font-size: var(--schedule-font-size-lg);
+    }
+    
+    .schedule-modal__body {
+        padding: var(--schedule-spacing-lg);
+    }
+    
+    .schedule-modal__footer {
+        flex-direction: column;
+        gap: var(--schedule-spacing-sm);
+    }
+    
+    .schedule-modal__actions {
+        width: 100%;
+    }
+    
+    .schedule-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .schedule-activity-types {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .schedule-activity-type__content {
+        padding: var(--schedule-spacing-sm);
+    }
+    
+    .schedule-activity-type__content .material-symbols-outlined {
+        font-size: 1.5rem;
+    }
+    
+    .schedule-activity-type__label {
+        font-size: var(--schedule-font-size-xs);
+    }
+}
+
+@media (max-width: 640px) {
+    .schedule-header--time {
+        min-width: 60px;
+    }
+    
+    .schedule-header--day {
+        min-width: 80px;
+    }
+    
+    .schedule-cell {
+        min-height: 50px;
+    }
+    
+    .schedule-cell__icon .material-symbols-outlined {
+        font-size: 1.25rem;
+    }
+    
+    .schedule-cell__add-icon {
+        font-size: 1.5rem;
+    }
+    
+    .schedule-form-control {
+        padding: var(--schedule-spacing-sm);
+        font-size: var(--schedule-font-size-sm);
+    }
+}
+
+/* Print Styles */
+@media print {
+    .schedule-wrapper {
+        box-shadow: none;
+        padding: 0;
+    }
+    
+    .schedule-cell {
+        cursor: default;
+    }
+    
+    .schedule-cell:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .schedule-modal-overlay {
+        display: none;
+    }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .schedule-cell {
+        border-width: 3px;
+    }
+    
+    .schedule-cell:focus {
+        outline-width: 4px;
+    }
+}

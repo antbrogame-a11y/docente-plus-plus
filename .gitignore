@@ -5,3 +5,23 @@
 contextual-ai.js
 onboarding_test.html
 test_pwa.sh
+
+# Testing
+node_modules/
+coverage/
+.nyc_output/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

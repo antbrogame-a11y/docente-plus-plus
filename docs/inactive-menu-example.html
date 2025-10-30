@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Inattivo - Docente++</title>
+    <link href="fonts/material-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <link href="fonts/roboto.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Highlight the inactive menu items for demo */
+        .nav-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            position: relative;
+        }
+        .nav-item.disabled::after {
+            content: "🔒";
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .demo-banner {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            font-family: 'Roboto', sans-serif;
+        }
+        .demo-banner h2 {
+            margin-top: 0;
+            color: #856404;
+        }
+        .demo-banner p {
+            color: #856404;
+            margin: 10px 0;
+        }
+        .demo-highlight {
+            background: #ff5252;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Banner -->
+    <div class="demo-banner">
+        <h2>✅ Comportamento Nuovo: Menu Sempre Attivo</h2>
+        <p><strong>IMPORTANTE:</strong> Questo file è stato mantenuto solo come riferimento storico.</p>
+        <p><span class="demo-highlight">COMPORTAMENTO ATTUALE</span>: Le voci di menu sono <strong>SEMPRE ATTIVE</strong>, anche se il profilo non è completo</p>
+        <p><span class="demo-highlight">COSA SUCCEDE</span>: L'utente vede il banner arancione per completare il profilo, ma può comunque navigare liberamente nell'app</p>
+        <p>Questo esempio mostra il <strong>vecchio comportamento</strong> (menu disabilitato) che non è più utilizzato nell'applicazione.</p>
+    </div>
+
+    <!-- Onboarding Incomplete Banner -->
+    <div id="onboarding-incomplete-banner" class="onboarding-banner" style="display: block;">
+        <div class="onboarding-banner-content">
+            <span class="material-symbols-outlined">info</span>
+            <div class="onboarding-banner-text">
+                <strong>Configurazione incompleta</strong>
+                <p>Completa il tuo profilo per accedere a tutte le funzionalità</p>
+            </div>
+            <button id="complete-onboarding-btn" class="btn btn-primary btn-sm">
+                <span class="material-symbols-outlined">person</span>
+                Completa Profilo
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header id="app-header">
+        <div class="header-content">
+            <button id="menu-toggle" class="menu-toggle icon-btn" title="Menu" aria-label="Apri menu navigazione">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <h1>Docente++ - Demo Menu Inattivo</h1>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <aside id="main-nav" class="sidebar" style="display: block;">
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-tab="home">
+                <span class="material-symbols-outlined">home</span>
+                <span class="nav-label">Home</span>
+            </button>
+            <button class="nav-item disabled" data-tab="lessons" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">menu_book</span>
+                <span class="nav-label">Lezioni</span>
+            </button>
+            <button class="nav-item disabled" data-tab="students" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">group</span>
+                <span class="nav-label">Studenti</span>
+            </button>
+            <button class="nav-item disabled" data-tab="classes" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">school</span>
+                <span class="nav-label">Classi</span>
+            </button>
+            <button class="nav-item disabled" data-tab="activities" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">assignment</span>
+                <span class="nav-label">Attività</span>
+            </button>
+            <button class="nav-item disabled" data-tab="evaluations" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">assessment</span>
+                <span class="nav-label">Valutazioni</span>
+            </button>
+            <button class="nav-item disabled" data-tab="schedule" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">calendar_month</span>
+                <span class="nav-label">Orario</span>
+            </button>
+            <button class="nav-item disabled" data-tab="agenda" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">event</span>
+                <span class="nav-label">Agenda</span>
+            </button>
+            <button class="nav-item disabled" data-tab="aiAssistant" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">psychology</span>
+                <span class="nav-label">Assistente IA</span>
+            </button>
+            <button class="nav-item disabled" data-tab="documentImport" aria-disabled="true" title="Completa il profilo per accedere a questa funzionalità">
+                <span class="material-symbols-outlined">upload_file</span>
+                <span class="nav-label">Importa Documenti</span>
+            </button>
+            
+            <div class="nav-divider"></div>
+            
+            <button class="nav-item" data-tab="settings">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="nav-label">Impostazioni</span>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main style="padding-left: 260px; padding-top: 60px;">
+        <div style="padding: 40px;">
+            <h2>⚠️ Esempio Storico - Menu Inattivo (NON PIÙ UTILIZZATO)</h2>
+            <p><strong>Questo è solo un esempio storico del vecchio comportamento.</strong></p>
+            <p>In questo esempio, le voci di menu nella sidebar a sinistra sono disabilitate (opache con icona lucchetto).</p>
+            
+            <h3>Comportamento Attuale dell'Applicazione:</h3>
+            <div style="background: #d4edda; border: 2px solid #28a745; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                <p style="color: #155724; margin: 0;"><strong>✅ Il menu è SEMPRE ATTIVO</strong></p>
+                <p style="color: #155724; margin: 10px 0 0 0;">Anche se il profilo non è completo, l'utente può navigare liberamente in tutte le sezioni dell'app. Il banner arancione serve solo come promemoria per completare il profilo.</p>
+            </div>
+            
+            <h3>Vecchio Comportamento (mostrato in questo esempio):</h3>
+            <ul>
+                <li>Le voci di menu erano disabilitate quando l'utente non aveva completato l'onboarding</li>
+                <li>Solo <strong>Home</strong> e <strong>Impostazioni</strong> erano accessibili</li>
+                <li>Questo causava frustrazione agli utenti</li>
+            </ul>
+            
+            <p><strong>Questo comportamento è stato rimosso per migliorare l'esperienza utente.</strong></p>
+        </div>
+    </main>
+</body>
+</html>

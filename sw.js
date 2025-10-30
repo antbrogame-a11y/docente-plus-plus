@@ -1,6 +1,12 @@
 // Service Worker per Docente++
 // Versione: 3.0.0 (Forced Update)
 
+// MIME Types constants
+const MIME_TYPES = {
+    TEXT_PLAIN: 'text/plain',
+    TEXT_HTML: 'text/html'
+};
+
 const STATIC_CACHE = 'docente-static-v6';
 const DYNAMIC_CACHE = 'docente-dynamic-v6';
 
@@ -99,7 +105,7 @@ self.addEventListener('fetch', (event) => {
         console.log('[SW] Fetch failed, offline mode:', error);
         
         // Se è una richiesta HTML, ritorna la pagina principale dalla cache
-        if (request.headers.get('accept')?.includes('text/html')) {
+        if (request.headers.get('accept')?.includes(MIME_TYPES.TEXT_HTML)) {
           return caches.match('/index.html');
         }
         
@@ -108,7 +114,7 @@ self.addEventListener('fetch', (event) => {
           status: 503,
           statusText: 'Service Unavailable',
           headers: new Headers({
-            'Content-Type': 'text/plain'
+            'Content-Type': MIME_TYPES.TEXT_PLAIN
           })
         });
       });
@@ -146,6 +152,68 @@ self.addEventListener('sync', (event) => {
       Promise.resolve()
     );
   }
+});
+
+// Gestione delle notifiche push
+self.addEventListener('push', (event) => {
+  console.log('[SW] Push notification received:', event);
+  
+  let notificationData = {
+    title: 'Docente++',
+    body: 'Hai una nuova notifica',
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/icon-192x192.png',
+    tag: 'docente-notification'
+  };
+  
+  // Se il push ha dati, usali
+  if (event.data) {
+    try {
+      const data = event.data.json();
+      notificationData = {
+        ...notificationData,
+        ...data
+      };
+    } catch (e) {
+      notificationData.body = event.data.text();
+    }
+  }
+  
+  event.waitUntil(
+    self.registration.showNotification(notificationData.title, {
+      body: notificationData.body,
+      icon: notificationData.icon,
+      badge: notificationData.badge,
+      tag: notificationData.tag,
+      data: notificationData.data || {},
+      requireInteraction: notificationData.requireInteraction || false,
+      actions: notificationData.actions || []
+    })
+  );
+});
+
+// Gestione dei click sulle notifiche
+self.addEventListener('notificationclick', (event) => {
+  console.log('[SW] Notification clicked:', event);
+  
+  event.notification.close();
+  
+  // Apri o focalizza la finestra dell'app
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      // Se c'è già una finestra aperta, focalizzala
+      for (const client of clientList) {
+        if (client.url.includes(self.location.origin) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      
+      // Altrimenti apri una nuova finestra
+      if (clients.openWindow) {
+        return clients.openWindow('/');
+      }
+    })
+  );
 });
 
 console.log('[SW] Service Worker v6 loaded');

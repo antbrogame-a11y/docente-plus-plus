@@ -1,0 +1,324 @@
+/**
+ * Orario (Schedule) CSS
+ * Grid-based timetable styling with responsive behavior
+ * Mobile-first approach
+ */
+
+/* Timetable Container */
+.timetable {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 weekdays */
+  grid-auto-rows: minmax(80px, auto); /* Minimum 80px per hour slot */
+  gap: 8px;
+  padding: 16px;
+  background-color: var(--surface-bg, #f5f5f5);
+  border-radius: 8px;
+  overflow-x: auto;
+  position: relative;
+}
+
+/* Responsive: Mobile (single column view) */
+@media (max-width: 640px) {
+  .timetable {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    gap: 12px;
+  }
+  
+  .schedule-slot {
+    /* On mobile, slots are stacked vertically */
+    grid-column: 1 !important;
+    grid-row: auto !important;
+  }
+}
+
+/* Responsive: Tablet (3 columns) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .timetable {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+  }
+}
+
+/* Responsive: Desktop (5 columns - full week) */
+@media (min-width: 1025px) {
+  .timetable {
+    grid-template-columns: repeat(5, 1fr);
+    grid-auto-rows: minmax(120px, auto);
+    gap: 12px;
+    padding: 24px;
+  }
+}
+
+/* Schedule Slot */
+.schedule-slot {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface, #ffffff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.schedule-slot:hover,
+.schedule-slot:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  outline: 2px solid var(--primary-color, #4a90e2);
+  outline-offset: 2px;
+}
+
+.schedule-slot:focus {
+  outline: 3px solid var(--primary-color, #4a90e2);
+}
+
+.schedule-slot:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Slot Header */
+.slot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.slot-time {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary, #666666);
+}
+
+.slot-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background-color: var(--badge-bg, #ff9800);
+  color: white;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Slot Body */
+.slot-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.slot-subject {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #333333);
+  line-height: 1.3;
+}
+
+.slot-class {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary, #666666);
+}
+
+.slot-room {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary, #999999);
+}
+
+/* Slot Type */
+.slot-type {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color, #e0e0e0);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary, #666666);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Multi-hour slots (spanning multiple rows) */
+.schedule-slot[data-duration="2"] {
+  min-height: 160px;
+}
+
+.schedule-slot[data-duration="3"] {
+  min-height: 240px;
+}
+
+.schedule-slot[data-duration="4"] {
+  min-height: 320px;
+}
+
+/* Color variants for different subjects */
+.schedule-slot[data-subject="Matematica"] {
+  border-left: 4px solid #4CAF50;
+}
+
+.schedule-slot[data-subject="Italiano"] {
+  border-left: 4px solid #2196F3;
+}
+
+.schedule-slot[data-subject="Storia"] {
+  border-left: 4px solid #FF9800;
+}
+
+.schedule-slot[data-subject="Scienze"] {
+  border-left: 4px solid #9C27B0;
+}
+
+.schedule-slot[data-subject="Inglese"] {
+  border-left: 4px solid #E91E63;
+}
+
+/* Collision indicator */
+.schedule-slot.has-collision {
+  border: 2px solid #f44336;
+  box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2);
+}
+
+.schedule-slot.has-collision::before {
+  content: '⚠️';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 1rem;
+}
+
+/* Empty state */
+.timetable-empty {
+  grid-column: 1 / -1;
+  padding: 48px 16px;
+  text-align: center;
+  color: var(--text-secondary, #666666);
+}
+
+.timetable-empty .material-symbols-outlined {
+  font-size: 3rem;
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+/* Loading state */
+.timetable-loading {
+  grid-column: 1 / -1;
+  padding: 48px 16px;
+  text-align: center;
+}
+
+.timetable-loading .spinner {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+  border: 4px solid var(--border-color, #e0e0e0);
+  border-top-color: var(--primary-color, #4a90e2);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Time slot labels (optional header row) */
+.timetable-header {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: var(--surface-bg, #f5f5f5);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-secondary, #666666);
+  border-bottom: 2px solid var(--border-color, #e0e0e0);
+}
+
+.timetable-header .day-label {
+  text-align: center;
+  padding: 8px;
+}
+
+/* Mobile: Hide day labels on very small screens */
+@media (max-width: 640px) {
+  .timetable-header {
+    display: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .schedule-slot {
+    border: 2px solid currentColor;
+  }
+  
+  .schedule-slot:focus {
+    outline: 4px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .schedule-slot {
+    transition: none;
+  }
+  
+  .timetable-loading .spinner {
+    animation: none;
+    border-top-color: var(--primary-color, #4a90e2);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .timetable {
+    background-color: var(--surface-bg-dark, #1e1e1e);
+  }
+  
+  .schedule-slot {
+    background-color: var(--surface-dark, #2d2d2d);
+    border-color: var(--border-color-dark, #404040);
+    color: var(--text-primary-dark, #e0e0e0);
+  }
+  
+  .slot-time,
+  .slot-class,
+  .slot-type {
+    color: var(--text-secondary-dark, #b0b0b0);
+  }
+  
+  .slot-room {
+    color: var(--text-tertiary-dark, #808080);
+  }
+}
+
+/* Print styles */
+@media print {
+  .timetable {
+    display: block;
+    page-break-inside: avoid;
+  }
+  
+  .schedule-slot {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .schedule-slot:hover,
+  .schedule-slot:focus {
+    transform: none;
+    box-shadow: none;
+  }
+}

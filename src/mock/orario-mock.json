@@ -1,0 +1,147 @@
+{
+  "schedule": [
+    {
+      "id": "slot-1",
+      "day": "Lunedì",
+      "startTime": "08:00",
+      "endTime": "09:00",
+      "subject": "Matematica",
+      "class": "3A",
+      "room": "Aula 12",
+      "type": "Teoria",
+      "color": "#4CAF50"
+    },
+    {
+      "id": "slot-2",
+      "day": "Lunedì",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "subject": "Italiano",
+      "class": "2B",
+      "room": "Aula 5",
+      "type": "Laboratorio",
+      "color": "#2196F3",
+      "multiHour": true
+    },
+    {
+      "id": "slot-3",
+      "day": "Lunedì",
+      "startTime": "11:00",
+      "endTime": "12:00",
+      "subject": "Storia",
+      "class": "3A",
+      "room": "Aula 12",
+      "type": "Teoria",
+      "color": "#FF9800"
+    },
+    {
+      "id": "slot-4",
+      "day": "Martedì",
+      "startTime": "08:00",
+      "endTime": "10:00",
+      "subject": "Scienze",
+      "class": "1C",
+      "room": "Laboratorio 1",
+      "type": "Laboratorio",
+      "color": "#9C27B0",
+      "multiHour": true
+    },
+    {
+      "id": "slot-5",
+      "day": "Martedì",
+      "startTime": "10:00",
+      "endTime": "11:00",
+      "subject": "Matematica",
+      "class": "3A",
+      "room": "Aula 12",
+      "type": "Esercitazione",
+      "color": "#4CAF50"
+    },
+    {
+      "id": "slot-6",
+      "day": "Mercoledì",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "subject": "Inglese",
+      "class": "2B",
+      "room": "Aula 7",
+      "type": "Teoria",
+      "color": "#E91E63"
+    },
+    {
+      "id": "slot-7",
+      "day": "Mercoledì",
+      "startTime": "10:00",
+      "endTime": "13:00",
+      "subject": "Progetto Interdisciplinare",
+      "class": "3A",
+      "room": "Aula Magna",
+      "type": "Progetto",
+      "color": "#00BCD4",
+      "multiHour": true
+    },
+    {
+      "id": "slot-8",
+      "day": "Giovedì",
+      "startTime": "08:00",
+      "endTime": "09:00",
+      "subject": "Geografia",
+      "class": "1C",
+      "room": "Aula 3",
+      "type": "Teoria",
+      "color": "#795548"
+    },
+    {
+      "id": "slot-9",
+      "day": "Giovedì",
+      "startTime": "11:00",
+      "endTime": "12:00",
+      "subject": "Educazione Fisica",
+      "class": "2B",
+      "room": "Palestra",
+      "type": "Pratica",
+      "color": "#607D8B"
+    },
+    {
+      "id": "slot-10",
+      "day": "Venerdì",
+      "startTime": "08:00",
+      "endTime": "09:00",
+      "subject": "Arte",
+      "class": "3A",
+      "room": "Laboratorio Arte",
+      "type": "Laboratorio",
+      "color": "#FFC107"
+    },
+    {
+      "id": "slot-11",
+      "day": "Venerdì",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "subject": "Informatica",
+      "class": "2B",
+      "room": "Laboratorio Informatica",
+      "type": "Laboratorio",
+      "color": "#3F51B5",
+      "multiHour": true
+    }
+  ],
+  "timeSlots": [
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00"
+  ],
+  "days": [
+    "Lunedì",
+    "Martedì",
+    "Mercoledì",
+    "Giovedì",
+    "Venerdì"
+  ]
+}

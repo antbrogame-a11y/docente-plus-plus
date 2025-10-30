@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Componente Orario Responsive</title>
+    
+    <!-- Material Symbols Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Schedule Styles -->
+    <link rel="stylesheet" href="css/schedule-theme.css">
+    <link rel="stylesheet" href="css/schedule-component.css">
+    
+    <style>
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #EADDFF 0%, #D0BCFF 100%);
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+        
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .demo-header {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .demo-header h1 {
+            margin: 0 0 10px 0;
+            color: #6750A4;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .demo-header p {
+            margin: 0;
+            color: #49454F;
+            font-size: 1.125rem;
+        }
+        
+        .demo-controls {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .demo-controls button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: #6750A4;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+        
+        .demo-controls button:hover {
+            background: #4F378B;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+        
+        .demo-controls button.secondary {
+            background: #625B71;
+        }
+        
+        .demo-controls button.secondary:hover {
+            background: #4A4458;
+        }
+        
+        .demo-stats {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            margin-top: 20px;
+        }
+        
+        .demo-stats h3 {
+            margin: 0 0 15px 0;
+            color: #6750A4;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-item {
+            padding: 15px;
+            background: #EADDFF;
+            border-radius: 8px;
+            border-left: 4px solid #6750A4;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #49454F;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6750A4;
+        }
+        
+        /* Dark theme toggle */
+        body.dark-theme {
+            background: linear-gradient(135deg, #1E1E1E 0%, #2C2C2C 100%);
+        }
+        
+        body.dark-theme .demo-header,
+        body.dark-theme .demo-controls,
+        body.dark-theme .demo-stats {
+            background: #2A2A2A;
+        }
+        
+        body.dark-theme .demo-header h1,
+        body.dark-theme .demo-stats h3 {
+            color: #D0BCFF;
+        }
+        
+        body.dark-theme .demo-header p,
+        body.dark-theme .stat-label {
+            color: #CCC2DC;
+        }
+        
+        body.dark-theme .stat-item {
+            background: #4F378B;
+            border-left-color: #D0BCFF;
+        }
+        
+        body.dark-theme .stat-value {
+            color: #EADDFF;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .demo-header p {
+                font-size: 1rem;
+            }
+            
+            .demo-controls {
+                flex-direction: column;
+            }
+            
+            .demo-controls button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>
+                <span class="material-symbols-outlined" style="vertical-align: middle; font-size: 1em;">calendar_month</span>
+                Componente Orario Responsive
+            </h1>
+            <p>Design moderno e professionale - 6 ore/giorno (Lun-Ven) 08:00-14:00</p>
+        </div>
+        
+        <div class="demo-controls">
+            <button id="demo-load-example">
+                <span class="material-symbols-outlined">upload</span>
+                Carica Dati di Esempio
+            </button>
+            <button id="demo-clear" class="secondary">
+                <span class="material-symbols-outlined">delete_sweep</span>
+                Pulisci Orario
+            </button>
+            <button id="demo-toggle-theme" class="secondary">
+                <span class="material-symbols-outlined">dark_mode</span>
+                Toggle Dark Mode
+            </button>
+            <button id="demo-export" class="secondary">
+                <span class="material-symbols-outlined">download</span>
+                Esporta JSON
+            </button>
+        </div>
+        
+        <!-- Schedule Container -->
+        <div id="schedule-container"></div>
+        
+        <div class="demo-stats">
+            <h3>
+                <span class="material-symbols-outlined">analytics</span>
+                Statistiche Orario
+            </h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-label">Slot Totali</div>
+                    <div class="stat-value" id="stat-total">30</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Slot Occupati</div>
+                    <div class="stat-value" id="stat-occupied">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Slot Liberi</div>
+                    <div class="stat-value" id="stat-empty">30</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Tasso Occupazione</div>
+                    <div class="stat-value" id="stat-rate">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { renderScheduleTable, showScheduleEditModal } from './js/schedule-component.js';
+        import { 
+            exampleScheduleData, 
+            exampleClasses,
+            generateEmptySchedule,
+            getScheduleStats
+        } from './js/schedule-example-data.js';
+        
+        // Mock state object for demo
+        window.state = {
+            classes: exampleClasses
+        };
+        
+        // Initialize schedule data
+        let scheduleData = generateEmptySchedule();
+        
+        // Get container
+        const container = document.getElementById('schedule-container');
+        
+        // Update statistics
+        function updateStats() {
+            const stats = getScheduleStats(scheduleData);
+            document.getElementById('stat-total').textContent = stats.totalSlots;
+            document.getElementById('stat-occupied').textContent = stats.occupiedSlots;
+            document.getElementById('stat-empty').textContent = stats.emptySlots;
+            document.getElementById('stat-rate').textContent = stats.occupancyRate;
+        }
+        
+        // Handle cell click
+        function handleCellClick(dayIndex, time, currentData) {
+            showScheduleEditModal(dayIndex, time, currentData, handleSave);
+        }
+        
+        // Handle save
+        function handleSave(dayIndex, time, newData) {
+            const days = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì'];
+            const key = `${days[dayIndex]}-${time}`;
+            
+            if (newData === null) {
+                delete scheduleData[key];
+            } else {
+                scheduleData[key] = newData;
+            }
+            
+            // Re-render
+            renderScheduleTable(container, scheduleData, handleCellClick);
+            updateStats();
+            
+            // Save to localStorage
+            localStorage.setItem('demo-schedule-data', JSON.stringify(scheduleData));
+        }
+        
+        // Load from localStorage if available
+        const savedData = localStorage.getItem('demo-schedule-data');
+        if (savedData) {
+            try {
+                scheduleData = JSON.parse(savedData);
+            } catch (e) {
+                console.error('Error loading saved data:', e);
+            }
+        }
+        
+        // Initial render
+        renderScheduleTable(container, scheduleData, handleCellClick);
+        updateStats();
+        
+        // Demo controls
+        document.getElementById('demo-load-example').addEventListener('click', () => {
+            scheduleData = { ...exampleScheduleData };
+            renderScheduleTable(container, scheduleData, handleCellClick);
+            updateStats();
+            localStorage.setItem('demo-schedule-data', JSON.stringify(scheduleData));
+        });
+        
+        document.getElementById('demo-clear').addEventListener('click', () => {
+            if (confirm('Sei sicuro di voler cancellare tutto l\'orario?')) {
+                scheduleData = generateEmptySchedule();
+                renderScheduleTable(container, scheduleData, handleCellClick);
+                updateStats();
+                localStorage.removeItem('demo-schedule-data');
+            }
+        });
+        
+        document.getElementById('demo-toggle-theme').addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+        });
+        
+        document.getElementById('demo-export').addEventListener('click', () => {
+            const dataStr = JSON.stringify(scheduleData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'orario-export.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+:root {
+  /* MD3 Expressive system colors */
+  --md-sys-color-primary: #8657FF;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #E7DEFF;
+  --md-sys-color-on-primary-container: #20005B;
+
+  --md-sys-color-secondary: #6E5EFF;
+  --md-sys-color-on-secondary: #FFFFFF;
+  --md-sys-color-secondary-container: #E6E0FF;
+  --md-sys-color-on-secondary-container: #1B1144;
+
+  --md-sys-color-tertiary: #FF7AC6;
+  --md-sys-color-on-tertiary: #381326;
+  --md-sys-color-tertiary-container: #FFD8EC;
+  --md-sys-color-on-tertiary-container: #3B1020;
+
+  --md-sys-color-background: #FFFBFF;
+  --md-sys-color-on-background: #1B1224;
+  --md-sys-color-surface: #FFFBFF;
+  --md-sys-color-on-surface: #1B1224;
+  --md-sys-color-surface-variant: #F4EEF9;
+  --md-sys-color-on-surface-variant: #4B4456;
+
+  --md-sys-color-outline: #8F8698;
+  --md-sys-color-error: #D84B4B;
+  --md-sys-color-on-error: #FFFFFF;
+
+  /* shapes / spacing / focus */
+  --md-shape-small: 10px;
+  --md-shape-medium: 14px;
+  --md-shape-large: 20px;
+
+  --md-spacing-xs: 4px;
+  --md-spacing-sm: 8px;
+  --md-spacing-md: 16px;
+  --md-spacing-lg: 24px;
+
+  --md-focus-outline: rgba(134,87,255,0.95);
+  --md-focus-width: 2px;
+  --md-focus-offset: 2px;
+}
+
+/* Global focus */
+:focus {
+  outline: var(--md-focus-width) solid var(--md-focus-outline);
+  outline-offset: var(--md-focus-offset);
+}
+
+/* Topbar / In-classe header (Expressive) */
+.in-classe-topbar {
+  background: linear-gradient(180deg, var(--md-sys-color-primary), var(--md-sys-color-primary-container));
+  color: var(--md-sys-color-on-primary);
+  padding: calc(var(--md-spacing-md));
+  border-radius: var(--md-shape-medium);
+  box-shadow: 0 8px 20px rgba(16,24,40,0.08);
+}
+
+/* Header text */
+.in-classe-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--md-sys-color-on-primary);
+}
+
+/* Subtitle / meta */
+.in-classe-sub {
+  margin-top: 6px;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.95rem;
+}
+
+/* Schedule grid: expressive surfaces */
+.schedule-grid .time-cell {
+  background: var(--md-sys-color-surface-variant);
+  color: var(--md-sys-color-on-surface-variant);
+  padding: var(--md-spacing-sm);
+  border-radius: var(--md-shape-small);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+/* Primary button (expressive style) */
+.btn-primary {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border-radius: 24px;
+  padding: 10px 18px;
+  box-shadow: 0 8px 18px rgba(134,87,255,0.18);
+  border: none;
+}
+
+/* Elevated surface utility */
+.surface-elevated {
+  background: var(--md-sys-color-surface);
+  box-shadow: 0 8px 20px rgba(16,24,40,0.08);
+  border-radius: var(--md-shape-medium);
+}
+
+/* Small utility: expressive accent pill */
+.pill-accent {
+  background: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 500;
+}

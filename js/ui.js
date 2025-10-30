@@ -27,22 +27,24 @@ export function showToast(message, type = 'info', duration = 3000) {
 export function switchTab(tabName) {
     if (!tabName) return;
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
 
     const content = document.getElementById(tabName);
     if (content) content.classList.add('active');
 
-    const button = document.querySelector(`.tab-button[data-tab="${tabName}"]`);
+    const button = document.querySelector(`.nav-item[data-tab="${tabName}"]`);
     if (button) {
         button.classList.add('active');
-        const parentGroup = button.closest('.menu-group');
-        if (parentGroup) {
-            parentGroup.querySelector('.menu-with-submenu').classList.add('active');
-        }
     }
 
+    // Close mobile menu if open
     if (window.innerWidth < 768 && document.getElementById('main-nav').classList.contains('mobile-open')) {
         document.getElementById('menu-toggle').click();
+    }
+
+    // Track current active tab for AI Agent context
+    if (window.app) {
+        window.app.currentActiveTab = tabName;
     }
 
     const renderFunction = `render${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`;
@@ -53,23 +55,88 @@ export function switchTab(tabName) {
     }
 }
 
+/**
+ * Update the workspace button title based on active class
+ * 
+ * TEMPORANEAMENTE DISABILITATO - La funzionalità Workspace non è attualmente utilizzata
+ * Per ripristinare: decommentare questa funzione e aggiornare le chiamate in app.js
+ */
+/*
 export function updateActiveClassBadge() {
-    const badge = document.getElementById('active-class-badge-text');
-    if (!badge) return;
+    // Update workspace button title with active class
+    const workspaceBtn = document.getElementById('workspace-btn');
+    if (!workspaceBtn) return;
+    
     if (state.activeClass) {
         const cls = state.classes.find(c => c.id === state.activeClass);
-        badge.textContent = cls ? cls.name : 'Workspace';
+        const title = cls ? `Classe: ${cls.name}` : 'Workspace';
+        workspaceBtn.setAttribute('title', title);
+        workspaceBtn.setAttribute('aria-label', title);
     } else {
-        badge.textContent = 'Workspace';
+        workspaceBtn.setAttribute('title', 'Workspace');
+        workspaceBtn.setAttribute('aria-label', 'Seleziona workspace');
     }
+}
+*/
+
+// Placeholder function to maintain compatibility with existing code
+export function updateActiveClassBadge() {
+    // Workspace functionality temporarily disabled - no action needed
 }
 
 export function showOnboarding() {
-    document.getElementById('onboarding-modal').style.display = 'flex';
+    const modal = document.getElementById('onboarding-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Also show the banner
+        showOnboardingBanner();
+    } else {
+        console.error('Onboarding modal not found. Skipping onboarding.');
+        // If modal doesn't exist, skip onboarding to not block the app
+        import('./data.js').then(({ skipOnboarding }) => {
+            skipOnboarding();
+            if (window.app && typeof window.app.initializeAppUI === 'function') {
+                window.app.initializeAppUI();
+            }
+        });
+    }
 }
 
 export function hideOnboarding() {
     document.getElementById('onboarding-modal').style.display = 'none';
+}
+
+export function showOnboardingBanner() {
+    // NEW: Show minimal text notice instead of invasive banner
+    const banner = document.getElementById('onboarding-incomplete-banner');
+    if (banner) {
+        banner.style.display = 'block';
+    }
+}
+
+export function hideOnboardingBanner() {
+    const banner = document.getElementById('onboarding-incomplete-banner');
+    if (banner) {
+        banner.style.display = 'none';
+    }
+}
+
+export function disableMenuItems(enabledItems = ['home', 'settings']) {
+    // REMOVED: This function is deprecated and does nothing.
+    // Menu items are now ALWAYS active - no disabling logic.
+    // Keeping for backward compatibility only.
+}
+
+export function enableAllMenuItems() {
+    // Ensure all menu items are always clickable and accessible
+    document.querySelectorAll('.nav-item[data-tab]').forEach(button => {
+        button.classList.remove('needs-profile');
+        button.classList.remove('disabled');
+        button.removeAttribute('data-tooltip');
+        button.removeAttribute('disabled');
+        button.removeAttribute('aria-disabled');
+        button.setAttribute('title', button.querySelector('.nav-label')?.textContent || '');
+    });
 }
 
 export function renderTemplate(templateId, containerId, data) {
@@ -88,4 +155,22 @@ export function renderTemplate(templateId, containerId, data) {
         });
     }
     container.innerHTML = html;
+}
+
+export function renderChatMessages() {
+    const messagesContainer = document.getElementById('ai-chat-messages');
+    if (!messagesContainer) return;
+    
+    if (state.chatMessages.length === 0) {
+        messagesContainer.innerHTML = '<p class="empty-state">Inizia una conversazione con l\'assistente IA!</p>';
+        return;
+    }
+    
+    messagesContainer.innerHTML = state.chatMessages.map(msg => {
+        const className = msg.sender === 'user' ? 'chat-message-user' : 'chat-message-ai';
+        return `<div class="${className}"><strong>${msg.sender === 'user' ? 'Tu' : 'IA'}:</strong> ${msg.text}</div>`;
+    }).join('');
+    
+    // Scroll to bottom
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }

@@ -1,0 +1,101 @@
+name: Style Check
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+# This workflow only checks the code and uploads results as an artifact
+# The style-check-post workflow handles posting comments using pull_request_target
+permissions:
+  contents: read        # To check out the code
+
+jobs:
+  check-styles:
+    name: Check for hardcoded styles
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run theme token checker
+      id: token-check
+      run: |
+        echo "Running MD3 token replacement checker..."
+        node tools/replace-tokens.js --dir=./css --dry-run > token-check.log 2>&1 || true
+        node tools/replace-tokens.js --dir=./src --dry-run >> token-check.log 2>&1 || true
+        cat token-check.log
+        
+        # Check if there are any findings
+        if grep -q "Files with findings: 0" token-check.log; then
+          echo "✅ No hardcoded values found!"
+          echo "status=pass" >> $GITHUB_OUTPUT
+        else
+          echo "⚠️  Hardcoded values detected - review recommended"
+          echo "status=warn" >> $GITHUB_OUTPUT
+        fi
+      
+    - name: Check for hex colors in new changes
+      run: |
+        echo "Checking for new hardcoded hex colors..."
+        
+        # Get changed files
+        git fetch origin main
+        CHANGED_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.(css|html)$' || true)
+        
+        if [ -z "$CHANGED_FILES" ]; then
+          echo "No CSS or HTML files changed"
+          exit 0
+        fi
+        
+        echo "Changed files:"
+        echo "$CHANGED_FILES"
+        
+        # Check for hex colors in changed lines
+        HEX_FOUND=0
+        for file in $CHANGED_FILES; do
+          if [ -f "$file" ]; then
+            # Check for hex colors that aren't in CSS variables
+            MATCHES=$(git diff origin/main...HEAD -- "$file" | grep '^+' | grep -E '#[0-9a-fA-F]{6}' | grep -v 'var(' || true)
+            if [ -n "$MATCHES" ]; then
+              echo "⚠️  Hex colors found in $file:"
+              echo "$MATCHES"
+              HEX_FOUND=1
+            fi
+          fi
+        done
+        
+        if [ $HEX_FOUND -eq 1 ]; then
+          echo ""
+          echo "⚠️  Warning: Hardcoded hex colors detected in changes"
+          echo "Consider using MD3 theme variables instead."
+          echo "See docs/STYLE-MD3-EXPRESSIVE.md for migration guide."
+          # Don't fail, just warn
+          exit 0
+        else
+          echo "✅ No new hardcoded hex colors detected"
+        fi
+        
+    - name: Prepare comment data
+      if: steps.token-check.outputs.status == 'warn'
+      run: |
+        # Save PR number for the posting workflow
+        echo "${{ github.event.pull_request.number }}" > pr-number.txt
+        
+    - name: Upload style check results
+      uses: actions/upload-artifact@v4
+      if: steps.token-check.outputs.status == 'warn'
+      with:
+        name: style-results
+        path: |
+          token-check.log
+          pr-number.txt
+        retention-days: 1

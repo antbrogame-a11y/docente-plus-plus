@@ -12,11 +12,75 @@ class DocentePlusPlus {
     }
 
     init() {
-        loadData();
-        if (!isOnboardingComplete()) {
-            showOnboarding();
-        } else {
-            this.initializeAppUI();
+        try {
+            // Initialize theme provider first
+            themeProvider.initialize();
+            
+            // Initialize legacy theme system for backwards compatibility
+            initializeTheme();
+            
+            const dataLoaded = loadData();
+            if (!dataLoaded) {
+                showToast('Dati corrotti rilevati. App ripristinata ai valori predefiniti.', 'warning', 5000);
+            }
+            
+            // Validate and recover onboarding state if needed
+            const onboardingState = recoverOnboardingState();
+            console.log('Onboarding state:', onboardingState);
+            
+            // NEW: Always enable all menu items (sidebar always active - no more blocking)
+            enableAllMenuItems();
+            
+            if (onboardingState.needsOnboarding) {
+                // NEW: Show banner but don't block menu - user can explore freely
+                this.initializeAppUI();
+                showOnboardingBanner();
+                // Suggest settings but don't force it
+                setTimeout(() => {
+                    showToast('👋 Benvenuto! Per iniziare, configura il tuo profilo dalle Impostazioni.', 'info', 5000);
+                }, 500);
+            } else if (onboardingState.needsProfileCompletion) {
+                // Onboarding marked complete but profile is incomplete (corrupted data)
+                showOnboardingBanner();
+                this.initializeAppUI();
+                showToast('⚠️ Profilo incompleto rilevato. Completa i dati dalle Impostazioni per un\'esperienza ottimale.', 'info', 6000);
+            } else {
+                // Everything is OK - profile complete
+                hideOnboardingBanner();
+                this.initializeAppUI();
+                
+                // Log success for debugging
+                if (onboardingState.reason === 'complete') {
+                    console.log('✅ App initialized with complete profile');
+                }
+            }
+            
+            setupEventListeners();
+            setupThemePicker();
+            createToastContainer();
+            
+            // Initialize AppBar scroll behavior
+            initAppBar();
+            
+            // Initialize Navigation system
+            initNavigation();
+            
+            // Initialize AI Agent FAB
+            initAIAgentFAB();
+            
+            // Initialize Floating AI Assistant Panel
+            initFloatingAssistant();
+            
+            // Initialize notification system
+            notificationSystem.startAutoCheck();
+            
+            console.log("Docente++ v1.2.2 (Always-Visible Sidebar & Unified Settings) initialized.");
+        } catch (error) {
+            console.error("Error during init:", error);
+            // Try to recover by showing a minimal UI
+            createToastContainer();
+            showToast('Errore durante l\'inizializzazione. Alcune funzionalità potrebbero non essere disponibili.', 'error', 5000);
+            setupEventListeners();
         }
         setupEventListeners(this);
         createToastContainer();
@@ -28,6 +92,30 @@ class DocentePlusPlus {
         this.renderAllTabs();
         // updateActiveClassBadge(); // This can be removed if not used in the new UI
         switchTab('home');
+        
+        // Initialize theme switcher UI
+        initThemeSwitcher();
+        
+        // NEW: Menu is always active - just show/hide banner based on profile status
+        if (isProfileComplete()) {
+            hideOnboardingBanner();
+        } else {
+            showOnboardingBanner();
+        }
+        
+        // Ensure all menu items are always enabled
+        enableAllMenuItems();
+    }
+    
+    // Public method to switch tabs - used by landing page cards
+    switchTab(tabName) {
+        switchTab(tabName);
+    }
+    
+    // Open In Classe page - using window.open is acceptable for focused classroom mode
+    // This keeps the main app accessible while teacher is in class
+    openInClasse() {
+        window.open('in-classe.html', '_blank');
     }
 
     renderAllTabs() {
@@ -133,6 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         window.app = new DocentePlusPlus();
         window.app.init();
+        // Expose showToast globally for theme picker
+        window.showToast = showToast;
     } catch (error) {
         console.error("Fatal error during app initialization:", error);
         document.body.innerHTML = '<div style="text-align:center;padding:20px;"><h1>Errore Critico</h1><p>L\'applicazione non è riuscita a caricarsi. Controlla la console per i dettagli.</p></div>';
