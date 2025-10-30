@@ -233,7 +233,7 @@ function getScheduleForDate(message) {
     lessonsForDate.forEach(l => events.push({ time: l.time || 'N/D', title: l.title, type: 'Lezione' }));
     activitiesForDate.forEach(a => events.push({ time: 'N/D', title: a.title, type: `Attività (${a.type})` }));
 
-    events.sort((a, b) => (a.time || '99:99').localeCompare(b.time || '99:99')));
+    events.sort((a, b) => (a.time || '99:99').localeCompare(b.time || '99:99'));
 
     const eventDescriptions = events.map(e => {
         const timeString = e.time !== 'N/D' ? ` (ore ${e.time})` : '';

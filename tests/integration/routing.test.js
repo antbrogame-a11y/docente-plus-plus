@@ -1,5 +1,6 @@
-// importa l'helper (aggiungi se non presente)
-import mockWindowLocation from '../../helpers/mockWindowLocation';
+
+import { jest } from '@jest/globals';
+import mockWindowLocation from '../helpers/mockWindowLocation.js';
 
 // variabile di modulo per mantenere la funzione di restore tra test
 let restoreWindowLocation = null;
@@ -13,7 +14,7 @@ afterEach(() => {
 });
 
 describe('SPA Routing', () => {
-    let restoreWindowLocation = null;
+    let originalLocation = null;
     let originalHistory;
     let pushStateSpy;
     let replaceStateSpy;
@@ -92,6 +93,4 @@ describe('SPA Routing', () => {
             expect(pushStateSpy.mock.calls[0][0].params).toEqual(params);
         });
     });
-
-    // ... resto dei test (nessuna modifica agli assertion) ...
 });
