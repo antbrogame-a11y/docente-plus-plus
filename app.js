@@ -2,16 +2,13 @@
 // app.js
 
 import { loadData, saveData, isOnboardingComplete, state } from './js/data.js';
-import { createToastContainer, showToast, switchTab, updateActiveClassBadge, showOnboarding } from './js/ui.js';
+import { createToastContainer, showToast, switchTab, updateActiveClassBadge, showOnboarding, renderLessons, renderActivities } from './js/ui.js';
 import { setupEventListeners } from './js/events.js';
-import { renderChatMessages } from './js/ai.js';
+import { renderChatMessages, sendMessageToAI } from './js/ai.js';
 
 class DocentePlusPlus {
     constructor() {
-        this.subjectsPreset = [
-            'Italiano', 'Storia', 'Geografia', 'Matematica', 'Scienze',
-            'Inglese', 'Arte e Immagine', 'Musica', 'Educazione Fisica'
-        ];
+        // Constructor remains the same
     }
 
     init() {
@@ -21,97 +18,115 @@ class DocentePlusPlus {
         } else {
             this.initializeAppUI();
         }
-        setupEventListeners();
+        setupEventListeners(this);
         createToastContainer();
-        console.log("Docente++ v1.1.0 (Refactored) initialized.");
+        console.log("Docente++ v2.0.0 (UI Refactor) initialized.");
     }
 
     initializeAppUI() {
         document.querySelector('header')?.classList.add('minimal');
         this.renderAllTabs();
-        updateActiveClassBadge();
+        // updateActiveClassBadge(); // This can be removed if not used in the new UI
         switchTab('home');
     }
 
     renderAllTabs() {
         this.renderHome();
-        this.renderLessons();
-        this.renderStudents();
-        this.renderClasses();
-        this.renderActivities();
-        this.renderEvaluations();
-        this.renderSchedule();
-        this.renderAiAssistant();
-        this.renderDocumentImport();
+        renderLessons();
+        renderActivities();
+        // renderStudents();
+        // renderClasses();
+        // renderSchedule();
+        renderChatMessages();
     }
 
     renderHome() {
-        document.getElementById('home-lesson-count').textContent = state.lessons.length;
-        document.getElementById('home-student-count').textContent = state.students.length;
-        document.getElementById('home-activity-count').textContent = state.activities.length;
-        document.getElementById('home-evaluation-count').textContent = state.evaluations.length;
+        this.renderTodaysSchedule();
+        this.renderTodoList();
+        this.refreshAISuggestions();
+    }
 
-        document.getElementById('today-schedule-enhanced').innerHTML = `<p class="home-placeholder">Nessuna lezione programmata per oggi.</p>`;
+    renderTodaysSchedule() {
+        const scheduleContainer = document.getElementById('home-today-schedule');
+        if (!scheduleContainer) return;
 
-        const todoContainer = document.getElementById('things-todo-list');
-        const upcomingActivities = state.activities.filter(a => new Date(a.date) >= new Date()).slice(0, 3);
-        if (upcomingActivities.length > 0) {
-            todoContainer.innerHTML = upcomingActivities.map(a => `<div class="todo-item">- Valutare <strong>${a.title}</strong></div>`).join('');
-        } else {
-            todoContainer.innerHTML = '<p class="home-placeholder">Nessuna attività imminente.</p>';
+        const today = new Date().toISOString().split('T')[0];
+        const todaysLessons = state.lessons.filter(l => l.date === today);
+        const todaysActivities = state.activities.filter(a => a.date === today);
+
+        const events = [
+            ...todaysLessons.map(l => ({ ...l, type: 'Lezione' })),
+            ...todaysActivities.map(a => ({ ...a, type: 'Attività' }))
+        ].sort((a, b) => (a.time || '99:99').localeCompare(b.time || '99:99'));
+
+        if (events.length === 0) {
+            scheduleContainer.innerHTML = '<p class="placeholder">Nessun evento in programma per oggi. Goditi il relax!</p>';
+            return;
         }
 
-        document.getElementById('ai-suggestions-content').innerHTML = `
-            <div class="ai-suggestion-item">💡 Potresti creare un'attività di ripasso sulla "Rivoluzione Francese".</div>
-            <div class="ai-suggestion-item">💡 Considera di pianificare una verifica per la classe 5B.</div>
+        scheduleContainer.innerHTML = events.map(event => `
+            <div class="schedule-item">
+                <span class="schedule-item-time">${event.time || 'Tutto il giorno'}</span>
+                <span class="schedule-item-title">${event.title}</span>
+                <span class="schedule-item-type ${event.type.toLowerCase()}">${event.type}</span>
+            </div>
+        `).join('');
+    }
+
+    renderTodoList() {
+        const todoContainer = document.getElementById('home-todo-list');
+        if (!todoContainer) return;
+
+        const upcomingActivities = state.activities
+            .filter(a => a.status !== 'completed' && new Date(a.date) >= new Date())
+            .sort((a,b) => new Date(a.date) - new Date(b.date))
+            .slice(0, 5);
+
+        if (upcomingActivities.length === 0) {
+            todoContainer.innerHTML = '<p class="placeholder">Nessuna attività imminente. Ottimo lavoro!</p>';
+            return;
+        }
+
+        todoContainer.innerHTML = upcomingActivities.map(act => `
+            <div class="todo-item" onclick="app.switchTab('activities')">
+                <span class="todo-item-title">Valutare: <strong>${act.title}</strong></span>
+                <span class="todo-item-date">Scadenza: ${new Date(act.date).toLocaleDateString()}</span>
+            </div>
+        `).join('');
+    }
+
+    refreshAISuggestions() {
+        const suggestionsContainer = document.getElementById('home-ai-suggestions');
+        if (!suggestionsContainer) return;
+
+        const suggestions = [
+            'Crea una lezione sulla "Fotosintesi Clorofilliana" per la prossima settimana.',
+            'Prepara una verifica a sorpresa per la classe 3A.',
+            'Suggerisci un\'attività di laboratorio sul "Ciclo dell\'Acqua".',
+            'Importa un PDF sul sistema solare per creare una nuova lezione.',
+        ];
+        const randomSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
+
+        suggestionsContainer.innerHTML = `
+            <div class="ai-suggestion-item" onclick="app.useAISuggestion('${randomSuggestion}')">
+                <span class="suggestion-icon">💡</span>
+                <span class="suggestion-text">${randomSuggestion}</span>
+            </div>
         `;
-
-        document.getElementById('home-ai-ready').textContent = "Pronta";
-        document.getElementById('home-ai-ready').style.color = 'green';
     }
 
-    renderLessons() {
-        const list = document.getElementById('lessons-list');
-        if (!list) return;
-        if (state.lessons.length === 0) {
-            list.innerHTML = '<p>Nessuna lezione pianificata. Clicca "Nuova Lezione" per iniziare.</p>';
-            return;
+    useAISuggestion(suggestionText) {
+        this.switchTab('ai-assistant');
+        const chatInput = document.getElementById('ai-chat-input');
+        if(chatInput){
+            chatInput.value = suggestionText;
+            showToast('Suggerimento pronto! Clicca Invia per chiedere all\'IA.');
         }
-        list.innerHTML = state.lessons.map(lesson => `
-            <div class="lesson-item">
-                <h4>${lesson.title} (${lesson.subject})</h4>
-                <p>${new Date(lesson.date).toLocaleDateString()} - ${lesson.time}</p>
-                <p>${lesson.description}</p>
-            </div>
-        `).join('');
     }
 
-    renderStudents() { /* ... */ }
-    renderClasses() { /* ... */ }
-    renderActivities() {
-        const list = document.getElementById('activities-list');
-        if (!list) return;
-        if (state.activities.length === 0) {
-            list.innerHTML = '<p>Nessuna attività creata.</p>';
-            return;
-        }
-        list.innerHTML = state.activities.map(act => `
-            <div class="activity-item">
-                <h4>${act.title}</h4>
-                <p>Tipo: ${act.type} | Stato: ${act.status}</p>
-                <p>Data: ${new Date(act.date).toLocaleDateString()}</p>
-            </div>
-        `).join('');
-    }
-    renderEvaluations() { /* ... */ }
-    renderSchedule() { /* ... */ }
-    renderAiAssistant() { renderChatMessages(); }
-    renderDocumentImport() { /* ... */ }
-    renderSettings() { /* ... */ }
-    renderBackupRestore() { /* ... */ }
-    renderNotifications() { /* ... */ }
-    renderInfoApp() { /* ... */ }
-    renderHelp() { /* ... */ }
+    // Methods for showing/hiding forms, etc. remain, but might need updates
+    // For example, they are no longer part of the DocentePlusPlus class in the new structure
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {

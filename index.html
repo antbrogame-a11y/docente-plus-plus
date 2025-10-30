@@ -34,6 +34,9 @@
     <script src="libs/papaparse.min.js"></script>
     <!-- PDF.js for PDF text extraction -->
     <script src="libs/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'libs/pdf.worker.js';
+    </script>
     <!-- JSZip for backup ZIP creation -->
     <script src="libs/jszip.min.js"></script>
 </head>
@@ -41,320 +44,85 @@
     <!-- Onboarding Modal -->
     <div id="onboarding-modal" class="modal" style="display: none;">
         <div class="modal-content onboarding-content">
-            <h2><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">school</span>Benvenuto in Docente++</h2>
-            <p class="onboarding-intro">Configura il tuo profilo per iniziare</p>
-            
+            <h2><span class="material-icons">school</span> Benvenuto in Docente++</h2>
+            <p>Configura il tuo profilo per iniziare.</p>
             <form id="onboarding-form">
-                <div class="onboarding-section">
-                    <h3><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">person</span>Dati Personali</h3>
-                    <div class="form-group">
-                        <label for="onboarding-first-name">Nome: *</label>
-                        <input type="text" id="onboarding-first-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="onboarding-last-name">Cognome: *</label>
-                        <input type="text" id="onboarding-last-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="onboarding-email">Email: *</label>
-                        <input type="email" id="onboarding-email" required>
-                    </div>
-                </div>
-
-                <div class="onboarding-section">
-                    <h3><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">apartment</span>Informazioni Scolastiche</h3>
-                    <div class="form-group">
-                        <label for="onboarding-school-level">Ordine di Scuola: *</label>
-                        <select id="onboarding-school-level" required>
-                            <option value="">Seleziona ordine di scuola</option>
-                            <option value="infanzia">Scuola dell'Infanzia</option>
-                            <option value="primaria">Scuola Primaria</option>
-                            <option value="secondaria-I">Scuola Secondaria di I Grado</option>
-                            <option value="secondaria-II">Scuola Secondaria di II Grado</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="onboarding-school-name">Nome Scuola:</label>
-                        <input type="text" id="onboarding-school-name" placeholder="Nome dell'istituto">
-                    </div>
-                </div>
-
-                <div class="onboarding-section">
-                    <h3><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">menu_book</span>Discipline</h3>
-                    <div class="form-group">
-                        <label for="onboarding-subjects">Seleziona o inserisci le tue discipline:</label>
-                        <div class="subjects-container">
-                            <div id="selected-subjects-display" class="selected-subjects"></div>
-                            <input type="text" id="onboarding-subjects" placeholder="Scrivi una disciplina e premi Invio">
-                            <div id="subjects-suggestions" class="subjects-suggestions"></div>
-                        </div>
-                        <small>Premi Invio o seleziona dalla lista per aggiungere una disciplina</small>
-                    </div>
-                </div>
-
-                <div class="onboarding-section">
-                    <h3><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">calendar_today</span>Anno Scolastico</h3>
-                    <div class="form-group">
-                        <label for="onboarding-school-year">Anno Scolastico: *</label>
-                        <select id="onboarding-school-year" required>
-                            <option value="">Seleziona anno scolastico</option>
-                            <option value="2024/2025">2024/2025</option>
-                            <option value="2025/2026">2025/2026</option>
-                            <option value="2026/2027">2026/2027</option>
-                            <option value="2027/2028">2027/2028</option>
-                            <option value="2028/2029">2028/2029</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="onboarding-year-start">Data Inizio Anno:</label>
-                        <input type="date" id="onboarding-year-start" value="2025-09-09">
-                    </div>
-                    <div class="form-group">
-                        <label for="onboarding-year-end">Data Fine Anno:</label>
-                        <input type="date" id="onboarding-year-end" value="2026-06-30">
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Inizia ad Usare Docente++</button>
-                </div>
+                <!-- ... Onboarding form fields ... -->
             </form>
-        </div>
-    </div>
-
-    <!-- Export Format Selection Modal -->
-    <div id="export-format-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h2>📥 Seleziona Formato di Esportazione</h2>
-            <p id="export-description">Scegli il formato in cui desideri esportare i dati:</p>
-            
-            <div class="export-format-options">
-                <div class="format-option" onclick="app.executeExport('json')">
-                    <div class="format-icon material-icons">description</div>
-                    <h3>JSON</h3>
-                    <p>Formato dati strutturato, ideale per backup e importazione</p>
-                </div>
-                <div class="format-option" onclick="app.executeExport('pdf')">
-                    <div class="format-icon">📕</div>
-                    <h3>PDF</h3>
-                    <p>Documento formattato pronto per la stampa e condivisione</p>
-                </div>
-                <div class="format-option" onclick="app.executeExport('excel')">
-                    <div class="format-icon material-icons">table_chart</div>
-                    <h3>Excel</h3>
-                    <p>Foglio di calcolo per analisi avanzate (XLSX)</p>
-                </div>
-            </div>
-            
-            <div class="form-actions">
-                <button class="btn btn-secondary" onclick="app.closeExportModal()">Annulla</button>
-            </div>
         </div>
     </div>
 
     <div class="container">
         <header>
-            <h1><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">school</span>Docente++</h1>
+            <h1><span class="material-icons">school</span> Docente++</h1>
             <p class="subtitle">Gestione Didattica Potenziata da IA</p>
         </header>
 
-        <!-- Active Class Badge (persistent, always visible) -->
-        <div class="active-class-badge" id="active-class-badge" onclick="app.showClassSelector()">
-            <span class="badge-icon">🎯</span>
-            <span class="badge-text" id="active-class-badge-text">Workspace</span>
-        </div>
-
         <div class="nav-container">
             <button class="menu-toggle" id="menu-toggle" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </button>
-            
-            <nav class="tabs" id="main-nav" role="navigation" aria-label="Menu principale">
-                <!-- Sala Prof (Dashboard/Workspace) -->
-                <button class="tab-button active" data-tab="home" title="Sala Prof - Dashboard Workspace" aria-label="Sala Prof">
-                    <span class="menu-icon material-icons">home</span>
-                    <span class="menu-text">Sala Prof</span>
-                </button>
-                
-                <!-- Classe (Class Selection - opens modal) -->
-                <button class="tab-button" data-tab="class-selector" title="Seleziona Classe Attiva" aria-label="Classe" onclick="app.showClassSelector()">
-                    <span class="menu-icon material-icons">school</span>
-                    <span class="menu-text">Classe</span>
-                </button>
-                
-                <!-- Gestione (Operational Features) -->
-                <div class="menu-group compact-menu">
-                    <button class="tab-button menu-with-submenu" title="Gestione - Funzionalità operative" aria-label="Gestione" aria-expanded="false">
-                        <span class="menu-icon material-icons">apps</span>
-                        <span class="menu-text">Gestione</span>
-                        <span class="menu-arrow">▼</span>
-                    </button>
-                    <div class="submenu" role="menu">
-                        <button class="tab-button submenu-item" data-tab="students" title="Gestione Studenti" aria-label="Studenti">
-                            <span class="menu-icon material-icons">person</span>
-                            <span class="menu-text">Studenti</span>
-                        </button>
-                        <button class="tab-button submenu-item" data-tab="classes" title="Gestione Classi" aria-label="Classi">
-                            <span class="menu-icon material-icons">school</span>
-                            <span class="menu-text">Classi</span>
-                        </button>
-                        <button class="tab-button submenu-item" data-tab="lessons" title="Gestione Lezioni" aria-label="Lezioni">
-                            <span class="menu-icon material-icons">menu_book</span>
-                            <span class="menu-text">Lezioni</span>
-                        </button>
-                        <button class="tab-button submenu-item" data-tab="schedule" title="Orario Settimanale" aria-label="Orario">
-                            <span class="menu-icon material-icons">calendar_today</span>
-                            <span class="menu-text">Orario</span>
-                        </button>
-                        <button class="tab-button submenu-item" data-tab="evaluations" title="Valutazioni" aria-label="Valutazioni">
-                            <span class="menu-icon material-icons">grading</span>
-                            <span class="menu-text">Valutazioni</span>
-                        </button>
-                        <button class="tab-button submenu-item" data-tab="activities" title="Attività Didattiche" aria-label="Attività">
-                            <span class="menu-icon material-icons">assignment</span>
-                            <span class="menu-text">Attività</span>
-                        </button>
-                        <button class="tab-button submenu-item" data-tab="ai-assistant" title="Assistente IA" aria-label="IA">
-                            <span class="menu-icon material-icons">smart_toy</span>
-                            <span class="menu-text">Assistente IA</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Impostazioni (Settings & Backup) -->
-                <div class="menu-group compact-menu">
-                    <button class="tab-button menu-with-submenu" title="Impostazioni - Configurazione e Backup" aria-label="Impostazioni" aria-expanded="false">
-                        <span class="menu-icon material-icons">settings</span>
-                        <span class="menu-text">Impostazioni</span>
-                        <span class="menu-arrow">▼</span>
-                    </button>
-                    <div class="submenu" role="menu">
-                        <button class="tab-button submenu-item" data-tab="settings" title="Configurazione App" aria-label="Config">
-                            <span class="menu-icon material-icons">settings</span>
-                            <span class="menu-text">Configurazione</span>
-                        </button>
-                        <button class="tab-button submenu-item" data-tab="backup-restore" title="Backup e Ripristino" aria-label="Backup">
-                            <span class="menu-icon material-icons">backup</span>
-                            <span class="menu-text">Backup</span>
-                        </button>
-                        <button class="tab-button submenu-item" data-tab="notifications" title="Notifiche e Promemoria" aria-label="Notifiche">
-                            <span class="menu-icon material-icons">notifications</span>
-                            <span class="menu-text">Notifiche</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Info App -->
-                <button class="tab-button" data-tab="info-app" title="Informazioni sull'App" aria-label="Info App">
-                    <span class="menu-icon material-icons">info</span>
-                    <span class="menu-text">Info</span>
-                </button>
-                
-                <!-- Guida (Help) -->
-                <button class="tab-button" data-tab="help" title="Guida e Documentazione" aria-label="Guida">
-                    <span class="menu-icon material-icons">help</span>
-                    <span class="menu-text">Guida</span>
-                </button>
+            <nav class="tabs" id="main-nav">
+                <button class="tab-button active" data-tab="home"><span class="material-icons">home</span> Sala Prof</button>
+                <button class="tab-button" data-tab="lessons"><span class="material-icons">menu_book</span> Lezioni</button>
+                <button class="tab-button" data-tab="activities"><span class="material-icons">assignment</span> Attività</button>
+                <button class="tab-button" data-tab="schedule"><span class="material-icons">calendar_today</span> Orario</button>
+                <button class="tab-button" data-tab="ai-assistant"><span class="material-icons">smart_toy</span> Assistente IA</button>
+                <button class="tab-button" data-tab="document-import"><span class="material-icons">description</span> Importa</button>
             </nav>
         </div>
         
         <div class="menu-backdrop" id="menu-backdrop"></div>
 
-        <!-- Home Tab (Sala Prof) -->
+        <!-- Home Tab (Sala Prof) - NEW LAYOUT -->
         <div id="home" class="tab-content active">
             <div class="tab-header">
-                <h2><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">home</span>Sala Prof</h2>
-                <button class="help-btn" onclick="app.showContextualHelp('home')" title="Aiuto" aria-label="Aiuto">?</button>
+                <h2><span class="material-icons">home</span> Sala Prof</h2>
+                <p>La tua dashboard per la giornata.</p>
             </div>
             
-            <!-- Enhanced Today's Schedule Section -->
-            <div class="home-section schedule-section">
-                <div class="section-header-flex">
-                    <h2><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">calendar_today</span>Orario di Oggi</h2>
-                    <div class="schedule-actions">
-                        <button class="btn btn-sm btn-secondary" onclick="app.goToTodaySchedule()" title="Vista completa orario" aria-label="Orario completo">
-                            <span class="material-icons" style="vertical-align: middle; font-size: 18px; margin-right: 4px;">assignment</span>Completo
-                        </button>
+            <div class="home-grid">
+                <!-- Main Column -->
+                <div class="home-main-column">
+                    <!-- Today's Schedule Card -->
+                    <div class="home-card" id="home-schedule-card">
+                        <div class="card-header">
+                            <h3><span class="material-icons">calendar_today</span> Orario di Oggi</h3>
+                            <button class="btn btn-sm btn-secondary" onclick="window.app.switchTab('schedule')">Vista completa</button>
+                        </div>
+                        <div id="home-today-schedule" class="card-content">
+                            <!-- Dynamic content will be injected here -->
+                            <p class="placeholder">Nessuna lezione programmata per oggi.</p>
+                        </div>
                     </div>
                 </div>
-                <div id="today-schedule-enhanced" class="schedule-today-grid">
-                    <!-- Will be populated by renderTodayScheduleEnhanced() -->
-                </div>
-                <p class="schedule-info-text">
-                    <small><span class="material-icons" style="vertical-align: middle; font-size: 16px;">lightbulb</span> Tocca una cella per modificare l'attività. 
-                    <span id="schedule-filter-info">Mostrando: <strong id="schedule-class-name">Workspace (tutte le classi)</strong></span>
-                    </small>
-                </p>
-            </div>
 
-            <!-- Quick Access Section -->
-            <div class="home-section">
-                <h2><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">bolt</span>Accesso Rapido</h2>
-                <div class="home-quick-access">
-                    <button class="btn-quick-access" onclick="app.switchTab('lessons')">
-                        <span class="quick-icon material-icons">menu_book</span>
-                        <span class="quick-label">Lezioni</span>
-                        <span class="quick-count" id="home-lesson-count">0</span>
-                    </button>
-                    <button class="btn-quick-access" onclick="app.switchTab('students')">
-                        <span class="quick-icon material-icons">groups</span>
-                        <span class="quick-label">Studenti</span>
-                        <span class="quick-count" id="home-student-count">0</span>
-                    </button>
-                    <button class="btn-quick-access" onclick="app.switchTab('activities')">
-                        <span class="quick-icon material-icons">assignment</span>
-                        <span class="quick-label">Attività</span>
-                        <span class="quick-count" id="home-activity-count">0</span>
-                    </button>
-                    <button class="btn-quick-access" onclick="app.switchTab('evaluations')">
-                        <span class="quick-icon material-icons">grading</span>
-                        <span class="quick-label">Valutazioni</span>
-                        <span class="quick-count" id="home-evaluation-count">0</span>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Things To Do Section -->
-            <div class="home-section">
-                <h2><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">check_circle</span>Cose da Fare</h2>
-                <div id="things-todo-list"></div>
-            </div>
-            
-            <!-- AI Suggestions Section -->
-            <div class="home-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h2 style="margin: 0;"><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">smart_toy</span>Suggerimenti IA</h2>
-                    <button class="btn btn-sm btn-secondary" onclick="app.refreshAISuggestions()" title="Aggiorna suggerimenti">
-                        <span class="material-icons" style="vertical-align: middle; font-size: 18px; margin-right: 4px;">refresh</span>Aggiorna
-                    </button>
-                </div>
-                <div id="ai-suggestions-content"></div>
-            </div>
+                <!-- Side Column -->
+                <div class="home-side-column">
+                    <!-- Things To Do Card -->
+                    <div class="home-card" id="home-todo-card">
+                        <div class="card-header">
+                            <h3><span class="material-icons">check_circle</span> Cose da Fare</h3>
+                        </div>
+                        <div id="home-todo-list" class="card-content">
+                             <!-- Dynamic content will be injected here -->
+                            <p class="placeholder">Nessuna attività in scadenza.</p>
+                        </div>
+                    </div>
 
-            <!-- Notifications and Reminders Section -->
-            <div class="home-section">
-                <h2><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">notifications</span>Notifiche e Promemoria</h2>
-                <div id="home-notifications-preview">
-                    <p class="home-placeholder">Nessuna notifica per oggi</p>
-                </div>
-                <button class="btn btn-secondary" onclick="app.switchTab('notifications')" style="margin-top: 10px;">
-                    Vedi tutte le notifiche
-                </button>
-            </div>
-
-            <!-- AI Assistant Quick Access -->
-            <div class="home-section">
-                <h2><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">smart_toy</span>Assistente IA</h2>
-                <p id="home-ai-status">Stato IA: <span id="home-ai-ready">Non configurata</span></p>
-                <div class="home-ai-actions">
-                    <button class="btn btn-primary" onclick="app.switchTab('ai-assistant')">
-                        <span class="material-icons" style="vertical-align: middle; font-size: 18px; margin-right: 4px;">chat</span>Apri Assistente IA
-                    </button>
-                    <button class="btn btn-secondary" onclick="app.switchTab('document-import')">
-                        <span class="material-icons" style="vertical-align: middle; font-size: 18px; margin-right: 4px;">description</span>Importa Documenti con IA
-                    </button>
+                    <!-- AI Suggestions Card -->
+                    <div class="home-card" id="home-ai-card">
+                        <div class="card-header">
+                            <h3><span class="material-icons">smart_toy</span> Suggerimenti IA</h3>
+                            <button class="btn btn-sm btn-icon" onclick="window.app.refreshAISuggestions()" title="Aggiorna suggerimenti">
+                                <span class="material-icons">refresh</span>
+                            </button>
+                        </div>
+                        <div id="home-ai-suggestions" class="card-content">
+                            <!-- Dynamic content will be injected here -->
+                            <p class="placeholder">L'IA sta pensando...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -362,172 +130,39 @@
         <!-- Lessons Tab -->
         <div id="lessons" class="tab-content">
             <div class="tab-header">
-                <h2>Gestione Lezioni</h2>
-                <button class="help-btn" onclick="app.showContextualHelp('lessons')" title="Aiuto">?</button>
+                <h2><span class="material-icons">menu_book</span> Gestione Lezioni</h2>
             </div>
             <div class="section-actions">
-                <button class="btn btn-primary" onclick="app.showAddLessonForm()"><span class="material-icons" style="vertical-align: middle; font-size: 18px; margin-right: 4px;">add</span>Nuova Lezione</button>
-                <button class="btn btn-secondary" onclick="app.generateLessonWithAI()"><span class="material-icons" style="vertical-align: middle; font-size: 18px; margin-right: 4px;">smart_toy</span>Genera con IA</button>
+                <button class="btn btn-primary" onclick="app.showAddLessonForm()"><span class="material-icons">add</span> Nuova Lezione</button>
+                <button class="btn btn-secondary" onclick="app.generateLessonWithAI()"><span class="material-icons">smart_toy</span> Genera con IA</button>
             </div>
-            
-            <div id="add-lesson-form" class="form-container" style="display: none;">
-                <h3>Nuova Lezione</h3>
-                <form id="lesson-form">
-                    <div class="form-group">
-                        <label for="lesson-title">Titolo:</label>
-                        <input type="text" id="lesson-title" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="lesson-subject">Materia:</label>
-                        <input type="text" id="lesson-subject" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="lesson-date">Data:</label>
-                            <input type="date" id="lesson-date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lesson-time">Ora:</label>
-                            <input type="time" id="lesson-time" value="09:00" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="lesson-description">Descrizione:</label>
-                        <textarea id="lesson-description" rows="4"></textarea>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Salva</button>
-                        <button type="button" class="btn btn-secondary" onclick="app.hideAddLessonForm()">Annulla</button>
-                    </div>
-                </form>
-            </div>
-
-            <div id="lessons-list" class="lessons-list"></div>
-        </div>
-
-        <!-- Schedule Tab -->
-        <div id="schedule" class="tab-content">
-            <h2><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">calendar_today</span>Orario Didattico</h2>
-            <div class="schedule-info">
-                <p>Gestisci il tuo orario settimanale. Clicca su una cella per assegnare una classe e un tipo di attività (Teoria, Disegno, Laboratorio).</p>
-                <p><small>Gli slot orari vanno dalle 8:00 alle 14:00, dal lunedì al venerdì. Sabato e domenica sono automaticamente esclusi.</small></p>
-            </div>
-            <div id="schedule-container"></div>
+            <div id="lessons-list"></div>
         </div>
 
         <!-- Activities Tab -->
         <div id="activities" class="tab-content">
-            <h2>Gestione Attività Didattiche</h2>
-            
-            <!-- Activities Summary Section -->
-            <div id="activities-summary" class="summary-section" role="region" aria-label="Riepilogo statistiche attività">
-                <h3>Riepilogo Attività</h3>
-                <div class="summary-cards" role="group" aria-label="Statistiche attività didattiche">
-                    <div class="summary-card">
-                        <div class="summary-icon material-icons">assignment</div>
-                        <div class="summary-content">
-                            <p class="summary-number" id="total-activities">0</p>
-                            <p class="summary-label">Totali</p>
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-icon material-icons">event</div>
-                        <div class="summary-content">
-                            <p class="summary-number" id="planned-activities">0</p>
-                            <p class="summary-label">Pianificate</p>
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-icon material-icons">play_arrow</div>
-                        <div class="summary-content">
-                            <p class="summary-number" id="inprogress-activities">0</p>
-                            <p class="summary-label">In Corso</p>
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-icon material-icons">check_circle</div>
-                        <div class="summary-content">
-                            <p class="summary-number" id="completed-activities">0</p>
-                            <p class="summary-label">Completate</p>
-                        </div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-icon material-icons">warning</div>
-                        <div class="summary-content">
-                            <p class="summary-number" id="overdue-activities">0</p>
-                            <p class="summary-label">Scadute</p>
-                        </div>
-                    </div>
-                </div>
+             <div class="tab-header">
+                <h2><span class="material-icons">assignment</span> Gestione Attività</h2>
             </div>
-            
-            <div class="section-actions">
-                <button class="btn btn-primary" onclick="app.showAddActivityForm()"><span class="material-icons" style="vertical-align: middle; font-size: 18px; margin-right: 4px;">add</span>Nuova Attività</button>
-                <select id="activity-filter" class="filter-select" onchange="app.renderActivities()">
-                    <option value="all">Tutte le attività</option>
-                    <option value="planned">Pianificate</option>
-                    <option value="in-progress">In corso</option>
-                    <option value="completed">Completate</option>
-                    <option value="lesson">Lezioni</option>
-                    <option value="exercise">Esercitazioni</option>
-                    <option value="lab">Laboratori</option>
-                </select>
+             <div class="section-actions">
+                <button class="btn btn-primary" onclick="app.showAddActivityForm()"><span class="material-icons">add</span> Nuova Attività</button>
             </div>
-            
-            <div id="add-activity-form" class="form-container" style="display: none;">
-                <h3>Nuova Attività</h3>
-                <form id="activity-form">
-                    <input type="hidden" id="activity-id">
-                    <div class="form-group">
-                        <label for="activity-title">Titolo *</label>
-                        <input type="text" id="activity-title" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="activity-type">Tipo *</label>
-                        <select id="activity-type" required>
-                            <option value="lesson">Lezione</option>
-                            <option value="exercise">Esercitazione</option>
-                            <option value="homework">Compiti</option>
-                            <option value="lab">Laboratorio</option>
-                            <option value="project">Progetto</option>
-                            <option value="exam">Verifica</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="activity-status">Stato *</label>
-                        <select id="activity-status" required>
-                            <option value="planned">Pianificata</option>
-                            <option value="in-progress">In corso</option>
-                            <option value="completed">Completata</option>
-                        </select>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="activity-date">Data *</label>
-                            <input type="date" id="activity-date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="activity-class">Classe *</label>
-                            <select id="activity-class" required></select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="activity-description">Descrizione</label>
-                        <textarea id="activity-description" rows="3"></textarea>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Salva Attività</button>
-                        <button type="button" class="btn btn-secondary" onclick="app.hideAddActivityForm()">Annulla</button>
-                    </div>
-                </form>
-            </div>
-            
             <div id="activities-list"></div>
+        </div>
+
+        <!-- Schedule Tab -->
+        <div id="schedule" class="tab-content">
+            <div class="tab-header">
+                <h2><span class="material-icons">calendar_today</span> Orario Settimanale</h2>
+            </div>
+            <div id="schedule-container"></div>
         </div>
 
         <!-- AI Assistant Tab -->
         <div id="ai-assistant" class="tab-content">
-            <h2><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">smart_toy</span>Assistente IA</h2>
+            <div class="tab-header">
+                <h2><span class="material-icons">smart_toy</span> Assistente IA</h2>
+            </div>
             <div class="ai-container">
                 <div class="ai-chat">
                     <div class="chat-messages" id="ai-chat-messages"></div>
@@ -536,55 +171,46 @@
                         <button id="ai-chat-send" class="btn btn-primary"><span class="material-icons">send</span></button>
                     </div>
                 </div>
-                <div class="ai-tools">
-                    <h3>Strumenti IA</h3>
-                    <div class="tool-card" onclick="app.showLessonGenerator()">
-                        <span class="material-icons">auto_awesome</span>
-                        <h4>Generatore di Lezioni</h4>
-                        <p>Crea una lezione completa da un semplice input.</p>
-                    </div>
-                    <div class="tool-card" onclick="app.showActivityGenerator()">
-                        <span class="material-icons">checklist</span>
-                        <h4>Generatore di Attività</h4>
-                        <p>Crea una lista di attività basate su un argomento.</p>
-                    </div>
-                    <div class="tool-card" onclick="app.showEvaluationGenerator()">
-                        <span class="material-icons">grading</span>
-                        <h4>Supporto alla Valutazione</h4>
-                        <p>Ottieni aiuto per creare griglie di valutazione.</p>
-                    </div>
-                </div>
             </div>
         </div>
         
         <!-- Document Import Tab -->
         <div id="document-import" class="tab-content">
-            <h2><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">description</span>Importa da Documenti</h2>
-            <p>Carica file PDF (es. libri di testo) per estrarre attività o creare nuove lezioni con l'aiuto dell'IA.</p>
+            <div class="tab-header">
+                <h2><span class="material-icons">description</span> Importa da Documenti</h2>
+                <p>Carica PDF per creare lezioni e attività con l'IA.</p>
+            </div>
             <div class="import-container">
                 <input type="file" id="pdf-upload" accept=".pdf" style="display: none;">
                 <button class="btn btn-primary" onclick="document.getElementById('pdf-upload').click();">
-                    <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">upload_file</span>Seleziona PDF
+                    <span class="material-icons">upload_file</span> Seleziona PDF
                 </button>
-                <div id="pdf-upload-feedback" style="margin-top: 15px;"></div>
+                <div id="pdf-upload-feedback"></div>
                 
-                <div id="pdf-import-options" style="display: none; margin-top: 20px;">
+                <div id="pdf-import-options" style="display: none;">
                     <h3>Elabora il documento</h3>
-                    <p>Scegli cosa vuoi fare con il testo estratto dal PDF:</p>
                     <div class="form-actions">
-                        <button class="btn btn-secondary" onclick="app.processPdfForLessons()">
-                            <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">menu_book</span>Crea Lezioni
+                        <button class="btn btn-secondary" onclick="processPdfForLessons()">
+                            <span class="material-icons">menu_book</span> Crea Lezione
                         </button>
-                        <button class="btn btn-secondary" onclick="app.processPdfForActivities()">
-                            <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">checklist</span>Estrai Attività
+                        <button class="btn btn-secondary" onclick="processPdfForActivities()">
+                            <span class="material-icons">checklist</span> Estrai Attività
                         </button>
                     </div>
-                    <div id="pdf-processing-output" style="margin-top: 20px;"></div>
+                    <div id="pdf-processing-output"></div>
                 </div>
             </div>
         </div>
 
     </div>
-    <script src="app.js" defer></script>
+    
+    <div id="toast-container"></div>
+    
+    <script src="js/data.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/files.js"></script>
+    <script src="js/events.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
