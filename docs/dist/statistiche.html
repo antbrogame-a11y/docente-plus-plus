@@ -1,0 +1,31 @@
+<h2><span class="material-symbols-outlined">monitoring</span> Statistiche e Report</h2>
+
+<div class="page-description">
+    <p>Analizza l'andamento delle tue classi e dei singoli studenti. Seleziona una classe per visualizzare i dettagli.</p>
+</div>
+
+<!-- Selettore Classe -->
+<div class="form-group-inline">
+    <label for="stats-class-selector">Seleziona una Classe:</label>
+    <select id="stats-class-selector">
+        <option value="all">Tutte le Classi (Riepilogo)</option>
+        <!-- Le classi verranno popolate da JS -->
+    </select>
+</div>
+
+<!-- Contenitore dei Report -->
+<div id="stats-report-container" class="stats-grid">
+
+    <!-- Report Generale (Tutte le classi) -->
+    <div id="stats-general-report" class="card span-4">
+        <h3>Riepilogo Generale</h3>
+        <div id="general-stats-content"></div>
+    </div>
+
+    <!-- Report Specifico per Classe (visibile dopo selezione) -->
+    <div id="stats-class-specific-report" class="card span-4" style="display: none;">
+        <h3 id="class-specific-title"></h3>
+        <div id="class-specific-stats-content"></div>
+    </div>
+
+</div>

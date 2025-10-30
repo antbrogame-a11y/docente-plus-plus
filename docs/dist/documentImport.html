@@ -1,0 +1,36 @@
+<h2><span class="material-symbols-outlined">upload_file</span> Importazione Documenti</h2>
+<div class="container">
+
+    <div class="card">
+        <h3>Importa Elenco Studenti da CSV</h3>
+        <p>Questa funzione ti permette di caricare un elenco di studenti da un file con estensione <strong>.csv</strong>. Assicurati che il file sia formattato correttamente, senza intestazioni, con un solo studente per riga.</p>
+        <p><strong>Formato richiesto:</strong> <code>NOME,COGNOME</code></p>
+        <p><em>Esempio:</em><br>
+        Mario,Rossi<br>
+        Luigi,Verdi<br>
+        Anna,Bianchi
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>Avvia Importazione</h3>
+        <div class="form-group">
+            <label for="import-class-selector">1. Seleziona la classe in cui importare gli studenti:</label>
+            <select id="import-class-selector">
+                <option value="">-- Seleziona una classe --</option>
+                <!-- Popolato da JS -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="csv-file-input">2. Seleziona il file .csv:</label>
+            <input type="file" id="csv-file-input" accept=".csv">
+        </div>
+        <button id="import-csv-btn" class="btn btn-primary" disabled>Importa Studenti</button>
+    </div>
+
+    <div class="card" id="import-results-container" class="hidden">
+        <h3>Risultati Importazione</h3>
+        <div id="import-results"></div>
+    </div>
+
+</div>

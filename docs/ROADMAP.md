@@ -1,74 +1,64 @@
-# 🗺️ Roadmap Operativa - Docente++
+## 🗺️ Roadmap di Sviluppo - DocentEpp
 
-**Versione Roadmap:** 1.1
-**Ultimo Aggiornamento:** 2024-07-30
-**Stato:** Versione 1.0.0 Rilasciata. In pianificazione v1.1.
+### **Fase 1: Implementazione del Nucleo Funzionale (Versione 1.1)**
 
----
+L'obiettivo di questa fase è rendere operative le sezioni principali dell'applicazione, trasformando i prototipi in moduli funzionanti per la gestione quotidiana della didattica.
 
-## 🎯 Obiettivi Strategici
+1.  **Gestione Classi (`classes.html`)**
+    *   **Obiettivo:** Creare, modificare ed eliminare classi.
+    *   **Azioni:**
+        *   Implementare il form per aggiungere una nuova classe.
+        *   Visualizzare le classi create in una lista o griglia.
+        *   Aggiungere pulsanti per modificare il nome o eliminare una classe (conferma richiesta).
+        *   Salvare i dati in `localStorage`.
 
-1.  **Stabilità e Qualità**: Consolidare le funzionalità esistenti.
-2.  **Esperienza Utente**: Migliorare l'interfaccia sulla base del feedback.
-3.  **Intelligenza Artificiale**: Espandere le capacità dell'assistente IA.
-4.  **Automazione**: Semplificare ulteriormente i flussi di lavoro.
+2.  **Gestione Studenti (`students.html`)**
+    *   **Obiettivo:** Associare studenti a ogni classe.
+    *   **Azioni:**
+        *   Creare un selettore per scegliere una classe.
+        *   Implementare il form per aggiungere uno studente alla classe selezionata.
+        *   Visualizzare l'elenco degli studenti per la classe scelta.
+        *   Permettere la modifica e l'eliminazione di studenti.
 
----
+3.  **Gestione Valutazioni (`evaluations.html`)**
+    *   **Obiettivo:** Registrare e visualizzare i voti degli studenti.
+    *   **Azioni:**
+        *   Creare un'interfaccia per selezionare una classe e uno studente.
+        *   Aggiungere un form per inserire una nuova valutazione (voto, data, descrizione).
+        *   Visualizzare la cronologia delle valutazioni per studente.
+        *   Calcolare e mostrare la media dei voti per materia (futuro).
 
-## ✅ v1.0.0 - Funzionalità Completate
+### **Fase 2: Potenziamento degli Strumenti (Versione 1.2)**
 
-La versione stabile 1.0.0 è stata completata e include le seguenti macro-funzionalità.
+Una volta che il nucleo è stabile, ci concentreremo sul migliorare gli strumenti di produttività e automazione.
 
-### Fondamenta e Gestione Dati
+1.  **Potenziamento Assistente IA (`aiAssistant.html`)**
+    *   **Obiettivo:** Rendere l'assistente IA realmente utile.
+    *   **Azioni:**
+        *   Collegarlo a vere API di intelligenza artificiale.
+        *   Addestrarlo a generare bozze di piani di lezione, idee per attività o quiz a scelta multipla sulla base di input dell'utente.
 
--   **[✅] Onboarding Iniziale**: Procedura guidata per la configurazione del profilo.
--   **[✅] CRUD Classi**: Gestione completa delle classi.
--   **[✅] CRUD Studenti**: Gestione completa degli studenti con associazione alle classi.
--   **[✅] CRUD Lezioni**: Pianificazione dettagliata delle lezioni.
--   **[✅] CRUD Attività**: Creazione di compiti, verifiche e altre attività didattiche.
--   **[✅] CRUD Valutazioni**: Inserimento di voti e giudizi per studente e attività.
--   **[✅] Persistenza Dati**: Salvataggio e caricamento automatico di tutte le informazioni nel `localStorage`.
+2.  **Completamento Importazione Documenti (`documentImport.html`)**
+    *   **Obiettivo:** Rendere funzionante l'importazione di file.
+    *   **Azioni:**
+        *   Implementare il parsing di file `.csv` o `.xlsx` per importare in blocco elenchi di studenti, evitando l'inserimento manuale.
 
-### UI/UX e Workflow
+3.  **Gestione Lezioni e Attività (`lessons.html`, `activities.html`)**
+    *   **Obiettivo:** Strutturare la pianificazione didattica.
+    *   **Azioni:**
+        *   Creare interfacce per definire piani di lezione, allegare materiali (link) e tracciare le attività svolte in classe.
 
--   **[✅] Dashboard Riepilogativa**: Schermata iniziale con widget per scadenze e valutazioni recenti.
--   **[✅] Orario Interattivo**: Vista settimanale e giornaliera delle lezioni pianificate.
--   **[✅] Design Reattivo**: Interfaccia ottimizzata per desktop e mobile.
--   **[✅] Sistema di Navigazione a Schede**: Accesso rapido a tutte le sezioni principali.
--   **[✅] Moduli a Comparsa**: Interfacce unificate per l'inserimento e la modifica dei dati.
+### **Fase 3: Rifinitura e Qualità della Vita (Versione 1.3+)**
 
-### Funzionalità Avanzate e IA (Simulate)
+In questa fase, l'attenzione si sposterà sul migliorare l'esperienza utente e aggiungere funzionalità avanzate.
 
--   **[✅] Assistente IA Conversazionale**: Chat interattiva in grado di interpretare comandi base (es. "crea lezione", "suggerisci attività") e fornire risposte contestuali.
--   **[✅] Importazione e Analisi Documenti**: Funzionalità per caricare un file, simularne l'analisi (estrazione riassunto e parole chiave) e creare una bozza di lezione.
+1.  **Temi e Personalizzazione (`settings.html`)**
+    *   **Obiettivo:** Permettere all'utente di personalizzare l'aspetto dell'app.
+    *   **Azioni:**
+        *   Aggiungere un selettore per un tema scuro (`dark mode`).
+        *   Permettere di cambiare il colore principale dell'interfaccia.
 
----
-
-## 🚀 Prossimi Passi: Verso la v1.1
-
-Il focus per la prossima versione sarà sul consolidamento e sul potenziamento delle funzionalità esistenti sulla base del feedback reale degli utenti.
-
-### 🎯 Obiettivi per la v1.1
-
--   **Consolidamento**: Risolvere bug minori e migliorare la stabilità della v1.0.
--   **Potenziamento IA**: Rendere l'IA meno simulata e più funzionale, collegandola a un vero modello linguistico (se possibile) e ampliando i comandi.
--   **Miglioramenti UX**: Implementare piccoli miglioramenti all'interfaccia suggeriti dal feedback degli utenti (es. filtri, ordinamenti).
--   **Esportazione Dati**: Aggiungere la funzionalità di esportazione dei dati (es. valutazioni in CSV).
-
-### 📝 Task Pianificati (Priorità Alta)
-
--   **[ ] `Bugfix`**: Ciclo di correzione dei bug post-rilascio.
--   **[ ] `Feature`**: Implementare un sistema di filtri nelle sezioni Studenti, Lezioni e Attività.
--   **[ ] `Feature`**: Aggiungere la funzione "Esporta in CSV" per la tabella delle valutazioni.
--   **[ ] `Enhancement`**: Migliorare la dashboard con grafici semplici (es. andamento media voti).
--   **[ ] `AI`**: Aumentare il numero di comandi che l'assistente può comprendere ed eseguire.
-
----
-
-## 💡 Idee per il Futuro (v1.2+)
-
--   **[ ] Sincronizzazione Cloud**: Permettere agli utenti di creare un account e sincronizzare i dati su più dispositivi.
--   **[ ] Collaborazione**: Funzionalità per condividere materiali e piani di lezione con altri docenti.
--   **[ ] Notifiche Push**: Avvisi per scadenze imminenti e altri eventi importanti.
--   **[ ] Integrazione Calendari Esterni**: Sincronizzare l'orario con Google Calendar o altri servizi.
-
+2.  **Introduzione di Grafici e Statistiche**
+    *   **Obiettivo:** Fornire visualizzazioni chiare dell'andamento degli studenti.
+    *   **Azioni:**
+        *   Integrare una libreria per grafici (es. Chart.js) per mostrare l'andamento dei voti nel tempo.

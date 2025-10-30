@@ -1,0 +1,208 @@
+/* Stili generali */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 10px;
+}
+
+header .btn-icon:last-child {
+    margin-right: 0;
+}
+
+#info-app-btn {
+    margin-left: auto;
+}
+
+nav#main-nav {
+    width: 240px;
+    background-color: #f8f9fa;
+    padding-top: 20px;
+    border-right: 1px solid #dee2e6;
+    display: block; /* Visibile di default */
+    transition: width 0.3s;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+}
+
+.nav-item:hover {
+    background-color: #e9ecef;
+}
+
+.nav-item.active {
+    background-color: #e9ecef;
+    border-left-color: #007bff;
+}
+
+.nav-item .material-symbols-outlined {
+    margin-right: 15px;
+}
+
+main {
+    flex-grow: 1;
+    padding: 20px;
+    padding-left: 260px; /* Spazio per la nav */
+    transition: padding-left 0.3s;
+}
+
+/* Barra degli strumenti */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filter-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-controls input[type="text"],
+.filter-controls select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+}
+
+/* Stili per la tabella */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+
+table th {
+    background-color: #f8f9fa;
+}
+
+/* Stili per le impostazioni */
+.settings-section {
+    margin-top: 20px;
+    border-top: 1px solid #dee2e6;
+    padding-top: 20px;
+}
+
+.settings-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: 1px solid #6c757d;
+}
+
+/* Stili per la modale */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 5px;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Stili per i form nelle modali */
+#add-class-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#add-class-form label {
+    font-weight: bold;
+}
+
+#add-class-form input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#add-class-form button {
+    align-self: flex-end;
+}

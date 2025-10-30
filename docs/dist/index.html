@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docente ++</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2a3b4d"/>
+</head>
+<body>
+    <header>
+        <button id="menu-toggle" class="btn-icon"><span class="material-symbols-outlined">menu</span></button>
+        <h1>Docente ++</h1>
+        <button id="info-app-btn" class="btn-icon"><span class="material-symbols-outlined">info</span></button>
+    </header>
+
+    <nav id="main-nav">
+        <!-- ... (voci di menu) ... -->
+        <div class="nav-item active" data-tab="home">
+            <span class="material-symbols-outlined">home</span>
+            Home
+        </div>
+        <div class="nav-item" data-tab="lessons">
+            <span class="material-symbols-outlined">school</span>
+            Lezioni
+        </div>
+        <div class="nav-item" data-tab="students">
+            <span class="material-symbols-outlined">group</span>
+            Studenti
+        </div>
+        <div class="nav-item" data-tab="classes">
+            <span class="material-symbols-outlined">class</span>
+            Classi
+        </div>
+        <div class="nav-item" data-tab="activities">
+            <span class="material-symbols-outlined">assignment</span>
+            Attività
+        </div>
+        <div class="nav-item" data-tab="evaluations">
+            <span class="material-symbols-outlined">grading</span>
+            Valutazioni
+        </div>
+        <div class="nav-item" data-tab="schedule">
+            <span class="material-symbols-outlined">calendar_month</span>
+            Orario
+        </div>
+        <div class="nav-item" data-tab="agenda">
+            <span class="material-symbols-outlined">book</span>
+            Agenda
+        </div>
+        <div class="nav-item" data-tab="statistiche">
+            <span class="material-symbols-outlined">monitoring</span>
+            Statistiche
+        </div>
+        <div class="nav-item" data-tab="aiAssistant">
+            <span class="material-symbols-outlined">smart_toy</span>
+            Assistente IA
+        </div>
+        <div class="nav-item" data-tab="documentImport">
+            <span class="material-symbols-outlined">upload_file</span>
+            Importa Documenti
+        </div>
+        <hr>
+        <div class="nav-item" data-tab="settings">
+            <span class="material-symbols-outlined">settings</span>
+            Impostazioni
+        </div>
+        <div class="nav-item" data-tab="help">
+            <span class="material-symbols-outlined">help</span>
+            Guida e Supporto
+        </div>
+    </nav>
+
+    <main>
+        <!-- Il contenuto verrà caricato qui -->
+    </main>
+
+    <!-- Modali Esistenti -->
+    <div id="app-info-modal" class="modal">...</div>
+    <div id="add-class-modal" class="modal">...</div>
+    <div id="edit-class-modal" class="modal">...</div>
+    <div id="student-modal" class="modal">...</div>
+    <div id="lesson-modal" class="modal">...</div>
+    <div id="activity-modal" class="modal">...</div>
+
+    <!-- Nuova Modale Valutazione -->
+    <div id="evaluation-modal" class="modal">...</div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-vertexai-compat.js"></script>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => console.log('Service Worker registrato con successo:', registration))
+                    .catch(err => console.log('Registrazione Service Worker fallita:', err));
+            });
+        }
+    </script>
+</body>
+</html>

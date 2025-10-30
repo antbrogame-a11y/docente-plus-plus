@@ -1,0 +1,21 @@
+{
+  "short_name": "DocentEpp",
+  "name": "Docente++",
+  "description": "Un assistente didattico per la gestione di classi, studenti e valutazioni, con supporto IA.",
+  "icons": [
+    {
+      "src": "images/icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "images/icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "theme_color": "#2a3b4d",
+  "background_color": "#ffffff"
+}

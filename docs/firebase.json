@@ -1,0 +1,55 @@
+{
+  "hosting": {
+    "public": "dist",
+    "rewrites": [
+      {
+        "source": "/**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      }
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  },
+  "firestore": {
+    "database": "(default)",
+    "location": "nam5",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "emulators": {
+    "hosting": {
+      "host": "0.0.0.0",
+      "port": 9013
+    },
+    "firestore": {
+      "host": "0.0.0.0",
+      "port": 9014
+    },
+    "hub": {
+      "host": "0.0.0.0",
+      "port": 9011
+    },
+    "ui": {
+      "host": "0.0.0.0",
+      "port": 9010
+    },
+    "logging": {
+      "host": "0.0.0.0",
+      "port": 9012
+    }
+  }
+}

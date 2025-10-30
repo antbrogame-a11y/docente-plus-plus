@@ -1,0 +1,65 @@
+<h2><span class="material-symbols-outlined">group</span> Gestione Studenti</h2>
+<div class="container">
+
+    <!-- Selettore della Classe -->
+    <div class="card">
+        <h3>Seleziona una Classe</h3>
+        <div class="form-group">
+            <select id="class-selector">
+                <option value="">-- Seleziona una classe --</option>
+                <!-- Le classi verranno popolate qui da JS -->
+            </select>
+        </div>
+    </div>
+
+    <!-- Contenuto dinamico che dipende dalla selezione della classe -->
+    <div id="students-content" class="hidden">
+        
+        <!-- Form per Aggiungere uno Studente -->
+        <div class="card">
+            <h3 id="add-student-title">Aggiungi Studente</h3>
+            <form id="add-student-form" class="form-inline">
+                <div class="form-group">
+                    <input type="text" id="student-firstname-input" placeholder="Nome" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="student-lastname-input" placeholder="Cognome" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Aggiungi Studente</button>
+            </form>
+        </div>
+
+        <!-- Elenco degli Studenti -->
+        <div class="card">
+            <h3>Elenco Studenti</h3>
+            <div id="student-list" class="list-container">
+                <!-- Gli studenti verranno inseriti qui -->
+            </div>
+        </div>
+    </div>
+
+     <!-- Messaggio da mostrare se non ci sono classi -->
+    <div id="no-classes-message" class="card hidden">
+        <p>Non hai ancora creato nessuna classe. Vai alla sezione <a href="#" onclick="document.querySelector('.nav-item[data-tab=classes]').click()">Gestione Classi</a> per iniziare.</p>
+    </div>
+</div>
+
+<!-- Modal per la modifica dello studente -->
+<div id="edit-student-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3>Modifica Studente</h3>
+        <form id="edit-student-form">
+            <input type="hidden" id="edit-student-id">
+            <div class="form-group">
+                <label for="edit-student-firstname">Nome:</label>
+                <input type="text" id="edit-student-firstname" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-student-lastname">Cognome:</label>
+                <input type="text" id="edit-student-lastname" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+        </form>
+    </div>
+</div>
