@@ -91,6 +91,7 @@ export function createModal(config) {
  */
 function getFormData(formId) {
     const form = document.getElementById(formId);
+    if (!form) return {}; // FIX: Se il form non esiste, ritorna un oggetto vuoto
     const formData = new FormData(form);
     const data = {};
     for (let [key, value] of formData.entries()) {
@@ -327,9 +328,10 @@ export function deleteStudent(studentId) {
 
 /**
  * Create a new lesson
+ * @param {object} [lessonData=null] - Dati della lezione da creare (opzionale)
  */
-export function createLesson() {
-    const data = getFormData('lesson-modal-form');
+export function createLesson(lessonData = null) {
+    const data = lessonData ? lessonData : getFormData('lesson-modal-form');
     
     if (!data.title || !data.title.trim() || !data.subject || !data.date) {
         showToast('Titolo, materia e data sono obbligatori', 'error');
@@ -349,9 +351,11 @@ export function createLesson() {
     state.lessons.push(newLesson);
     saveData();
     
-    hideModal('lesson-modal');
-    showToast('Lezione creata con successo!', 'success');
-    window.app.renderLessons();
+    if (!lessonData) {
+        hideModal('lesson-modal');
+        showToast('Lezione creata con successo!', 'success');
+        window.app.renderLessons();
+    }
 }
 
 /**
@@ -439,9 +443,10 @@ export function deleteLesson(lessonId) {
 
 /**
  * Create a new activity
+ * @param {object} [activityData=null] - Dati dell'attività da creare (opzionale)
  */
-export function createActivity() {
-    const data = getFormData('activity-modal-form');
+export function createActivity(activityData = null) {
+    const data = activityData ? activityData : getFormData('activity-modal-form');
     
     if (!data.title || !data.title.trim() || !data.type || !data.date) {
         showToast('Titolo, tipo e data sono obbligatori', 'error');
@@ -461,9 +466,11 @@ export function createActivity() {
     state.activities.push(newActivity);
     saveData();
     
-    hideModal('activity-modal');
-    showToast('Attività creata con successo!', 'success');
-    window.app.renderActivities();
+    if (!activityData) {
+        hideModal('activity-modal');
+        showToast('Attività creata con successo!', 'success');
+        window.app.renderActivities();
+    }
 }
 
 /**

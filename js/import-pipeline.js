@@ -77,7 +77,8 @@ export function analyzeDocumentContent(textContent, fileType) { // <-- ESPORTATA
             lessons.push({ 
                 title: lessonMatch[1].trim(), 
                 description: `Lezione dall'${currentUnit}`,
-                date: new Date().toISOString().split('T')[0]
+                date: new Date().toISOString().split('T')[0],
+                subject: 'Materia da Definire' // FIX: Aggiunto campo obbligatorio
             });
         }
 
