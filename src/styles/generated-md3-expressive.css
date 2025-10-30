@@ -27,7 +27,7 @@
   --md-sys-color-on-error: #FFFFFF;
 }
 
-/* Dark Theme - MD3 Expressive */
+/* Dark Theme - MD3 Expressive - POLISHED */
 body.dark-theme,
 :root.dark-theme {
   --md-sys-color-primary: #CDB6FF;
@@ -45,14 +45,15 @@ body.dark-theme,
   --md-sys-color-tertiary-container: #6B2E50;
   --md-sys-color-on-tertiary-container: #FFE0F0;
 
-  --md-sys-color-background: #15121A;
-  --md-sys-color-on-background: #EDE7F8;
-  --md-sys-color-surface: #1A1720;
-  --md-sys-color-on-surface: #EDE7F8;
-  --md-sys-color-surface-variant: #221927;
-  --md-sys-color-on-surface-variant: #D9D0E8;
+  /* Improved contrast and softer background */
+  --md-sys-color-background: #1C1B1F;
+  --md-sys-color-on-background: #E6E1E5;
+  --md-sys-color-surface: #1C1B1F;
+  --md-sys-color-on-surface: #E6E1E5;
+  --md-sys-color-surface-variant: #49454F;
+  --md-sys-color-on-surface-variant: #CAC4D0;
 
-  --md-sys-color-outline: #9D93A8;
+  --md-sys-color-outline: #938F99;
   --md-sys-color-error: #FFB4AB;
   --md-sys-color-on-error: #690005;
 }

@@ -10,6 +10,8 @@
 
 La versione 1.2.4 introduce la pagina "In Classe" completa:
 
+- **↩️ Annulla Eliminazione (NUOVO)**: Un toast di notifica appare dopo ogni eliminazione, permettendo di annullare l'azione con un click per prevenire errori.
+- **⏳ Scheletri di Caricamento (NUOVO)**: Durante il caricamento dei dati, vengono mostrati degli scheletri grafici per migliorare la percezione di reattività dell'app.
 - **📚 Pagina "In Classe" Completa (NUOVO)**: Interfaccia dedicata per gestire le lezioni in tempo reale
   - Design mobile-first completamente responsive
   - **Attività**: Gestisci attività della lezione (aggiungi, visualizza, elimina)

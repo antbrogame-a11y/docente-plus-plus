@@ -2,7 +2,7 @@
 // CRUD operations and modal management for Docente++
 
 import { state, saveData } from './data.js';
-import { showToast } from './ui.js';
+import { showToast, showUndoToast } from './ui.js';
 import { MIME_TYPES } from './constants.js';
 
 /**
@@ -176,43 +176,36 @@ function updateClass(classId) {
  * Delete a class
  */
 export function deleteClass(classId) {
-    const classItem = state.classes.find(c => c.id === classId);
-    if (!classItem) {
+    const classIndex = state.classes.findIndex(c => c.id === classId);
+    if (classIndex === -1) {
         showToast('Classe non trovata', 'error');
         return;
     }
-    
-    // Check if there are students in this class
+
+    const deletedClass = state.classes[classIndex];
     const studentsInClass = state.students.filter(s => s.classId === classId);
-    
-    let confirmMsg = `Sei sicuro di voler eliminare la classe "${classItem.name}"?`;
-    if (studentsInClass.length > 0) {
-        confirmMsg += `\n\nATTENZIONE: Ci sono ${studentsInClass.length} studenti associati a questa classe. Verranno scollegati dalla classe.`;
-    }
-    
-    if (!confirm(confirmMsg)) {
-        return;
-    }
-    
-    // Remove class
-    state.classes = state.classes.filter(c => c.id !== classId);
-    
-    // Unlink students from this class
-    state.students.forEach(s => {
-        if (s.classId === classId) {
-            s.classId = null;
-        }
-    });
-    
-    // If this was the active class, reset it
+
+    state.classes.splice(classIndex, 1);
+    studentsInClass.forEach(s => s.classId = null);
     if (state.activeClass === classId) {
         state.activeClass = null;
     }
-    
+
     saveData();
-    showToast('Classe eliminata con successo!', 'success');
     window.app.renderClasses();
+
+    showUndoToast(`Classe "${deletedClass.name}" eliminata`, () => {
+        state.classes.splice(classIndex, 0, deletedClass);
+        studentsInClass.forEach(s => s.classId = classId);
+        if (state.activeClass === null) {
+            state.activeClass = classId;
+        }
+        saveData();
+        window.app.renderClasses();
+        showToast('Eliminazione annullata', 'success');
+    });
 }
+
 
 // ==================== STUDENTS CRUD ====================
 
@@ -305,26 +298,30 @@ function updateStudent(studentId) {
  * Delete a student
  */
 export function deleteStudent(studentId) {
-    const student = state.students.find(s => s.id === studentId);
-    if (!student) {
+    const studentIndex = state.students.findIndex(s => s.id === studentId);
+    if (studentIndex === -1) {
         showToast('Studente non trovato', 'error');
         return;
     }
-    
-    if (!confirm(`Sei sicuro di voler eliminare lo studente "${student.firstName} ${student.lastName}"?\n\nATTENZIONE: Verranno eliminate anche tutte le valutazioni associate.`)) {
-        return;
-    }
-    
-    // Remove student
-    state.students = state.students.filter(s => s.id !== studentId);
-    
-    // Remove associated evaluations
+
+    const deletedStudent = state.students[studentIndex];
+    const deletedEvaluations = state.evaluations.filter(e => e.studentId === studentId);
+
+    state.students.splice(studentIndex, 1);
     state.evaluations = state.evaluations.filter(e => e.studentId !== studentId);
-    
+
     saveData();
-    showToast('Studente eliminato con successo!', 'success');
     window.app.renderStudents();
+
+    showUndoToast(`Studente "${deletedStudent.firstName}" eliminato`, () => {
+        state.students.splice(studentIndex, 0, deletedStudent);
+        state.evaluations.push(...deletedEvaluations);
+        saveData();
+        window.app.renderStudents();
+        showToast('Eliminazione annullata', 'success');
+    });
 }
+
 
 // ==================== LESSONS CRUD ====================
 
@@ -418,21 +415,25 @@ function updateLesson(lessonId) {
  * Delete a lesson
  */
 export function deleteLesson(lessonId) {
-    const lesson = state.lessons.find(l => l.id === lessonId);
-    if (!lesson) {
+    const lessonIndex = state.lessons.findIndex(l => l.id === lessonId);
+    if (lessonIndex === -1) {
         showToast('Lezione non trovata', 'error');
         return;
     }
-    
-    if (!confirm(`Sei sicuro di voler eliminare la lezione "${lesson.title}"?`)) {
-        return;
-    }
-    
-    state.lessons = state.lessons.filter(l => l.id !== lessonId);
+
+    const deletedLesson = state.lessons[lessonIndex];
+    state.lessons.splice(lessonIndex, 1);
     saveData();
-    showToast('Lezione eliminata con successo!', 'success');
     window.app.renderLessons();
+
+    showUndoToast(`Lezione "${deletedLesson.title}" eliminata`, () => {
+        state.lessons.splice(lessonIndex, 0, deletedLesson);
+        saveData();
+        window.app.renderLessons();
+        showToast('Eliminazione annullata', 'success');
+    });
 }
+
 
 // ==================== ACTIVITIES CRUD ====================
 
@@ -525,31 +526,30 @@ function updateActivity(activityId) {
  * Delete an activity
  */
 export function deleteActivity(activityId) {
-    const activity = state.activities.find(a => a.id === activityId);
-    if (!activity) {
+    const activityIndex = state.activities.findIndex(a => a.id === activityId);
+    if (activityIndex === -1) {
         showToast('Attività non trovata', 'error');
         return;
     }
-    
-    // Check if there are evaluations linked to this activity
-    const linkedEvals = state.evaluations.filter(e => e.activityId === activityId);
-    
-    let confirmMsg = `Sei sicuro di voler eliminare l'attività "${activity.title}"?`;
-    if (linkedEvals.length > 0) {
-        confirmMsg += `\n\nATTENZIONE: Ci sono ${linkedEvals.length} valutazioni associate a questa attività. Verranno eliminate.`;
-    }
-    
-    if (!confirm(confirmMsg)) {
-        return;
-    }
-    
-    state.activities = state.activities.filter(a => a.id !== activityId);
+
+    const deletedActivity = state.activities[activityIndex];
+    const deletedEvaluations = state.evaluations.filter(e => e.activityId === activityId);
+
+    state.activities.splice(activityIndex, 1);
     state.evaluations = state.evaluations.filter(e => e.activityId !== activityId);
-    
+
     saveData();
-    showToast('Attività eliminata con successo!', 'success');
     window.app.renderActivities();
+
+    showUndoToast(`Attività "${deletedActivity.title}" eliminata`, () => {
+        state.activities.splice(activityIndex, 0, deletedActivity);
+        state.evaluations.push(...deletedEvaluations);
+        saveData();
+        window.app.renderActivities();
+        showToast('Eliminazione annullata', 'success');
+    });
 }
+
 
 // ==================== EVALUATIONS CRUD ====================
 
@@ -640,21 +640,25 @@ function updateEvaluation(evaluationId) {
  * Delete an evaluation
  */
 export function deleteEvaluation(evaluationId) {
-    const evaluation = state.evaluations.find(e => e.id === evaluationId);
-    if (!evaluation) {
+    const evalIndex = state.evaluations.findIndex(e => e.id === evaluationId);
+    if (evalIndex === -1) {
         showToast('Valutazione non trovata', 'error');
         return;
     }
-    
-    if (!confirm('Sei sicuro di voler eliminare questa valutazione?')) {
-        return;
-    }
-    
-    state.evaluations = state.evaluations.filter(e => e.id !== evaluationId);
+
+    const deletedEvaluation = state.evaluations[evalIndex];
+    state.evaluations.splice(evalIndex, 1);
     saveData();
-    showToast('Valutazione eliminata con successo!', 'success');
     window.app.renderEvaluations();
+
+    showUndoToast('Valutazione eliminata', () => {
+        state.evaluations.splice(evalIndex, 0, deletedEvaluation);
+        saveData();
+        window.app.renderEvaluations();
+        showToast('Eliminazione annullata', 'success');
+    });
 }
+
 
 // ==================== CSV IMPORT/EXPORT ====================
 

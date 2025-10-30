@@ -122,8 +122,8 @@
 ### General
 
 #### 🟠 High
-- [ ] Add loading states per async operations
-- [ ] Skeleton screens per data loading
+- [x] Add loading states per async operations
+- [x] Skeleton screens per data loading
 - [ ] Empty states con call-to-action
 - [ ] Error states con recovery actions
 
@@ -425,7 +425,7 @@
 - [ ] Performance monitoring (Lighthouse CI)
 - [ ] Error tracking (Sentry)
 - [ ] Analytics (privacy-friendly)
-- [ ] A/B testing framework
+- [A/B testing framework
 
 ---
 
@@ -435,9 +435,9 @@
 
 - [ ] Add keyboard shortcut guide modal
 - [ ] Implement "Recently viewed" section
-- [ ] Add "Undo" toast per delete actions
-- [ ] Dark mode polish (contrast improvements)
-- [ ] Loading skeleton per slow operations
+- [x] Add "Undo" toast per delete actions
+- [x] Dark mode polish (contrast improvements)
+- [x] Loading skeleton per slow operations
 - [ ] Empty state illustrations
 - [ ] Success animations per important actions
 - [ ] Quick filter chips (Today, This Week, My Classes)

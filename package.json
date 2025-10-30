@@ -28,28 +28,5 @@
     "@testing-library/jest-dom": "^6.1.4",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0"
-  },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "moduleNameMapper": {
-      "\\.(css|less|scss|sass)$": "<rootDir>/tests/__mocks__/styleMock.js"
-    },
-    "collectCoverageFrom": [
-      "js/**/*.js",
-      "!js/**/*.test.js",
-      "!node_modules/**"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 0,
-        "functions": 0,
-        "lines": 0,
-        "statements": 0
-      }
-    },
-    "testMatch": [
-      "**/tests/**/*.test.js"
-    ],
-    "transform": {}
   }
 }

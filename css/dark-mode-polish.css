@@ -1,0 +1,27 @@
+/* Dark Mode Polish - Contrast and Readability Improvements */
+
+body.dark-theme {
+    /* Increase base text contrast */
+    --md-sys-color-on-background: #F2EFFC;
+    --md-sys-color-on-surface: #F2EFFC;
+
+    /* Slightly soften the primary color to reduce glare */
+    --md-sys-color-primary: #BEA5FF;
+
+    /* Adjust surface variant for better component differentiation */
+    --md-sys-color-surface-variant: #282030;
+
+    /* Make the outline a bit more subtle */
+    --md-sys-color-outline: #938A9E;
+}
+
+/* Improve contrast for specific components in dark mode */
+body.dark-theme .nav-item.active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .toast {
+    background-color: #332A44;
+    color: #F2EFFC;
+    border: 1px solid #4E4466;
+}

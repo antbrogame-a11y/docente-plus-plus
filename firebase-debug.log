@@ -40626,3 +40626,123 @@ INFO: Connected to new websocket client
 [debug] [2025-10-30T15:32:29.830Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseapphosting.googleapis.com [omitted]
 [debug] [2025-10-30T15:32:29.848Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebasedataconnect.googleapis.com 200
 [debug] [2025-10-30T15:32:29.848Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebasedataconnect.googleapis.com [omitted]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-30T17:43:40.786Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-30T17:43:40.786Z] > authorizing via signed-in user (antonio.corsano@gmail.com)
+[debug] [2025-10-30T17:43:40.792Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.792Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.793Z] > refreshing access token with scopes: []
+[debug] [2025-10-30T17:43:40.795Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-30T17:43:40.795Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.817Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.817Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.817Z] > refreshing access token with scopes: []
+[debug] [2025-10-30T17:43:40.818Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-30T17:43:40.818Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.827Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.827Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.827Z] > refreshing access token with scopes: []
+[debug] [2025-10-30T17:43:40.828Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-30T17:43:40.828Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.830Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.830Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.830Z] > refreshing access token with scopes: []
+[debug] [2025-10-30T17:43:40.830Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-30T17:43:40.830Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.831Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-30T17:43:40.831Z] > authorizing via signed-in user (antonio.corsano@gmail.com)
+[debug] [2025-10-30T17:43:40.832Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.832Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.832Z] > refreshing access token with scopes: []
+[debug] [2025-10-30T17:43:40.833Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-30T17:43:40.833Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.834Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.834Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.834Z] > refreshing access token with scopes: []
+[debug] [2025-10-30T17:43:40.835Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-30T17:43:40.835Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.837Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.837Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.837Z] > refreshing access token with scopes: []
+[debug] [2025-10-30T17:43:40.837Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-30T17:43:40.837Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.838Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.839Z] Checked if tokens are valid: false, expires at: 1761841086589
+[debug] [2025-10-30T17:43:40.839Z] > refreshing access token with scopes: []
+[debug] [2025-10-30T17:43:40.839Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-30T17:43:40.839Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.904Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-30T17:43:40.904Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.918Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseio.com [none]
+[debug] [2025-10-30T17:43:40.919Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseio.com x-goog-quota-user=projects/docente-plus-plus-577885-d9bd1
+[debug] [2025-10-30T17:43:40.929Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-30T17:43:40.929Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.937Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/cloudfunctions.googleapis.com [none]
+[debug] [2025-10-30T17:43:40.937Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/docente-plus-plus-577885-d9bd1
+[debug] [2025-10-30T17:43:40.942Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-30T17:43:40.942Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.949Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-30T17:43:40.950Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/docente-plus-plus-577885-d9bd1
+[debug] [2025-10-30T17:43:40.952Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-30T17:43:40.952Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.962Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseio.com [none]
+[debug] [2025-10-30T17:43:40.963Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseio.com x-goog-quota-user=projects/docente-plus-plus-577885-d9bd1
+[debug] [2025-10-30T17:43:40.966Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-30T17:43:40.966Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.974Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-10-30T17:43:40.974Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/docente-plus-plus-577885-d9bd1
+[debug] [2025-10-30T17:43:40.977Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-30T17:43:40.977Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:40.985Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-10-30T17:43:40.985Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/docente-plus-plus-577885-d9bd1
+[debug] [2025-10-30T17:43:40.991Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-30T17:43:40.991Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:41.001Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseapphosting.googleapis.com [none]
+[debug] [2025-10-30T17:43:41.001Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/docente-plus-plus-577885-d9bd1
+[debug] [2025-10-30T17:43:41.058Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-30T17:43:41.059Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-30T17:43:41.066Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/cloudfunctions.googleapis.com [none]
+[debug] [2025-10-30T17:43:41.066Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/docente-plus-plus-577885-d9bd1
+[debug] [2025-10-30T17:43:41.428Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/cloudfunctions.googleapis.com 200
+[debug] [2025-10-30T17:43:41.428Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2025-10-30T17:43:41.605Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseio.com 403
+[debug] [2025-10-30T17:43:41.606Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseio.com [omitted]
+[debug] [2025-10-30T17:43:41.720Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseio.com 403
+[debug] [2025-10-30T17:43:41.720Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseio.com [omitted]
+[debug] [2025-10-30T17:43:41.813Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseapphosting.googleapis.com 200
+[debug] [2025-10-30T17:43:41.813Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-30T17:43:41.874Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/cloudfunctions.googleapis.com 200
+[debug] [2025-10-30T17:43:41.874Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2025-10-30T17:43:42.208Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebasedataconnect.googleapis.com 200
+[debug] [2025-10-30T17:43:42.208Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2025-10-30T17:43:42.700Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseapphosting.googleapis.com 200
+[debug] [2025-10-30T17:43:42.701Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2025-10-30T17:43:43.623Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebasedataconnect.googleapis.com 200
+[debug] [2025-10-30T17:43:43.623Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/docente-plus-plus-577885-d9bd1/services/firebasedataconnect.googleapis.com [omitted]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-30T17:43:43.626Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-30T17:43:43.626Z] > authorizing via signed-in user (antonio.corsano@gmail.com)
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-30T17:43:43.628Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-30T17:43:43.628Z] > authorizing via signed-in user (antonio.corsano@gmail.com)
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-30T17:43:43.643Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-30T17:43:43.643Z] > authorizing via signed-in user (antonio.corsano@gmail.com)
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-30T17:43:43.644Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-30T17:43:43.644Z] > authorizing via signed-in user (antonio.corsano@gmail.com)
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-30T17:43:43.648Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-30T17:43:43.648Z] > authorizing via signed-in user (antonio.corsano@gmail.com)
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2025-10-30T17:43:43.650Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2025-10-30T17:43:43.650Z] > authorizing via signed-in user (antonio.corsano@gmail.com)

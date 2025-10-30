@@ -2,6 +2,7 @@
 // js/ui.js
 
 import { state } from './data.js';
+import { createListSkeleton, createCardSkeleton, createTextSkeleton } from './skeletons.js';
 
 export function createToastContainer() {
     if (!document.getElementById('toast-container')) {
@@ -23,6 +24,47 @@ export function showToast(message, type = 'info', duration = 3000) {
         setTimeout(() => toast.remove(), 500);
     }, duration);
 }
+
+export function showUndoToast(message, onUndo, duration = 5000) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-info show';
+
+    const messageSpan = document.createElement('span');
+    messageSpan.textContent = message;
+    toast.appendChild(messageSpan);
+
+    const undoButton = document.createElement('button');
+    undoButton.textContent = 'Annulla';
+    undoButton.className = 'undo-button';
+    toast.appendChild(undoButton);
+
+    const timeoutId = setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 500);
+    }, duration);
+
+    undoButton.addEventListener('click', () => {
+        clearTimeout(timeoutId);
+        onUndo();
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 500);
+    });
+
+    container.appendChild(toast);
+}
+
+function renderContent(containerId, skeleton, content) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = skeleton;
+    setTimeout(() => {
+        container.innerHTML = content;
+    }, 500); 
+}
+
 
 export function switchTab(tabName) {
     if (!tabName) return;
