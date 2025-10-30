@@ -216,3 +216,13 @@ export function renderChatMessages() {
     // Scroll to bottom
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
+
+export function playSuccessAnimation() {
+    const overlay = document.getElementById('success-animation');
+    if (overlay) {
+        overlay.classList.add('show');
+        setTimeout(() => {
+            overlay.classList.remove('show');
+        }, 1200); // Durata totale dell'animazione + tempo di visualizzazione
+    }
+}

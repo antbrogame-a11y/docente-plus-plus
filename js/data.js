@@ -3,6 +3,7 @@
 
 import { collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { db } from './firebase.js'; // Importa l'istanza db dal modulo firebase
+import { playSuccessAnimation } from './ui.js';
 
 export const state = {
     settings: {},
@@ -69,6 +70,7 @@ export async function saveData() {
         }
         // Implementare logica di salvataggio simile per le altre raccolte
         console.log("Salvataggio dati su Firestore completato.");
+        playSuccessAnimation(); // Mostra l'animazione di successo
     } catch (error) {
         console.error("Errore durante il salvataggio dei dati su Firestore:", error);
     }
