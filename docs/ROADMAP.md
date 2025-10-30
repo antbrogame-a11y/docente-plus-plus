@@ -1,64 +1,39 @@
 ## 🗺️ Roadmap di Sviluppo - DocentEpp
 
-### **Fase 1: Implementazione del Nucleo Funzionale (Versione 1.1)**
+### **Fase 0: Refactoring Architetturale e Stabilità (Completata)**
 
-L'obiettivo di questa fase è rendere operative le sezioni principali dell'applicazione, trasformando i prototipi in moduli funzionanti per la gestione quotidiana della didattica.
+*   **Obiettivo:** Ristrutturare la codebase per garantire stabilità, manutenibilità e performance.
+*   **Azioni:**
+    *   **[COMPLETATO]** Eseguito un "deep debug" completo del codice esistente.
+    *   **[COMPLETATO]** **Modularizzazione del Codice**: Trasformato il monolitico `app.js` in un'architettura a moduli dinamici (`agenda.js`, `classes.js`, `statistiche.js`, `aiAssistant.js`).
+    *   **[COMPLETATO]** **Implementazione del Caricamento Dinamico**: Il router principale (`app.js`) ora carica le risorse solo quando necessario, migliorando le performance.
+    *   **[COMPLETATO]** **Refactoring Anti-`innerHTML`**: Sostituito l'uso insicuro di `innerHTML` con metodi del DOM per prevenire vulnerabilità XSS.
+    *   **[COMPLETATO]** **Ricostruzione della Logica di Base**: Ricostruita e consolidata la logica per le sezioni Agenda, Classi e Assistente AI.
 
-1.  **Gestione Classi (`classes.html`)**
-    *   **Obiettivo:** Creare, modificare ed eliminare classi.
-    *   **Azioni:**
-        *   Implementare il form per aggiungere una nuova classe.
-        *   Visualizzare le classi create in una lista o griglia.
-        *   Aggiungere pulsanti per modificare il nome o eliminare una classe (conferma richiesta).
-        *   Salvare i dati in `localStorage`.
+### **Fase 1: Implementazione del Nucleo Funzionale (In Corso)**
 
-2.  **Gestione Studenti (`students.html`)**
-    *   **Obiettivo:** Associare studenti a ogni classe.
-    *   **Azioni:**
-        *   Creare un selettore per scegliere una classe.
-        *   Implementare il form per aggiungere uno studente alla classe selezionata.
-        *   Visualizzare l'elenco degli studenti per la classe scelta.
-        *   Permettere la modifica e l'eliminazione di studenti.
+*   **Gestione Classi (`classes.html`)**
+    *   **[COMPLETATO]** Implementato il form per aggiungere una nuova classe.
+    *   **[COMPLETATO]** Visualizzate le classi create in una lista.
+    *   **[COMPLETATO]** Aggiunti pulsanti per modificare ed eliminare classi.
+    *   **[COMPLETATO]** Salvataggio dati in `localStorage`.
+*   **Potenziamento Assistente IA (`aiAssistant.html`)**
+    *   **[COMPLETATO]** Collegato a vere API di intelligenza artificiale (Firebase Vertex AI - Gemini Pro).
+    *   **[COMPLETATO]** Implementata l'interfaccia di chat per interagire con l'IA.
+    *   **Obiettivo Futuro**: Addestrare o fornire prompt specifici per generare contenuti didattici strutturati.
+*   **Introduzione di Grafici e Statistiche (`statistiche.html`)**
+    *   **[COMPLETATO]** Creata una pagina dedicata alle statistiche.
+    *   **[COMPLETATO]** Implementato un report generale e uno specifico per classe.
+    *   **[COMPLETATO]** Calcolo delle medie e conteggio di studenti/valutazioni.
+    *   **Obiettivo Futuro**: Integrare una libreria per grafici (es. Chart.js) per visualizzazioni avanzate.
+*   **Gestione Studenti (`students.html`)** - **[NON INIZIATO]**
+*   **Gestione Valutazioni (`evaluations.html`)** - **[NON INIZIATO]**
 
-3.  **Gestione Valutazioni (`evaluations.html`)**
-    *   **Obiettivo:** Registrare e visualizzare i voti degli studenti.
-    *   **Azioni:**
-        *   Creare un'interfaccia per selezionare una classe e uno studente.
-        *   Aggiungere un form per inserire una nuova valutazione (voto, data, descrizione).
-        *   Visualizzare la cronologia delle valutazioni per studente.
-        *   Calcolare e mostrare la media dei voti per materia (futuro).
+### **Fase 2: Potenziamento degli Strumenti (Da Iniziare)**
 
-### **Fase 2: Potenziamento degli Strumenti (Versione 1.2)**
+*   **Completamento Importazione Documenti (`documentImport.html`)** - **[NON INIZIATO]**
+*   **Gestione Lezioni e Attività (`lessons.html`, `activities.html`)** - **[NON INIZIATO]**
 
-Una volta che il nucleo è stabile, ci concentreremo sul migliorare gli strumenti di produttività e automazione.
+### **Fase 3: Rifinitura e Qualità della Vita (Da Iniziare)**
 
-1.  **Potenziamento Assistente IA (`aiAssistant.html`)**
-    *   **Obiettivo:** Rendere l'assistente IA realmente utile.
-    *   **Azioni:**
-        *   Collegarlo a vere API di intelligenza artificiale.
-        *   Addestrarlo a generare bozze di piani di lezione, idee per attività o quiz a scelta multipla sulla base di input dell'utente.
-
-2.  **Completamento Importazione Documenti (`documentImport.html`)**
-    *   **Obiettivo:** Rendere funzionante l'importazione di file.
-    *   **Azioni:**
-        *   Implementare il parsing di file `.csv` o `.xlsx` per importare in blocco elenchi di studenti, evitando l'inserimento manuale.
-
-3.  **Gestione Lezioni e Attività (`lessons.html`, `activities.html`)**
-    *   **Obiettivo:** Strutturare la pianificazione didattica.
-    *   **Azioni:**
-        *   Creare interfacce per definire piani di lezione, allegare materiali (link) e tracciare le attività svolte in classe.
-
-### **Fase 3: Rifinitura e Qualità della Vita (Versione 1.3+)**
-
-In questa fase, l'attenzione si sposterà sul migliorare l'esperienza utente e aggiungere funzionalità avanzate.
-
-1.  **Temi e Personalizzazione (`settings.html`)**
-    *   **Obiettivo:** Permettere all'utente di personalizzare l'aspetto dell'app.
-    *   **Azioni:**
-        *   Aggiungere un selettore per un tema scuro (`dark mode`).
-        *   Permettere di cambiare il colore principale dell'interfaccia.
-
-2.  **Introduzione di Grafici e Statistiche**
-    *   **Obiettivo:** Fornire visualizzazioni chiare dell'andamento degli studenti.
-    *   **Azioni:**
-        *   Integrare una libreria per grafici (es. Chart.js) per mostrare l'andamento dei voti nel tempo.
+*   **Temi e Personalizzazione (`settings.html`)** - **[NON INIZIATO]**

@@ -1,62 +1,54 @@
 <h2><span class="material-symbols-outlined">grading</span> Gestione Valutazioni</h2>
 <div class="container">
 
-    <!-- Selettori -->
+    <!-- Filtri e Azioni -->
     <div class="card">
-        <h3>Seleziona Studente</h3>
         <div class="form-inline">
             <div class="form-group">
-                <label for="class-selector-eval">Classe:</label>
-                <select id="class-selector-eval">
-                    <option value="">-- Prima seleziona una classe --</option>
-                </select>
+                <label for="eval-class-select">Classe:</label>
+                <select id="eval-class-select"></select>
             </div>
             <div class="form-group">
-                <label for="student-selector-eval">Studente:</label>
-                <select id="student-selector-eval" disabled>
-                    <option value="">-- Seleziona uno studente --</option>
-                </select>
+                <label for="eval-student-select">Studente:</label>
+                <select id="eval-student-select"></select>
             </div>
         </div>
     </div>
 
-    <!-- Contenuto dinamico che dipende dalla selezione -->
-    <div id="evaluations-content" class="hidden">
-
-        <!-- Form per Aggiungere una Valutazione -->
-        <div class="card">
-            <h3>Aggiungi Nuova Valutazione</h3>
-            <form id="add-evaluation-form">
-                <div class="form-inline">
-                    <div class="form-group">
-                        <label for="evaluation-grade">Voto:</label>
-                        <input type="number" id="evaluation-grade" min="1" max="10" step="0.5" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="evaluation-date">Data:</label>
-                        <input type="date" id="evaluation-date" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="evaluation-notes">Note / Descrizione (es. Compito di Matematica):</label>
-                    <input type="text" id="evaluation-notes" placeholder="Descrivi la prova...">
-                </div>
-                <button type="submit" class="btn btn-primary">Aggiungi Valutazione</button>
-            </form>
+    <!-- Elenco Valutazioni -->
+    <div class="card">
+        <div class="list-header">
+            <h3 id="evaluation-list-title">Valutazioni</h3>
+            <button id="add-evaluation-btn" class="btn btn-primary" disabled><span class="material-symbols-outlined">add_circle</span> Aggiungi Valutazione</button>
         </div>
+        <div id="evaluation-list" class="list-container">
+            <!-- Le valutazioni verranno inserite qui -->
+        </div>
+    </div>
 
-        <!-- Elenco delle Valutazioni -->
-        <div class="card">
-            <h3>Storico Valutazioni</h3>
-            <div id="evaluation-list" class="list-container">
-                <!-- Le valutazioni verranno inserite qui -->
+</div>
+
+<!-- Modal per Aggiungere/Modificare Valutazione -->
+<div id="evaluation-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3 id="evaluation-modal-title">Aggiungi Valutazione</h3>
+        <form id="evaluation-form">
+            <input type="hidden" id="evaluation-id-input">
+            <input type="hidden" id="evaluation-student-id-input">
+            <div class="form-group">
+                <label for="evaluation-grade-input">Voto:</label>
+                <input type="number" id="evaluation-grade-input" step="0.25" min="0" max="10" required>
             </div>
-        </div>
+            <div class="form-group">
+                <label for="evaluation-date-input">Data:</label>
+                <input type="date" id="evaluation-date-input" required>
+            </div>
+            <div class="form-group">
+                <label for="evaluation-notes-input">Note (opzionale):</label>
+                <textarea id="evaluation-notes-input" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Salva</button>
+        </form>
     </div>
-
-    <!-- Messaggio da mostrare se non ci sono studenti/classi -->
-    <div id="no-students-message-eval" class="card hidden">
-        <p>Per registrare una valutazione, devi prima <a href="#" onclick="document.querySelector('.nav-item[data-tab=classes]').click()">creare una classe</a> e <a href="#" onclick="document.querySelector('.nav-item[data-tab=students]').click()">aggiungere degli studenti</a>.</p>
-    </div>
-
 </div>

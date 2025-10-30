@@ -1,19 +1,18 @@
+
 document.addEventListener('DOMContentLoaded', () => {
-    // --- ELEMENTI PRINCIPALI ---
+    // --- ELEMENTI GLOBALI ---
     const mainContent = document.querySelector('main');
     const navItems = document.querySelectorAll('.nav-item');
 
-    // --- FIREBASE e AI ---
-    let firebaseConfig = {};
-    let app;
-    let vertex;
-    let model;
+    // --- VARIABILI GLOBALI (per i moduli) ---
+    // Rendi queste variabili accessibili globalmente in modo che i moduli possano usarle.
+    window.firebaseConfig = {};
+    window.app = null;
+    window.vertex = null;
+    window.model = null;
 
-    // --- CHIAVI DATI ---
-    const DATA_KEYS = ['docentepp_classes', 'docentepp_students', 'docentepp_evaluations', 'docentepp_lessons', 'docentepp_activities', 'docentepp_schedule'];
-
-    // --- GESTIONE DATI ---
-    const loadData = (key, defaults) => {
+    // --- FUNZIONI GLOBALI (per i moduli) ---
+    window.loadData = (key, defaults) => {
         try {
             const dataJSON = localStorage.getItem(key);
             return dataJSON ? JSON.parse(dataJSON) : defaults;
@@ -21,202 +20,111 @@ document.addEventListener('DOMContentLoaded', () => {
             return defaults;
         }
     };
-    const saveData = (key, data) => localStorage.setItem(key, JSON.stringify(data));
 
-    // --- INIZIALIZZAZIONE APP ---
-    const initializeApp = () => {
-        // Setup navigazione
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const tab = item.dataset.tab;
-                navigateToTab(tab, true);
+    window.saveData = (key, data) => {
+        try {
+            localStorage.setItem(key, JSON.stringify(data));
+        } catch (error) {
+            console.error(`Errore durante il salvataggio dei dati per la chiave: ${key}`, error);
+        }
+    };
+    
+    window.navigateToTab = (tab) => {
+        // Rimuovi 'active' da tutti gli item e aggiungilo a quello giusto
+        document.querySelector('.nav-item.active')?.classList.remove('active');
+        document.querySelector(`.nav-item[data-tab="${tab}"]`)?.classList.add('active');
+        loadContent(tab);
+    };
+
+    // --- ROUTER PRINCIPALE ---
+    const loadContent = (tab) => {
+        fetch(`${tab}.html`)
+            .then(response => {
+                if (!response.ok) throw new Error(`Pagina ${tab}.html non trovata.`);
+                return response.text();
+            })
+            .then(html => {
+                mainContent.innerHTML = ''; // Pulisce il contenuto precedente
+                const template = document.createElement('template');
+                template.innerHTML = html;
+                mainContent.appendChild(template.content.cloneNode(true));
+                
+                // Carica dinamicamente il modulo JS associato
+                loadModule(tab);
+            })
+            .catch(error => {
+                mainContent.innerHTML = `<h2>Pagina non trovata</h2><p>${error.message}</p>`;
             });
+    };
+
+    const loadModule = (tab) => {
+        const scriptPath = `js/${tab}.js`;
+        const scriptId = `module-${tab}`;
+
+        // Non ricaricare lo script se è già presente
+        if (document.getElementById(scriptId)) {
+            runSetupFunction(tab);
+            return;
+        }
+
+        fetch(scriptPath, { method: 'HEAD' })
+            .then(res => {
+                if (res.ok) {
+                    const script = document.createElement('script');
+                    script.id = scriptId;
+                    script.src = scriptPath;
+                    script.onload = () => runSetupFunction(tab);
+                    document.head.appendChild(script);
+                } else {
+                    console.warn(`Nessun modulo JS trovato per la tab: ${tab}`);
+                }
+            });
+    };
+
+    const runSetupFunction = (tab) => {
+        // Converte 'classes' in 'setupClasses'
+        const funcName = `setup${tab.charAt(0).toUpperCase() + tab.slice(1)}`;
+        if (typeof window[funcName] === 'function') {
+            try {
+                window[funcName]();
+            } catch (error) {
+                console.error(`Errore durante l'esecuzione di ${funcName}():`, error);
+            }
+        } else {
+            console.warn(`Funzione di setup ${funcName} non trovata.`);
+        }
+    };
+
+    // --- INIZIALIZZAZIONE FIREBASE E APP ---
+    const initializeApp = () => {
+        // Setup navigazione iniziale
+        navItems.forEach(item => {
+            item.addEventListener('click', () => navigateToTab(item.dataset.tab));
         });
 
-        // Carica la tab iniziale (Agenda)
+        // Carica la tab iniziale (di default: agenda)
         const initialTab = 'agenda';
         document.querySelector(`.nav-item[data-tab="${initialTab}"]`).classList.add('active');
         loadContent(initialTab);
     };
 
-    // --- ROUTING E CARICAMENTO CONTENUTI ---
-    const navigateToTab = (tab, isClick = false) => {
-        if (!isClick) {
-            document.querySelector(`.nav-item[data-tab="${tab}"]`)?.click();
-        } else {
-            document.querySelector('.nav-item.active')?.classList.remove('active');
-            document.querySelector(`.nav-item[data-tab="${tab}"]`)?.classList.add('active');
-            loadContent(tab);
-        }
-    };
-
-    const loadContent = (tab) => {
-        fetch(`${tab}.html`)
-            .then(response => response.ok ? response.text() : Promise.reject(`File non trovato`))
-            .then(html => {
-                mainContent.innerHTML = html;
-                setupTab(tab);
-            })
-            .catch(error => {
-                mainContent.innerHTML = `<h2>Pagina non trovata</h2><p>${error}</p>`;
-            });
-    };
-
-    const setupTab = (tab) => {
-        const setups = {
-            'agenda': setupAgenda,
-            'classes': setupClasses,
-            'students': () => {},
-            'lessons': () => {},
-            'activities': () => {},
-            'evaluations': () => {},
-            'statistiche': setupStatistiche,
-            'aiAssistant': setupAiAssistant,
-            'documentImport': () => {},
-            'settings': () => {},
-            'help': () => {},
-        };
-        setups[tab]?.();
-    };
-
-    // --- SETUP SEZIONI ---
-
-    const setupAgenda = () => {
-        // ... (logica agenda invariata)
-    };
-
-    const setupAiAssistant = () => {
-        // ... (logica assistente IA invariata)
-    };
-
-    const setupClasses = () => {
-        // ... (logica classi invariata)
-    };
-
-    const setupStatistiche = () => {
-        const classSelector = document.getElementById('stats-class-selector');
-        const generalReportDiv = document.getElementById('stats-general-report');
-        const classSpecificReportDiv = document.getElementById('stats-class-specific-report');
-        const generalContentDiv = document.getElementById('general-stats-content');
-        const classSpecificContentDiv = document.getElementById('class-specific-stats-content');
-        const classSpecificTitle = document.getElementById('class-specific-title');
-
-        const classes = loadData('docentepp_classes', []);
-        const students = loadData('docentepp_students', []);
-        const evaluations = loadData('docentepp_evaluations', []);
-
-        const calculateAverage = (grades) => {
-            if (grades.length === 0) return 0;
-            const sum = grades.reduce((acc, curr) => acc + curr, 0);
-            return sum / grades.length;
-        };
-
-        // Popola il selettore delle classi
-        classes.forEach(c => {
-            const option = document.createElement('option');
-            option.value = c.id;
-            option.textContent = c.name;
-            classSelector.appendChild(option);
-        });
-
-        const renderStats = (classId) => {
-            if (classId === 'all') {
-                generalReportDiv.style.display = 'block';
-                classSpecificReportDiv.style.display = 'none';
-                renderGeneralReport();
-            } else {
-                generalReportDiv.style.display = 'none';
-                classSpecificReportDiv.style.display = 'block';
-                renderClassSpecificReport(Number(classId));
-            }
-        };
-
-        const renderGeneralReport = () => {
-            if (classes.length === 0) {
-                generalContentDiv.innerHTML = '<p>Nessuna classe da analizzare. Aggiungi prima una classe.</p>';
-                return;
-            }
-
-            let html = '<table><thead><tr><th>Classe</th><th>N° Studenti</th><th>N° Valutazioni</th><th>Media Generale</th></tr></thead><tbody>';
-            classes.forEach(c => {
-                const studentsInClass = students.filter(s => s.classId === c.id);
-                const studentIds = studentsInClass.map(s => s.id);
-                const evalsInClass = evaluations.filter(ev => studentIds.includes(ev.studentId));
-                const grades = evalsInClass.map(ev => ev.grade);
-                const avg = calculateAverage(grades);
-
-                html += `
-                    <tr>
-                        <td>${c.name}</td>
-                        <td>${studentsInClass.length}</td>
-                        <td>${evalsInClass.length}</td>
-                        <td>${avg.toFixed(2)}</td>
-                    </tr>
-                `;
-            });
-            html += '</tbody></table>';
-            generalContentDiv.innerHTML = html;
-        };
-
-        const renderClassSpecificReport = (classId) => {
-            const selectedClass = classes.find(c => c.id === classId);
-            if (!selectedClass) return;
-
-            classSpecificTitle.textContent = `Report Dettagliato: ${selectedClass.name}`;
-            const studentsInClass = students.filter(s => s.classId === classId);
-
-            if (studentsInClass.length === 0) {
-                classSpecificContentDiv.innerHTML = '<p>Nessuno studente in questa classe.</p>';
-                return;
-            }
-
-            let html = '<table><thead><tr><th>Studente</th><th>N° Valutazioni</th><th>Media Voti</th></tr></thead><tbody>';
-            studentsInClass.forEach(s => {
-                const studentEvals = evaluations.filter(ev => ev.studentId === s.id);
-                const grades = studentEvals.map(ev => ev.grade);
-                const avg = calculateAverage(grades);
-
-                html += `
-                    <tr>
-                        <td>${s.name} ${s.surname}</td>
-                        <td>${studentEvals.length}</td>
-                        <td>${avg.toFixed(2)}</td>
-                    </tr>
-                `;
-            });
-            html += '</tbody></table>';
-            classSpecificContentDiv.innerHTML = html;
-        };
-
-        classSelector.addEventListener('change', (e) => renderStats(e.target.value));
-
-        // Render iniziale
-        renderStats('all');
-    };
-
-    // --- CARICAMENTO CONFIGURAZIONE FIREBASE ---
     fetch('./firebase-config.json')
         .then(response => {
-            if (!response.ok) throw new Error('firebase-config.json non trovato.');
+            if (!response.ok) throw new Error('firebase-config.json non trovato. L\'assistente AI sarà disabilitato.');
             return response.json();
         })
         .then(config => {
-            firebaseConfig = config;
-            app = firebase.initializeApp(firebaseConfig);
-            vertex = firebase.vertexAI();
-            model = vertex.getGenerativeModel({ model: "gemini-pro" });
-            console.log("Firebase e Gemini inizializzati.");
+            window.firebaseConfig = config;
+            window.app = firebase.initializeApp(window.firebaseConfig);
+            window.vertex = firebase.vertexAI();
+            window.model = window.vertex.getGenerativeModel({ model: "gemini-pro" });
+            console.log("Firebase e Gemini inizializzati con successo.");
         })
         .catch(error => {
-            console.error("Errore inizializzazione Firebase:", error);
-            const setupOriginal = setupAiAssistant;
-            setupAiAssistant = () => {
-                setupOriginal();
-                const chatBox = document.getElementById('ai-chat-box');
-                if(chatBox) chatBox.innerHTML = `<div class="chat-message ai-error-message">Impossibile inizializzare l'Assistente AI. Controlla la console per i dettagli.</div>`;
-            }
+            console.error("Errore critico nell'inizializzazione di Firebase:", error.message);
         })
         .finally(() => {
+            // L'app viene inizializzata indipendentemente dall'esito di Firebase
             initializeApp();
         });
 });
