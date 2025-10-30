@@ -1,2 +1,39 @@
-<h2>Orario</h2>
-<p>Qui puoi gestire il tuo orario.</p>
+<h2><span class="material-symbols-outlined">calendar_view_week</span> Orario Scolastico</h2>
+
+<div class="page-description">
+    <p>Visualizza e gestisci il tuo orario settimanale. Clicca su uno slot per aggiungere o modificare una lezione.</p>
+</div>
+
+<!-- Griglia dell'Orario -->
+<div id="schedule-grid-container">
+    <div id="schedule-grid" class="schedule-grid">
+        <!-- Le intestazioni e le celle verranno generate dinamicamente da schedule.js -->
+    </div>
+</div>
+
+<!-- Modale per Aggiungere/Modificare Lezione (inizialmente nascosta) -->
+<div id="schedule-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-button" id="modal-close-button">&times;</span>
+        <h3>Gestisci Lezione</h3>
+        <p id="modal-slot-info"></p>
+
+        <div class="form-group">
+            <label for="modal-class-selector">Seleziona Classe:</label>
+            <select id="modal-class-selector">
+                <option value="">-- Nessuna --</option>
+                <!-- Le classi verranno popolate da JS -->
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="modal-notes">Note Aggiuntive:</label>
+            <textarea id="modal-notes" rows="3"></textarea>
+        </div>
+
+        <div class="modal-actions">
+            <button id="modal-save-button" class="btn btn-primary">Salva Lezione</button>
+            <button id="modal-delete-button" class="btn btn-danger" style="display: none;">Elimina Lezione</button>
+        </div>
+    </div>
+</div>

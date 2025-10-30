@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const navItems = document.querySelectorAll('.nav-item');
 
     // --- VARIABILI GLOBALI (per i moduli) ---
-    // Rendi queste variabili accessibili globalmente in modo che i moduli possano usarle.
     window.firebaseConfig = {};
     window.app = null;
     window.vertex = null;
@@ -30,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     window.navigateToTab = (tab) => {
-        // Rimuovi 'active' da tutti gli item e aggiungilo a quello giusto
         document.querySelector('.nav-item.active')?.classList.remove('active');
         document.querySelector(`.nav-item[data-tab="${tab}"]`)?.classList.add('active');
         loadContent(tab);
@@ -44,12 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.text();
             })
             .then(html => {
-                mainContent.innerHTML = ''; // Pulisce il contenuto precedente
+                mainContent.innerHTML = ''; 
                 const template = document.createElement('template');
                 template.innerHTML = html;
                 mainContent.appendChild(template.content.cloneNode(true));
-                
-                // Carica dinamicamente il modulo JS associato
                 loadModule(tab);
             })
             .catch(error => {
@@ -61,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const scriptPath = `js/${tab}.js`;
         const scriptId = `module-${tab}`;
 
-        // Non ricaricare lo script se è già presente
         if (document.getElementById(scriptId)) {
             runSetupFunction(tab);
             return;
@@ -82,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const runSetupFunction = (tab) => {
-        // Converte 'classes' in 'setupClasses'
         const funcName = `setup${tab.charAt(0).toUpperCase() + tab.slice(1)}`;
         if (typeof window[funcName] === 'function') {
             try {
@@ -97,18 +91,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- INIZIALIZZAZIONE FIREBASE E APP ---
     const initializeApp = () => {
-        // Setup navigazione iniziale
         navItems.forEach(item => {
             item.addEventListener('click', () => navigateToTab(item.dataset.tab));
         });
 
-        // Carica la tab iniziale (di default: agenda)
         const initialTab = 'agenda';
         document.querySelector(`.nav-item[data-tab="${initialTab}"]`).classList.add('active');
         loadContent(initialTab);
     };
 
-    fetch('./firebase-config.json')
+    fetch('../firebase-config.json') // CORREZIONE: Path corretto per file nella root
         .then(response => {
             if (!response.ok) throw new Error('firebase-config.json non trovato. L\'assistente AI sarà disabilitato.');
             return response.json();
@@ -124,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Errore critico nell'inizializzazione di Firebase:", error.message);
         })
         .finally(() => {
-            // L'app viene inizializzata indipendentemente dall'esito di Firebase
             initializeApp();
         });
 });
