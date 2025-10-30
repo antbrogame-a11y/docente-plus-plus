@@ -1,57 +1,57 @@
-# 📚 Documentazione Docente++
+# DocentEpp - Il Tuo Assistente Digitale per la Didattica
 
-Benvenuto nella documentazione completa di Docente++!
+**DocentEpp** è una Progressive Web App (PWA) moderna e intuitiva, progettata per semplificare la vita dei docenti. Dimentica i registri cartacei e i file sparsi: DocentEpp centralizza la gestione delle classi, degli studenti e delle valutazioni in un unico posto, accessibile da qualsiasi dispositivo.
 
-## 🗂️ Indice Documentazione
-
-### 🚀 Guide Rapide e Installazione
-
-- **[Quick Start](QUICK_START.md)** - Guida rapida per iniziare in 5 minuti con l'importazione documenti
-- **[Installazione PWA](PWA_INSTALLATION.md)** - Guida completa installazione Progressive Web App
-- **[PWA Quick Start](PWA_QUICK_START.md)** - Test rapido funzionalità PWA
-
-### 📋 Funzionalità Specifiche
-
-- **[Importazione Attività da PDF](PDF_ACTIVITIES_IMPORT.md)** - Estrazione automatica attività didattiche da PDF
-- **[Modulo News RSS/Atom](NEWS_RSS_MODULE.md)** - Aggregazione news con analisi IA contestuale
-- **[Importazione Documenti](DOCUMENT_IMPORT_MODULE.md)** - Sistema avanzato import documenti didattici e anagrafici
-
-### 🏗️ Architettura e Riferimenti Tecnici
-
-- **[Architettura News](NEWS_ARCHITECTURE.md)** - Architettura tecnica del modulo News
-- **[Implementazione Orario](SCHEDULE_IMPLEMENTATION.md)** - Dettagli implementazione orario didattico
-- **[OpenRouter API](OPENROUTER_API_EXAMPLE.md)** - Esempi e guida utilizzo API OpenRouter
-
-### 📊 Report di Implementazione e Test
-
-- **[Riepilogo Implementazione PDF](RIEPILOGO_IMPLEMENTAZIONE.md)** - Report completo implementazione import PDF
-- **[Test Results](IMPLEMENTATION_TEST_RESULTS.md)** - Risultati test implementazione funzionalità
-- **[Implementation Summary](IMPLEMENTATION_SUMMARY.md)** - Sommario generale implementazioni
-- **[News Testing Guide](NEWS_TESTING_GUIDE.md)** - Guida completa per test modulo News
-- **[Piano Test Beta](BETA_TEST_PLAN.md)** - Piano completo test per release Beta 1.0
-- **[Feedback Utente](FEEDBACK_UTENTE.md)** - Raccolta feedback utenti e requisiti
-
-### 🗺️ Pianificazione e Roadmap
-
-- **[Roadmap Operativa](ROADMAP.md)** - Roadmap incrementale sviluppo per macro-temi (UI/UX, IA, File, Testing, Release)
-
-### 🔍 Documentazione PWA
-
-- **[PWA Verification Summary](PWA_VERIFICATION_SUMMARY.md)** - Riepilogo rapido verifica PWA
-- **[PWA Review Checklist](PWA_REVIEW_CHECKLIST.md)** - Checklist completa revisione PWA
-- **[PWA Verification Report](PWA_VERIFICATION_REPORT.md)** - Report tecnico dettagliato
-- **[PWA Runtime Testing](PWA_RUNTIME_TESTING.md)** - Procedure test runtime
-- **[PWA Implementation Summary](PWA_IMPLEMENTATION_SUMMARY.md)** - Sommario implementazione PWA
-- **[PWA Verification Overview](PWA_VERIFICATION_OVERVIEW.md)** - Panoramica verifica tecnica
-- **[PWA Test Log](PWA_TEST_LOG.md)** - Log completo test PWA
-
-### 🔄 Migrazione e Implementazioni
-
-- **[Migration Summary](MIGRATION_SUMMARY.md)** - Sommario migrazioni e aggiornamenti sistema
-- **[News Implementation Summary](NEWS_IMPLEMENTATION_SUMMARY.md)** - Sommario implementazione modulo News
+L'applicazione è costruita su un'architettura **Single Page Application (SPA)**, garantendo un'esperienza utente fluida, veloce e reattiva, simile a quella di un'app nativa.
 
 ---
 
-## 🔙 Torna alla Documentazione Principale
+## ✨ Funzionalità Principali
 
-Vai al [README principale](../README.md) per una panoramica generale di Docente++.
+*   **Dashboard Intelligente (`Agenda`**): Una panoramica giornaliera con le prossime lezioni, gli impegni e le scadenze.
+*   **Gestione Classi e Studenti**: Crea e organizza le tue classi, aggiungendo e gestendo gli studenti in modo semplice e veloce.
+*   **Registro Valutazioni**: Tieni traccia dei voti e delle note per ogni studente, con calcolo automatico della media.
+*   **Importazione Rapida da CSV**: Popola intere classi in pochi secondi importando un semplice file `.csv`.
+*   **Assistente IA (In sviluppo)**: Sfrutta l'intelligenza artificiale per ricevere supporto nella didattica.
+*   **Statistiche e Andamento**: Analizza l'andamento delle classi e dei singoli studenti.
+
+---
+
+## 🚀 Quick Start (Guida per Sviluppatori)
+
+Per avviare il progetto in locale, segui questi semplici passaggi:
+
+1.  **Clona il repository**:
+    ```bash
+    git clone <URL_DEL_REPOSITORY>
+    cd <NOME_DELLA_CARTELLA>
+    ```
+
+2.  **Installa le dipendenze**:
+    ```bash
+    npm install
+    ```
+
+3.  **Avvia il server di sviluppo**:
+    ```bash
+    npm start
+    ```
+    L'applicazione sarà accessibile all'indirizzo `http://localhost:8080` (o una porta simile).
+
+---
+
+## 🗺️ Roadmap di Sviluppo
+
+Il nostro obiettivo è continuare a migliorare DocentEpp. Abbiamo grandi piani per il futuro, tra cui:
+
+*   **Visualizzazione grafica delle statistiche**
+*   **Implementazione dell'orario scolastico**
+*   **Sincronizzazione Cloud con Firebase**
+
+Per una visione dettagliata dei prossimi passi, consulta la nostra [**Roadmap completa**](ROADMAP.md).
+
+---
+
+## 🤝 Come Contribuire
+
+Sei uno sviluppatore e vuoi contribuire al progetto? Fantastico! Abbiamo preparato una [**Guida per Sviluppatori**](dev-guide.md) che contiene tutte le informazioni sull'architettura, le convenzioni di codice e le linee guida per iniziare.

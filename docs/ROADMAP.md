@@ -1,39 +1,54 @@
-## 🗺️ Roadmap di Sviluppo - DocentEpp
+# 🗺️ Roadmap di Sviluppo - DocentEpp
 
-### **Fase 0: Refactoring Architetturale e Stabilità (Completata)**
+Questa roadmap delinea la visione strategica e i passi operativi per l'evoluzione di DocentEpp. Il nostro obiettivo è procedere per fasi, consolidando le funzionalità prima di passare a quelle successive.
 
-*   **Obiettivo:** Ristrutturare la codebase per garantire stabilità, manutenibilità e performance.
-*   **Azioni:**
-    *   **[COMPLETATO]** Eseguito un "deep debug" completo del codice esistente.
-    *   **[COMPLETATO]** **Modularizzazione del Codice**: Trasformato il monolitico `app.js` in un'architettura a moduli dinamici (`agenda.js`, `classes.js`, `statistiche.js`, `aiAssistant.js`).
-    *   **[COMPLETATO]** **Implementazione del Caricamento Dinamico**: Il router principale (`app.js`) ora carica le risorse solo quando necessario, migliorando le performance.
-    *   **[COMPLETATO]** **Refactoring Anti-`innerHTML`**: Sostituito l'uso insicuro di `innerHTML` con metodi del DOM per prevenire vulnerabilità XSS.
-    *   **[COMPLETATO]** **Ricostruzione della Logica di Base**: Ricostruita e consolidata la logica per le sezioni Agenda, Classi e Assistente AI.
+---
 
-### **Fase 1: Implementazione del Nucleo Funzionale (In Corso)**
+### ✅ **Fase 1: Nucleo Funzionale e Architettura SPA (Completata)**
 
-*   **Gestione Classi (`classes.html`)**
-    *   **[COMPLETATO]** Implementato il form per aggiungere una nuova classe.
-    *   **[COMPLETATO]** Visualizzate le classi create in una lista.
-    *   **[COMPLETATO]** Aggiunti pulsanti per modificare ed eliminare classi.
-    *   **[COMPLETATO]** Salvataggio dati in `localStorage`.
-*   **Potenziamento Assistente IA (`aiAssistant.html`)**
-    *   **[COMPLETATO]** Collegato a vere API di intelligenza artificiale (Firebase Vertex AI - Gemini Pro).
-    *   **[COMPLETATO]** Implementata l'interfaccia di chat per interagire con l'IA.
-    *   **Obiettivo Futuro**: Addestrare o fornire prompt specifici per generare contenuti didattici strutturati.
-*   **Introduzione di Grafici e Statistiche (`statistiche.html`)**
-    *   **[COMPLETATO]** Creata una pagina dedicata alle statistiche.
-    *   **[COMPLETATO]** Implementato un report generale e uno specifico per classe.
-    *   **[COMPLETATO]** Calcolo delle medie e conteggio di studenti/valutazioni.
-    *   **Obiettivo Futuro**: Integrare una libreria per grafici (es. Chart.js) per visualizzazioni avanzate.
-*   **Gestione Studenti (`students.html`)** - **[NON INIZIATO]**
-*   **Gestione Valutazioni (`evaluations.html`)** - **[NON INIZIATO]**
+In questa fase cruciale, abbiamo gettato le fondamenta dell'applicazione, trasformandola in una Single Page Application robusta e modulare.
 
-### **Fase 2: Potenziamento degli Strumenti (Da Iniziare)**
+*   **[COMPLETATO]** **Refactoring Architetturale**: Migrazione da un modello a pagine multiple a un'architettura SPA con caricamento dinamico dei contenuti.
+*   **[COMPLETATO]** **Gestione Classi**: Implementazione completa delle operazioni CRUD (Create, Read, Update, Delete) per le classi.
+*   **[COMPLETATO]** **Gestione Studenti**: Implementazione completa delle operazioni CRUD per gli studenti, con associazione alle classi.
+*   **[COMPLETATO]** **Gestione Valutazioni**: Implementazione completa delle operazioni CRUD per le valutazioni, collegate agli studenti.
+*   **[COMPLETATO]** **Importazione da CSV**: Creata la funzionalità per importare massivamente studenti da file `.csv`, potenziando la produttività.
+*   **[COMPLETATO]** **Integrazione Base Assistente IA**: Collegamento con i modelli di Firebase Vertex AI (Gemini) per l'assistenza contestuale.
+*   **[COMPLETATO]** **Dashboard (`Agenda`)**: Creata la schermata principale con una vista riassuntiva.
+*   **[COMPLETATO]** **Pagina Statistiche**: Implementata la pagina per il calcolo delle medie numeriche.
 
-*   **Completamento Importazione Documenti (`documentImport.html`)** - **[NON INIZIATO]**
-*   **Gestione Lezioni e Attività (`lessons.html`, `activities.html`)** - **[NON INIZIATO]**
+---
 
-### **Fase 3: Rifinitura e Qualità della Vita (Da Iniziare)**
+### 🎯 **Fase 2: Potenziamento e Qualità della Vita (In Corso)**
 
-*   **Temi e Personalizzazione (`settings.html`)** - **[NON INIZIATO]**
+L'obiettivo di questa fase è arricchire l'esperienza utente e fornire strumenti di visualizzazione e produttività più potenti.
+
+1.  **Visualizzazione Grafica delle Statistiche** - **[PROSSIMO PASSO]**
+    *   **Obiettivo**: Trasformare i dati numerici in insight visivi immediati.
+    *   **Azioni**: Integrare una libreria per grafici (es. `Chart.js`) per mostrare l'andamento degli studenti e la distribuzione dei voti.
+
+2.  **Implementazione dell'Orario Scolastico (`schedule.html`)**
+    *   **Obiettivo**: Fornire una vista settimanale chiara delle lezioni.
+    *   **Azioni**: Progettare una griglia visiva e permettere l'associazione delle classi alle ore.
+
+3.  **Esportazione Dati e Reportistica**
+    *   **Obiettivo**: Permettere ai docenti di salvare e stampare il proprio lavoro.
+    *   **Azioni**: Implementare l'esportazione in formati come CSV o PDF.
+
+---
+
+### 🔮 **Fase 3: Funzionalità Avanzate e Cloud (Visione a Lungo Termine)**
+
+Una volta consolidata la Fase 2, potremo portare l'applicazione al livello successivo, trasformandola in uno strumento ancora più potente e connesso.
+
+1.  **Sincronizzazione Cloud e Multi-Dispositivo**
+    *   **Obiettivo**: Sostituire `localStorage` con **Firebase Firestore** per il salvataggio dei dati.
+    *   **Azioni**: Implementare un sistema di autenticazione (Firebase Auth) per la gestione di account utente sicuri.
+
+2.  **Potenziamento Assistente IA**
+    *   **Obiettivo**: Rendere l'IA un co-pilota proattivo per la didattica.
+    *   **Azioni**: Addestrare l'IA a generare bozze di lezioni, verifiche e fornire suggerimenti basati sui dati degli studenti.
+
+3.  **Gestione Attività Didattiche**
+    *   **Obiettivo**: Completare la sezione `lessons.html` per tracciare piani di lezione e attività svolte.
+

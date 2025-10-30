@@ -1,36 +1,29 @@
-<h2><span class="material-symbols-outlined">upload_file</span> Importazione Documenti</h2>
+<h2><span class="material-symbols-outlined">upload_file</span> Importazione Dati</h2>
 <div class="container">
 
     <div class="card">
         <h3>Importa Elenco Studenti da CSV</h3>
-        <p>Questa funzione ti permette di caricare un elenco di studenti da un file con estensione <strong>.csv</strong>. Assicurati che il file sia formattato correttamente, senza intestazioni, con un solo studente per riga.</p>
-        <p><strong>Formato richiesto:</strong> <code>NOME,COGNOME</code></p>
-        <p><em>Esempio:</em><br>
-        Mario,Rossi<br>
-        Luigi,Verdi<br>
-        Anna,Bianchi
-        </p>
+        <p>Carica un file in formato <strong>.csv</strong> per aggiungere rapidamente studenti a una classe. <br>Il file deve contenere le seguenti colonne, senza intestazione: <code>nome,cognome,email</code>.</p>
+        
+        <div class="form-group">
+            <label for="import-class-select">1. Seleziona la classe di destinazione:</label>
+            <select id="import-class-select"></select>
+        </div>
+
+        <div class="form-group">
+            <label for="file-input">2. Seleziona o trascina il file CSV:</label>
+            <div id="drop-area">
+                <p>Trascina il file qui o clicca per selezionarlo</p>
+                <input type="file" id="file-input" accept=".csv" style="display: none;">
+            </div>
+        </div>
+
+        <button id="import-btn" class="btn btn-primary" disabled><span class="material-symbols-outlined">upload</span> Avvia Importazione</button>
     </div>
 
     <div class="card">
-        <h3>Avvia Importazione</h3>
-        <div class="form-group">
-            <label for="import-class-selector">1. Seleziona la classe in cui importare gli studenti:</label>
-            <select id="import-class-selector">
-                <option value="">-- Seleziona una classe --</option>
-                <!-- Popolato da JS -->
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="csv-file-input">2. Seleziona il file .csv:</label>
-            <input type="file" id="csv-file-input" accept=".csv">
-        </div>
-        <button id="import-csv-btn" class="btn btn-primary" disabled>Importa Studenti</button>
-    </div>
-
-    <div class="card" id="import-results-container" class="hidden">
-        <h3>Risultati Importazione</h3>
-        <div id="import-results"></div>
+        <h3>Risultato Importazione</h3>
+        <div id="import-result"></div>
     </div>
 
 </div>
