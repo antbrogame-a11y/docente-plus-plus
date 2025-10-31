@@ -1,6 +1,6 @@
 
 // Funzione di setup per la sezione Classi, caricata dinamicamente.
-const setupClasses = () => {
+const setupClasses = async () => {
 
     // Tenta di accedere alle funzioni globali definite in app.js
     if (typeof loadData !== 'function' || typeof saveData !== 'function') {
@@ -19,7 +19,7 @@ const setupClasses = () => {
     const closeModalBtn = editModal.querySelector('.close-btn');
 
     // --- DATI ---
-    let classes = loadData('docentepp_classes', []);
+    let classes = await loadData('classes', []);
 
     // --- FUNZIONI ---
 
@@ -52,7 +52,7 @@ const setupClasses = () => {
         });
     };
 
-    const addClass = (e) => {
+    const addClass = async (e) => {
         e.preventDefault();
         const newName = classNameInput.value.trim();
         if (newName) {
@@ -61,17 +61,16 @@ const setupClasses = () => {
                 name: newName
             };
             classes.push(newClass);
-            saveData('docentepp_classes', classes);
+            await saveData('classes', classes);
             renderClasses();
             classNameInput.value = '';
         }
     };
 
-    const deleteClass = (id) => {
+    const deleteClass = async (id) => {
         if (confirm('Sei sicuro di voler eliminare questa classe? Verranno eliminati anche tutti gli studenti e le valutazioni associate.')) {
-            // Filtra anche studenti e valutazioni
-            let students = loadData('docentepp_students', []);
-            let evaluations = loadData('docentepp_evaluations', []);
+            let students = await loadData('students', []);
+            let evaluations = await loadData('evaluations', []);
 
             const studentsInClass = students.filter(s => s.classId === id);
             const studentIdsToDelete = studentsInClass.map(s => s.id);
@@ -81,9 +80,9 @@ const setupClasses = () => {
 
             classes = classes.filter(c => c.id !== id);
 
-            saveData('docentepp_classes', classes);
-            saveData('docentepp_students', students);
-            saveData('docentepp_evaluations', evaluations);
+            await saveData('classes', classes);
+            await saveData('students', students);
+            await saveData('evaluations', evaluations);
 
             renderClasses();
         }
@@ -102,7 +101,7 @@ const setupClasses = () => {
         editModal.style.display = 'none';
     };
 
-    const saveClassChanges = (e) => {
+    const saveClassChanges = async (e) => {
         e.preventDefault();
         const id = Number(editClassIdInput.value);
         const newName = editClassNameInput.value.trim();
@@ -110,7 +109,7 @@ const setupClasses = () => {
             const classIndex = classes.findIndex(c => c.id === id);
             if (classIndex !== -1) {
                 classes[classIndex].name = newName;
-                saveData('docentepp_classes', classes);
+                await saveData('classes', classes);
                 renderClasses();
                 closeEditModal();
             }

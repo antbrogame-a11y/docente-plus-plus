@@ -1,6 +1,6 @@
 
 // Funzione di setup per la sezione Valutazioni, caricata dinamicamente.
-const setupEvaluations = () => {
+const setupEvaluations = async () => {
 
     if (typeof loadData !== 'function' || typeof saveData !== 'function') {
         console.error('Le funzioni globali loadData o saveData non sono state trovate.');
@@ -27,9 +27,9 @@ const setupEvaluations = () => {
     const notesInput = document.getElementById('evaluation-notes-input');
 
     // --- DATI ---
-    let classes = loadData('docentepp_classes', []);
-    let students = loadData('docentepp_students', []);
-    let evaluations = loadData('docentepp_evaluations', []);
+    let classes = await loadData('classes', []);
+    let students = await loadData('students', []);
+    let evaluations = await loadData('evaluations', []);
 
     // --- FUNZIONI ---
 
@@ -162,7 +162,7 @@ const setupEvaluations = () => {
         modal.style.display = 'none';
     };
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
         const evaluationId = Number(evaluationIdInput.value);
         const evalData = {
@@ -180,15 +180,15 @@ const setupEvaluations = () => {
             evaluations.push(evalData);
         }
 
-        saveData('docentepp_evaluations', evaluations);
+        await saveData('evaluations', evaluations);
         renderEvaluations(classSelect.value, studentSelect.value);
         closeModal();
     };
 
-    const deleteEvaluation = (evaluationId) => {
+    const deleteEvaluation = async (evaluationId) => {
         if (confirm('Sei sicuro di voler eliminare questa valutazione?')) {
             evaluations = evaluations.filter(ev => ev.id !== evaluationId);
-            saveData('docentepp_evaluations', evaluations);
+            await saveData('evaluations', evaluations);
             renderEvaluations(classSelect.value, studentSelect.value);
         }
     };

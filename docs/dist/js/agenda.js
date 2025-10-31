@@ -1,10 +1,12 @@
 
 // Funzione di setup per la sezione Agenda, caricata dinamicamente.
-const setupAgenda = () => {
+const setupAgenda = async () => {
 
-    // Tenta di accedere alle funzioni globali definite in app.js
-    if (typeof loadData !== 'function' || typeof navigateToTab !== 'function') {
-        console.error('Le funzioni globali loadData o navigateToTab non sono state trovate. Assicurati che app.js sia caricato correttamente.');
+    // Controlla se la funzione di caricamento dati è disponibile
+    if (typeof window.loadData !== 'function') {
+        console.error('La funzione globale loadData non è stata trovata. L\'app potrebbe non essere inizializzata.');
+        const list = document.getElementById('latest-evaluations-list');
+        if(list) list.innerHTML = '<p class="error-message">Errore nel caricamento dei dati. Prova a ricaricare la pagina.</p>';
         return;
     }
 
@@ -16,10 +18,13 @@ const setupAgenda = () => {
     const quickAddStudentBtn = document.getElementById('quick-add-student');
     const quickAddEvaluationBtn = document.getElementById('quick-add-evaluation');
 
-    // --- CARICAMENTO DATI ---
-    const classes = loadData('docentepp_classes', []);
-    const students = loadData('docentepp_students', []);
-    const evaluations = loadData('docentepp_evaluations', []);
+    // Mostra un caricamento iniziale
+    if (latestEvaluationsList) latestEvaluationsList.innerHTML = '<p>Caricamento dati...</p>';
+
+    // --- CARICAMENTO DATI ASINCRONO ---
+    const classes = await window.loadData('classes', []);
+    const students = await window.loadData('students', []);
+    const evaluations = await window.loadData('evaluations', []);
 
     // --- AGGIORNAMENTO STATISTICHE RAPIDE ---
     if (statsClassCount) {
@@ -36,7 +41,7 @@ const setupAgenda = () => {
         if (evaluations.length === 0) {
             latestEvaluationsList.innerHTML = '<p class="empty-list-message">Nessuna valutazione registrata.</p>';
         } else {
-            // Ordina le valutazioni per data (ipotizzando una prop 'date') e prendi le ultime 5
+            // Ordina le valutazioni per data e prendi le ultime 5
             const recentEvaluations = evaluations.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
 
             recentEvaluations.forEach(ev => {
@@ -45,16 +50,15 @@ const setupAgenda = () => {
                 listItem.className = 'list-item';
                 
                 const studentName = student ? `${student.name} ${student.surname}` : 'Studente non trovato';
-                const grade = ev.grade || 'N/D';
-                const subject = ev.subject || 'Materia non specificata';
-
+                
                 listItem.innerHTML = `
                     <div class="list-item-main">
                         <span class="material-symbols-outlined">person</span>
                         <span><strong>${studentName}</strong></span>
                     </div>
                     <div class="list-item-details">
-                        <span>Voto: <strong>${grade}</strong> in ${subject}</span>
+                        <span>Voto: <strong>${ev.grade}</strong></span>
+                        <span>Data: ${new Date(ev.date).toLocaleDateString()}</span>
                     </div>
                 `;
                 latestEvaluationsList.appendChild(listItem);
@@ -64,12 +68,12 @@ const setupAgenda = () => {
 
     // --- SETUP AZIONI RAPIDE ---
     if (quickAddClassBtn) {
-        quickAddClassBtn.addEventListener('click', () => navigateToTab('classes'));
+        quickAddClassBtn.addEventListener('click', () => window.navigateToTab('classes'));
     }
     if (quickAddStudentBtn) {
-        quickAddStudentBtn.addEventListener('click', () => navigateToTab('students'));
+        quickAddStudentBtn.addEventListener('click', () => window.navigateToTab('students'));
     }
     if (quickAddEvaluationBtn) {
-        quickAddEvaluationBtn.addEventListener('click', () => navigateToTab('evaluations'));
+        quickAddEvaluationBtn.addEventListener('click', () => window.navigateToTab('evaluations'));
     }
 };

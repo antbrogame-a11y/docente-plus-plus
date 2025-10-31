@@ -1,5 +1,5 @@
 
-const setupSchedule = () => {
+const setupSchedule = async () => {
     // --- ELEMENTI DEL DOM ---
     const gridContainer = document.getElementById('schedule-grid');
     const modal = document.getElementById('schedule-modal');
@@ -9,14 +9,28 @@ const setupSchedule = () => {
     const modalNotes = document.getElementById('modal-notes');
     const modalSaveButton = document.getElementById('modal-save-button');
     const modalDeleteButton = document.getElementById('modal-delete-button');
-    const exportScheduleBtn = document.getElementById('export-schedule-btn'); // Nuovo
+    const exportScheduleBtn = document.getElementById('export-schedule-btn');
 
     // --- CONFIGURAZIONE E DATI ---
     const days = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
     const hours = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'];
-    let scheduleData = loadData('docentepp_schedule', {});
-    const classes = loadData('docentepp_classes', []);
+    let scheduleData = await loadData('schedule', {});
+    const classes = await loadData('classes', []);
     let currentSlot = null;
+
+    // --- PULIZIA DATI INIZIALE ---
+    // Rimuove le lezioni orfane (la cui classe è stata eliminata)
+    let needsSave = false;
+    for (const slotId in scheduleData) {
+        const lesson = scheduleData[slotId];
+        if (lesson.classId && !classes.find(c => c.id === parseInt(lesson.classId))) {
+            delete scheduleData[slotId];
+            needsSave = true;
+        }
+    }
+    if (needsSave) {
+        await saveData('schedule', scheduleData);
+    }
 
     // --- FUNZIONI PRINCIPALI ---
 
@@ -63,10 +77,8 @@ const setupSchedule = () => {
                             ${lesson.notes ? `<span class="lesson-notes">${lesson.notes}</span>` : ''}
                         </div>
                     `;
-                } else { // Se la classe è stata eliminata, pulisci i dati
-                     delete scheduleData[slotId];
-                     saveData('docentepp_schedule', scheduleData);
-                     cell.innerHTML = '';
+                } else {
+                    cell.innerHTML = ''; // La pulizia è già avvenuta, ma per sicurezza
                 }
             } else if (cell) {
                  cell.innerHTML = '';
@@ -104,7 +116,7 @@ const setupSchedule = () => {
         currentSlot = null;
     };
 
-    const saveLesson = () => {
+    const saveLesson = async () => {
         if (!currentSlot) return;
         const slotId = `${currentSlot.day}-${currentSlot.hour}`;
         const classId = modalClassSelector.value;
@@ -115,21 +127,20 @@ const setupSchedule = () => {
         } else {
             delete scheduleData[slotId];
         }
-        saveData('docentepp_schedule', scheduleData);
+        await saveData('schedule', scheduleData);
         populateGrid();
         closeModal();
     };
 
-    const deleteLesson = () => {
+    const deleteLesson = async () => {
         if (!currentSlot) return;
         const slotId = `${currentSlot.day}-${currentSlot.hour}`;
         delete scheduleData[slotId];
-        saveData('docentepp_schedule', scheduleData);
+        await saveData('schedule', scheduleData);
         populateGrid();
         closeModal();
     };
 
-    // NUOVA FUNZIONE: Esportazione CSV
     const exportScheduleToCSV = () => {
         const header = ['"Ora"'].concat(days.map(d => `"${d}"`)).join(',');
         
@@ -148,7 +159,7 @@ const setupSchedule = () => {
                         }
                     }
                 }
-                row.push(`"${cellContent.replace(/"/g, '''''''')}"`); // Escape double quotes
+                row.push(`"${cellContent.replace(/"/g, '''''''')}"`);
             });
             return row.join(',');
         });
@@ -170,7 +181,7 @@ const setupSchedule = () => {
     modalCloseButton.addEventListener('click', closeModal);
     modalSaveButton.addEventListener('click', saveLesson);
     modalDeleteButton.addEventListener('click', deleteLesson);
-    exportScheduleBtn.addEventListener('click', exportScheduleToCSV); // Nuovo listener
+    exportScheduleBtn.addEventListener('click', exportScheduleToCSV);
     window.addEventListener('click', (event) => {
         if (event.target === modal) closeModal();
     });

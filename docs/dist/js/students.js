@@ -1,6 +1,6 @@
 
 // Funzione di setup per la sezione Studenti, caricata dinamicamente.
-const setupStudents = () => {
+const setupStudents = async () => {
 
     if (typeof loadData !== 'function' || typeof saveData !== 'function') {
         console.error('Le funzioni globali loadData o saveData non sono state trovate.');
@@ -26,8 +26,8 @@ const setupStudents = () => {
     const studentEmailInput = document.getElementById('student-email-input');
 
     // --- DATI ---
-    let classes = loadData('docentepp_classes', []);
-    let students = loadData('docentepp_students', []);
+    let classes = await loadData('classes', []);
+    let students = await loadData('students', []);
 
     // --- FUNZIONI ---
 
@@ -134,7 +134,7 @@ const setupStudents = () => {
         modal.style.display = 'none';
     };
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
         const studentId = Number(studentIdInput.value);
         const studentData = {
@@ -152,25 +152,25 @@ const setupStudents = () => {
             students.push(studentData);
         }
         
-        saveData('docentepp_students', students);
+        await saveData('students', students);
         renderStudents(studentData.classId);
         closeModal();
     };
 
-    const deleteStudent = (studentId) => {
+    const deleteStudent = async (studentId) => {
         if (confirm('Sei sicuro di voler eliminare questo studente? Verranno eliminate anche tutte le sue valutazioni.')) {
-            let evaluations = loadData('docentepp_evaluations', []);
+            let evaluations = await loadData('evaluations', []);
             evaluations = evaluations.filter(ev => ev.studentId !== studentId);
-            saveData('docentepp_evaluations', evaluations);
+            await saveData('evaluations', evaluations);
 
             students = students.filter(s => s.id !== studentId);
-            saveData('docentepp_students', students);
+            await saveData('students', students);
             renderStudents(classFilterSelect.value);
         }
     };
 
     // NUOVA FUNZIONE: Esportazione in CSV
-    const exportStudentsToCSV = () => {
+    const exportStudentsToCSV = async () => {
         const classId = Number(classFilterSelect.value);
         const selectedClass = classes.find(c => c.id === classId);
         if (!selectedClass) {
@@ -179,7 +179,7 @@ const setupStudents = () => {
         }
 
         const studentsToExport = students.filter(s => s.classId === classId);
-        const evaluations = loadData('docentepp_evaluations', []);
+        const evaluations = await loadData('evaluations', []);
 
         const csvRows = [
             '"Cognome","Nome","Email","Media Voti"' // Intestazione CSV

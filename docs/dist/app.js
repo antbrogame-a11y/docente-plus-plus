@@ -3,50 +3,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- ELEMENTI GLOBALI ---
     const mainContent = document.querySelector('main');
     const navItems = document.querySelectorAll('.nav-item');
-    const welcomeModal = document.getElementById('welcome-modal');
-    const closeWelcomeBtn = document.getElementById('close-welcome-btn');
-    const startTourBtn = document.getElementById('start-tour-btn');
+    const loadingOverlay = document.createElement('div');
 
-    // --- VARIABILI GLOBALI (per i moduli) ---
-    window.firebaseConfig = {};
-    window.app = null;
-    window.vertex = null;
-    window.model = null;
+    // Stile per l'overlay di caricamento
+    loadingOverlay.style.position = 'fixed';
+    loadingOverlay.style.top = '0';
+    loadingOverlay.style.left = '0';
+    loadingOverlay.style.width = '100%';
+    loadingOverlay.style.height = '100%';
+    loadingOverlay.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+    loadingOverlay.style.display = 'flex';
+    loadingOverlay.style.justifyContent = 'center';
+    loadingOverlay.style.alignItems = 'center';
+    loadingOverlay.style.zIndex = '1000';
+    loadingOverlay.innerHTML = '<p style="font-size: 1.2em;">Caricamento in corso...</p>';
+    document.body.appendChild(loadingOverlay);
 
-    // --- FUNZIONI GLOBALI (per i moduli) ---
-    window.loadData = (key, defaults) => {
-        try {
-            const dataJSON = localStorage.getItem(key);
-            return dataJSON ? JSON.parse(dataJSON) : defaults;
-        } catch {
-            return defaults;
-        }
-    };
-
-    window.saveData = (key, data) => {
-        try {
-            localStorage.setItem(key, JSON.stringify(data));
-        } catch (error) {
-            console.error(`Errore durante il salvataggio dei dati per la chiave: ${key}`, error);
-        }
-    };
-    
+    // --- FUNZIONI GLOBALI ---
     window.navigateToTab = (tab) => {
         document.querySelector('.nav-item.active')?.classList.remove('active');
-        document.querySelector(`.nav-item[data-tab="${tab}"]`)?.classList.add('active');
-        loadContent(tab);
-    };
-
-    // --- LOGICA ONBOARDING ---
-    const closeWelcomeModal = () => {
-        welcomeModal.style.display = 'none';
-        saveData('docentepp_hasVisited', true);
-    };
-
-    const handleOnboarding = () => {
-        const hasVisited = loadData('docentepp_hasVisited', false);
-        if (!hasVisited) {
-            welcomeModal.style.display = 'flex';
+        const newActiveTab = document.querySelector(`.nav-item[data-tab="${tab}"]`);
+        if (newActiveTab) {
+            newActiveTab.classList.add('active');
+            loadContent(tab);
         }
     };
 
@@ -58,10 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.text();
             })
             .then(html => {
-                mainContent.innerHTML = ''; 
-                const template = document.createElement('template');
-                template.innerHTML = html;
-                mainContent.appendChild(template.content.cloneNode(true));
+                mainContent.innerHTML = html;
                 loadModule(tab);
             })
             .catch(error => {
@@ -73,10 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const scriptPath = `js/${tab}.js`;
         const scriptId = `module-${tab}`;
 
-        if (document.getElementById(scriptId)) {
-            runSetupFunction(tab);
-            return;
-        }
+        // Rimuovi il vecchio script se esiste per forzare il ricaricamento
+        const oldScript = document.getElementById(scriptId);
+        if (oldScript) oldScript.remove();
 
         fetch(scriptPath, { method: 'HEAD' })
             .then(res => {
@@ -105,44 +80,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- INIZIALIZZAZIONE FIREBASE E APP ---
-    const initializeApp = () => {
+    // --- GESTIONE CAMBIO AUTH E FIRESTORE ---
+    const handleAuthChange = () => {
+        console.log("Stato di autenticazione cambiato. Ricarico la vista corrente.");
+        const currentTab = document.querySelector('.nav-item.active')?.dataset.tab || 'agenda';
+        loadContent(currentTab);
+        loadingOverlay.style.display = 'none'; // Nascondi l'overlay dopo il primo caricamento
+    };
+    
+    // Event listener per ricaricare i dati quando l'utente effettua il login/logout
+    window.addEventListener('auth-changed', handleAuthChange);
+    // Event listener per segnalare che Firestore è pronto
+    window.addEventListener('firestore-ready', () => {
+        console.log("Firestore è pronto. L'app può procedere.");
+        handleAuthChange(); // Ricarica la vista iniziale
+    });
+
+    // --- INIZIALIZZAZIONE APP ---
+    const initializeApp = (firebaseApp) => {
         navItems.forEach(item => {
-            item.addEventListener('click', () => navigateToTab(item.dataset.tab));
+            item.addEventListener('click', () => window.navigateToTab(item.dataset.tab));
         });
 
-        // Listener per i pulsanti del modale di benvenuto
-        closeWelcomeBtn.addEventListener('click', closeWelcomeModal);
-        startTourBtn.addEventListener('click', () => {
-            closeWelcomeModal();
-            // TODO: In futuro, avviare qui il tour interattivo.
-            console.log("Avvio del tour guidato...");
-        });
+        // Carica i moduli di autenticazione e Firestore
+        const authScript = document.createElement('script');
+        authScript.src = 'js/auth.js';
+        authScript.onload = () => window.setupAuth(firebaseApp);
+        document.head.appendChild(authScript);
 
+        const firestoreScript = document.createElement('script');
+        firestoreScript.src = 'js/firestore.js';
+        document.head.appendChild(firestoreScript);
+        
         const initialTab = 'agenda';
         document.querySelector(`.nav-item[data-tab="${initialTab}"]`).classList.add('active');
-        loadContent(initialTab);
-
-        // Controlla se mostrare il messaggio di benvenuto
-        handleOnboarding();
+        // Il contenuto verrà caricato dall'evento 'auth-changed'
     };
 
-    fetch('../firebase-config.json') // CORREZIONE: Path corretto per file nella root
+    // --- INIZIALIZZAZIONE FIREBASE ---
+    fetch('/firebase-config.json')
         .then(response => {
-            if (!response.ok) throw new Error('firebase-config.json non trovato. L\'assistente AI sarà disabilitato.');
+            if (!response.ok) throw new Error('firebase-config.json non trovato.');
             return response.json();
         })
         .then(config => {
-            window.firebaseConfig = config;
-            window.app = firebase.initializeApp(window.firebaseConfig);
-            window.vertex = firebase.vertexAI();
-            window.model = window.vertex.getGenerativeModel({ model: "gemini-pro" });
-            console.log("Firebase e Gemini inizializzati con successo.");
+            const firebaseApp = firebase.initializeApp(config);
+            initializeApp(firebaseApp);
         })
         .catch(error => {
             console.error("Errore critico nell'inizializzazione di Firebase:", error.message);
-        })
-        .finally(() => {
-            initializeApp();
+            loadingOverlay.innerHTML = '<p style="color: red;">Errore di connessione. Impossibile caricare l\'app.</p>';
         });
 });

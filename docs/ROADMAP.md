@@ -19,29 +19,29 @@ In questa fase cruciale, abbiamo gettato le fondamenta dell'applicazione, trasfo
 
 ---
 
-### 🎯 **Fase 2: Potenziamento e Qualità della Vita (In Corso)**
+### ✅ **Fase 2: Potenziamento e Qualità della Vita (Completata)**
 
-L'obiettivo di questa fase è arricchire l'esperienza utente e fornire strumenti di visualizzazione e produttività più potenti.
+L'obiettivo di questa fase è stato arricchire l'esperienza utente e fornire strumenti di visualizzazione e produttività più potenti.
 
-1.  **Visualizzazione Grafica delle Statistiche** - **[PROSSIMO PASSO]**
+*   **[COMPLETATO]** **Visualizzazione Grafica delle Statistiche**
     *   **Obiettivo**: Trasformare i dati numerici in insight visivi immediati.
-    *   **Azioni**: Integrare una libreria per grafici (es. `Chart.js`) per mostrare l'andamento degli studenti e la distribuzione dei voti.
+    *   **Azioni**: Integrata una libreria per grafici (`Chart.js`) per mostrare l'andamento degli studenti e la distribuzione dei voti.
 
-2.  **Implementazione dell'Orario Scolastico (`schedule.html`)**
+*   **[COMPLETATO]** **Implementazione dell'Orario Scolastico (`schedule.html`)**
     *   **Obiettivo**: Fornire una vista settimanale chiara delle lezioni.
-    *   **Azioni**: Progettare una griglia visiva e permettere l'associazione delle classi alle ore.
+    *   **Azioni**: Progettata una griglia visiva che permette l'associazione delle classi alle ore.
 
-3.  **Esportazione Dati e Reportistica**
+*   **[COMPLETATO]** **Esportazione Dati e Reportistica**
     *   **Obiettivo**: Permettere ai docenti di salvare e stampare il proprio lavoro.
-    *   **Azioni**: Implementare l'esportazione in formati come CSV o PDF.
+    *   **Azioni**: Implementata l'esportazione in formato CSV per studenti, valutazioni e orario.
 
 ---
 
 ### 🔮 **Fase 3: Funzionalità Avanzate e Cloud (Visione a Lungo Termine)**
 
-Una volta consolidata la Fase 2, potremo portare l'applicazione al livello successivo, trasformandola in uno strumento ancora più potente e connesso.
+Ora che la Fase 2 è consolidata, possiamo portare l'applicazione al livello successivo, trasformandola in uno strumento ancora più potente e connesso.
 
-1.  **Sincronizzazione Cloud e Multi-Dispositivo**
+1.  **Sincronizzazione Cloud e Multi-Dispositivo** - **[PROSSIMO PASSO]**
     *   **Obiettivo**: Sostituire `localStorage` con **Firebase Firestore** per il salvataggio dei dati.
     *   **Azioni**: Implementare un sistema di autenticazione (Firebase Auth) per la gestione di account utente sicuri.
 
@@ -51,4 +51,3 @@ Una volta consolidata la Fase 2, potremo portare l'applicazione al livello succe
 
 3.  **Gestione Attività Didattiche**
     *   **Obiettivo**: Completare la sezione `lessons.html` per tracciare piani di lezione e attività svolte.
-

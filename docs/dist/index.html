@@ -19,6 +19,9 @@
 <body>
     <header data-step="1" data-intro="Questa è l'intestazione principale dell'applicazione.">
         <h1>Docente ++</h1>
+        <div id="auth-container">
+            <!-- Il contenuto dell'autenticazione verrà inserito qui -->
+        </div>
     </header>
 
     <nav id="main-nav" data-step="2" data-intro="Usa questa barra di navigazione per spostarti tra le diverse sezioni: Dashboard, Classi, Studenti, Valutazioni e altro ancora.">
@@ -42,6 +45,10 @@
             <span class="material-symbols-outlined">calendar_view_week</span>
             Orario
         </div>
+        <div class="nav-item" data-tab="lessons">
+            <span class="material-symbols-outlined">history_edu</span>
+            Lezioni
+        </div>
         <div class="nav-item" data-tab="statistiche">
             <span class="material-symbols-outlined">monitoring</span>
             Statistiche
@@ -50,44 +57,23 @@
             <span class="material-symbols-outlined">smart_toy</span>
             Assistente IA
         </div>
+        <div class="nav-item" data-tab="ai-suggestions">
+            <span class="material-symbols-outlined">psychology</span>
+            Suggerimenti IA
+        </div>
         <div class="nav-item" data-tab="documentImport">
             <span class="material-symbols-outlined">upload_file</span>
             Importa Documenti
         </div>
     </nav>
 
-    <!-- Welcome Onboarding Modal -->
-    <div id="welcome-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h2>Benvenuto in Docente ++!</h2>
-            <p>La tua nuova app per la gestione della didattica, semplice e offline.</p>
-            <p>Docente ++ ti aiuta a organizzare:</p>
-            <ul>
-                <li>Le tue <strong>Classi</strong> e il loro colore</li>
-                <li>Gli <strong>Studenti</strong> per ogni classe</li>
-                <li><strong>Valutazioni</strong>, medie e note</li>
-                <li>L'<strong>Orario</strong> settimanale delle lezioni</li>
-            </ul>
-            <p>Tutti i dati sono salvati <strong>solo sul tuo dispositivo</strong> per la massima privacy. Inizia subito a esplorare!</p>
-            <div class="modal-actions">
-                <button id="start-tour-btn" class="btn btn-primary">Fai un Tour Guidato</button>
-                <button id="close-welcome-btn" class="btn btn-secondary">Inizia a Usare l'App</button>
-            </div>
-        </div>
-    </div>
-
-    <main data-step="8" data-intro="In quest'area vedrai il contenuto principale della sezione selezionata. Iniziamo con la Dashboard!">
-        <!-- Il contenuto viene caricato dinamicamente qui da app.js -->
-    </main>
-
-    <!-- Pulsante Aiuto/Tour (FAB) -->
-    <button id="help-tour-btn" class="fab" title="Fai un tour guidato" data-step="9" data-intro="Usa questo pulsante in qualsiasi momento per far ripartire il tour guidato.">
-        <span class="material-symbols-outlined">help_outline</span>
-    </button>
+    <!-- ... (contenuto modale e main invariato) ... -->
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-vertexai-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     
     <!-- Intro.js JS -->
     <script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>

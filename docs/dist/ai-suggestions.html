@@ -1,0 +1,43 @@
+<div class="main-header">
+    <h2><span class="material-symbols-outlined">psychology</span>Suggerimenti Didattici dall'IA</h2>
+    <p>Analizza i dati di rendimento dei tuoi studenti e ottieni suggerimenti personalizzati per migliorare l'apprendimento.</p>
+</div>
+
+<div class="content-area">
+    <div class="form-container ai-form">
+        <form id="suggestions-generator-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="suggestions-class-select">Seleziona una Classe</label>
+                    <select id="suggestions-class-select" required>
+                        <option value="">-- Prima seleziona una classe --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="suggestions-type-select">Tipo di Analisi</label>
+                    <select id="suggestions-type-select" required>
+                        <option value="identify_struggling">Individua Studenti in Difficoltà</option>
+                        <option value="identify_top_performers">Individua Studenti di Eccellenza</option>
+                        <option value="class_overview">Panoramica Generale della Classe</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="generate-suggestions-btn">
+                    <span class="material-symbols-outlined">auto_awesome</span>
+                    Analizza e Genera Suggerimenti
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="ai-result-container" id="suggestions-result-container">
+        <div id="suggestions-result-placeholder">
+            <span class="material-symbols-outlined">psychology_alt</span>
+            <p>I suggerimenti didattici appariranno qui dopo l'analisi.</p>
+        </div>
+        <div id="suggestions-result-content" class="prose" style="display:none;"></div>
+        <div id="suggestions-result-loader" class="loader" style="display:none;"></div>
+    </div>
+</div>
