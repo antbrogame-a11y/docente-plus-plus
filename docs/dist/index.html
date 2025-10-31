@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Docente ++</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2.1">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#2a3b4d"/>
@@ -24,62 +24,88 @@
         </div>
     </header>
 
-    <nav id="main-nav" data-step="2" data-intro="Usa questa barra di navigazione per spostarti tra le diverse sezioni: Dashboard, Classi, Studenti, Valutazioni e altro ancora.">
-        <div class="nav-item active" data-tab="agenda">
-            <span class="material-symbols-outlined">dashboard</span>
-            Dashboard
+    <div class="nav-container">
+        <nav id="main-nav" data-step="2" data-intro="Usa questa barra di navigazione per spostarti tra le diverse sezioni: Dashboard, Classi, Studenti, Valutazioni e altro ancora.">
+            <div class="nav-item active" data-tab="agenda">
+                <span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </div>
+            <div class="nav-item" data-tab="classes" data-step="3" data-intro="Qui puoi creare e gestire le tue classi. Assegna un nome e un colore unico a ciascuna!">
+                <span class="material-symbols-outlined">school</span>
+                Classi
+            </div>
+            <div class="nav-item" data-tab="students" data-step="4" data-intro="Aggiungi e organizza i tuoi studenti, associandoli alle classi che hai creato.">
+                <span class="material-symbols-outlined">groups</span>
+                Studenti
+            </div>
+            <div class="nav-item" data-tab="evaluations" data-step="5" data-intro="Registra le valutazioni dei tuoi studenti, calcola le medie e tieni traccia dei loro progressi.">
+                <span class="material-symbols-outlined">grading</span>
+                Valutazioni
+            </div>
+            
+            <!-- Pulsante "Altro" per la navigazione mobile -->
+            <div class="nav-item" id="more-menu-toggle">
+                <span class="material-symbols-outlined">more_horiz</span>
+                Altro
+            </div>
+        </nav>
+        
+        <!-- Pannello a comparsa per le voci di menu aggiuntive -->
+        <div id="more-menu-panel">
+            <div class="nav-item" data-tab="schedule" data-step="6" data-intro="Definisci il tuo orario settimanale, associando le classi alle diverse ore.">
+                <span class="material-symbols-outlined">calendar_view_week</span>
+                Orario
+            </div>
+            <div class="nav-item" data-tab="lessons">
+                <span class="material-symbols-outlined">history_edu</span>
+                Lezioni
+            </div>
+            <div class="nav-item" data-tab="statistiche">
+                <span class="material-symbols-outlined">monitoring</span>
+                Statistiche
+            </div>
+            <div class="nav-item" data-tab="aiAssistant" data-step="7" data-intro="Usa l'Assistente IA per ricevere aiuto, generare dati di esempio o automatizzare compiti.">
+                <span class="material-symbols-outlined">smart_toy</span>
+                Assistente IA
+            </div>
+            <div class="nav-item" data-tab="ai-suggestions">
+                <span class="material-symbols-outlined">psychology</span>
+                Suggerimenti IA
+            </div>
+            <div class="nav-item" data-tab="documentImport">
+                <span class="material-symbols-outlined">upload_file</span>
+                Importa Documenti
+            </div>
         </div>
-        <div class="nav-item" data-tab="classes" data-step="3" data-intro="Qui puoi creare e gestire le tue classi. Assegna un nome e un colore unico a ciascuna!">
-            <span class="material-symbols-outlined">school</span>
-            Classi
-        </div>
-        <div class="nav-item" data-tab="students" data-step="4" data-intro="Aggiungi e organizza i tuoi studenti, associandoli alle classi che hai creato.">
-            <span class="material-symbols-outlined">groups</span>
-            Studenti
-        </div>
-        <div class="nav-item" data-tab="evaluations" data-step="5" data-intro="Registra le valutazioni dei tuoi studenti, calcola le medie e tieni traccia dei loro progressi.">
-            <span class="material-symbols-outlined">grading</span>
-            Valutazioni
-        </div>
-        <div class="nav-item" data-tab="schedule" data-step="6" data-intro="Definisci il tuo orario settimanale, associando le classi alle diverse ore.">
-            <span class="material-symbols-outlined">calendar_view_week</span>
-            Orario
-        </div>
-        <div class="nav-item" data-tab="lessons">
-            <span class="material-symbols-outlined">history_edu</span>
-            Lezioni
-        </div>
-        <div class="nav-item" data-tab="statistiche">
-            <span class="material-symbols-outlined">monitoring</span>
-            Statistiche
-        </div>
-        <div class="nav-item" data-tab="aiAssistant" data-step="7" data-intro="Usa l'Assistente IA per ricevere aiuto, generare dati di esempio o automatizzare compiti.">
-            <span class="material-symbols-outlined">smart_toy</span>
-            Assistente IA
-        </div>
-        <div class="nav-item" data-tab="ai-suggestions">
-            <span class="material-symbols-outlined">psychology</span>
-            Suggerimenti IA
-        </div>
-        <div class="nav-item" data-tab="documentImport">
-            <span class="material-symbols-outlined">upload_file</span>
-            Importa Documenti
-        </div>
-    </nav>
+    </div>
 
-    <!-- ... (contenuto modale e main invariato) ... -->
+    <main role="main" class="container">
+        <!-- Il contenuto verrà caricato qui -->
+    </main>
+
+    <div id="modal-container" style="display:none;">
+        <div id="modal-content">
+            <span id="close-modal">&times;</span>
+            <div id="modal-body">
+                <!-- Contenuto del modale -->
+            </div>
+        </div>
+    </div>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-vertexai-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-    
+
+    <!-- Firebase Init -->
+    <script src="js/firebase-init.js"></script>
+
     <!-- Intro.js JS -->
     <script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
 
     <!-- Main App Logic -->
-    <script src="app.js" defer></script>
+    <script src="app.js?v=2.1" defer></script>
 
     <!-- Service Worker -->
     <script>
