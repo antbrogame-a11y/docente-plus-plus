@@ -1,10 +1,10 @@
 
-// Funzione di setup per la sezione Classi, caricata dinamicamente.
-const setupClasses = async () => {
+// Funzione di setup per la sezione Classi, migrata a Firestore.
+const setupClasses = () => {
 
-    // Tenta di accedere alle funzioni globali definite in app.js
-    if (typeof loadData !== 'function' || typeof saveData !== 'function') {
-        console.error('Le funzioni globali loadData o saveData non sono state trovate. Assicurati che app.js sia caricato correttamente.');
+    // --- VERIFICA ISTANZA FIREDB ---
+    if (!window.db) {
+        console.error("Istanza Firestore non trovata. Assicurati che firestore.js sia caricato e inizializzato correttamente.");
         return;
     }
 
@@ -18,34 +18,35 @@ const setupClasses = async () => {
     const editClassNameInput = document.getElementById('edit-class-name');
     const closeModalBtn = editModal.querySelector('.close-btn');
 
-    // --- DATI ---
-    let classes = await loadData('classes', []);
+    const userId = firebase.auth().currentUser.uid;
+    const classesRef = db.collection('users').doc(userId).collection('classes');
 
     // --- FUNZIONI ---
 
-    const renderClasses = () => {
+    const renderClasses = (docs) => {
         classListDiv.innerHTML = '';
-        if (classes.length === 0) {
+        if (docs.empty) {
             classListDiv.innerHTML = '<p class="empty-list-message">Nessuna classe trovata. Inizia aggiungendone una!</p>';
             return;
         }
 
-        classes.forEach(c => {
+        docs.forEach(doc => {
+            const c = { id: doc.id, ...doc.data() };
             const classElement = document.createElement('div');
             classElement.className = 'list-item';
+            classElement.setAttribute('data-id', c.id);
             classElement.innerHTML = `
                 <div class="list-item-main">
                     <span class="material-symbols-outlined">school</span>
                     <span>${c.name}</span>
                 </div>
                 <div class="list-item-actions">
-                    <button class="btn-icon btn-edit" data-id="${c.id}"><span class="material-symbols-outlined">edit</span></button>
-                    <button class="btn-icon btn-delete" data-id="${c.id}"><span class="material-symbols-outlined">delete</span></button>
+                    <button class="btn-icon btn-edit"><span class="material-symbols-outlined">edit</span></button>
+                    <button class="btn-icon btn-delete"><span class="material-symbols-outlined">delete</span></button>
                 </div>
             `;
 
-            // Aggiungi event listener per modifica ed eliminazione
-            classElement.querySelector('.btn-edit').addEventListener('click', () => openEditModal(c.id));
+            classElement.querySelector('.btn-edit').addEventListener('click', () => openEditModal(c.id, c.name));
             classElement.querySelector('.btn-delete').addEventListener('click', () => deleteClass(c.id));
 
             classListDiv.appendChild(classElement);
@@ -56,45 +57,54 @@ const setupClasses = async () => {
         e.preventDefault();
         const newName = classNameInput.value.trim();
         if (newName) {
-            const newClass = {
-                id: Date.now(), // ID univoco basato sul timestamp
-                name: newName
-            };
-            classes.push(newClass);
-            await saveData('classes', classes);
-            renderClasses();
-            classNameInput.value = '';
+            try {
+                await classesRef.add({ name: newName });
+                classNameInput.value = '';
+            } catch (error) {
+                console.error("Errore nell'aggiungere la classe:", error);
+                alert("Si è verificato un errore durante l'aggiunta della classe.");
+            }
         }
     };
 
     const deleteClass = async (id) => {
-        if (confirm('Sei sicuro di voler eliminare questa classe? Verranno eliminati anche tutti gli studenti e le valutazioni associate.')) {
-            let students = await loadData('students', []);
-            let evaluations = await loadData('evaluations', []);
+        if (confirm('Sei sicuro di voler eliminare questa classe? Verranno eliminati anche tutti gli studenti e le valutazioni associate in modo permanente.')) {
+            try {
+                const batch = db.batch();
+                const studentsRef = db.collection('users').doc(userId).collection('students');
+                const evaluationsRef = db.collection('users').doc(userId).collection('evaluations');
 
-            const studentsInClass = students.filter(s => s.classId === id);
-            const studentIdsToDelete = studentsInClass.map(s => s.id);
+                // 1. Trova ed elimina gli studenti e le loro valutazioni
+                const studentsQuery = await studentsRef.where('classId', '==', id).get();
+                if (!studentsQuery.empty) {
+                    for (const studentDoc of studentsQuery.docs) {
+                        const studentId = studentDoc.id;
+                        // Trova ed elimina le valutazioni dello studente
+                        const evaluationsQuery = await evaluationsRef.where('studentId', '==', studentId).get();
+                        evaluationsQuery.forEach(evalDoc => batch.delete(evalDoc.ref));
+                        // Elimina lo studente
+                        batch.delete(studentDoc.ref);
+                    }
+                }
 
-            students = students.filter(s => s.classId !== id);
-            evaluations = evaluations.filter(ev => !studentIdsToDelete.includes(ev.studentId));
+                // 2. Elimina la classe
+                batch.delete(classesRef.doc(id));
 
-            classes = classes.filter(c => c.id !== id);
+                // 3. Esegui il batch
+                await batch.commit();
 
-            await saveData('classes', classes);
-            await saveData('students', students);
-            await saveData('evaluations', evaluations);
-
-            renderClasses();
+            } catch (error) {
+                console.error("Errore nell'eliminazione a cascata della classe:", error);
+                alert("Si è verificato un errore complesso durante l'eliminazione della classe.");
+            }
         }
     };
 
-    const openEditModal = (id) => {
-        const classToEdit = classes.find(c => c.id === id);
-        if (classToEdit) {
-            editClassIdInput.value = classToEdit.id;
-            editClassNameInput.value = classToEdit.name;
-            editModal.style.display = 'flex';
-        }
+    const openEditModal = (id, currentName) => {
+        editClassIdInput.value = id;
+        editClassNameInput.value = currentName;
+        editModal.style.display = 'flex';
+        editClassNameInput.focus();
     };
 
     const closeEditModal = () => {
@@ -103,20 +113,26 @@ const setupClasses = async () => {
 
     const saveClassChanges = async (e) => {
         e.preventDefault();
-        const id = Number(editClassIdInput.value);
+        const id = editClassIdInput.value;
         const newName = editClassNameInput.value.trim();
         if (id && newName) {
-            const classIndex = classes.findIndex(c => c.id === id);
-            if (classIndex !== -1) {
-                classes[classIndex].name = newName;
-                await saveData('classes', classes);
-                renderClasses();
+            try {
+                await classesRef.doc(id).update({ name: newName });
                 closeEditModal();
+            } catch (error) {
+                console.error("Errore nell'aggiornare la classe:", error);
+                alert("Si è verificato un errore durante l'aggiornamento.");
             }
         }
     };
 
-    // --- EVENT LISTENER ---
+    // --- LISTENER IN TEMPO REALE ---
+    classesRef.orderBy('name').onSnapshot(renderClasses, err => {
+        console.error("Errore nel listener di Firestore:", err);
+        classListDiv.innerHTML = '<p class="error-message">Errore nel caricamento delle classi. Controlla la console.</p>';
+    });
+
+    // --- EVENT LISTENER GLOBALI ---
     classForm.addEventListener('submit', addClass);
     editForm.addEventListener('submit', saveClassChanges);
     closeModalBtn.addEventListener('click', closeEditModal);
@@ -126,6 +142,6 @@ const setupClasses = async () => {
         }
     });
 
-    // --- RENDER INIZIALE ---
-    renderClasses();
+    console.log("Modulo Classi caricato e configurato con Firestore.");
 };
+

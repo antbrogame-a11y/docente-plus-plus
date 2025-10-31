@@ -29,12 +29,8 @@ const setupAuth = async (firebaseApp) => {
                 const provider = new firebase.auth.GoogleAuthProvider();
                 auth.signInWithPopup(provider);
             });
-            // Se l'utente non è loggato, potresti voler disabilitare l'app o mostrare dati locali
-            // Per ora, l'app continuerà a funzionare con localStorage
         }
-        // Ricarica la vista corrente per aggiornare i dati
+        // Ricarica la vista corrente per aggiornare i dati in base allo stato di autenticazione
         window.dispatchEvent(new CustomEvent('auth-changed', { detail: { user } }));
     });
 };
-
-
