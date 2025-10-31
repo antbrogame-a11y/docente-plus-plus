@@ -1,26 +1,25 @@
 <h2><span class="material-symbols-outlined">groups</span> Gestione Studenti</h2>
-<div class="container">
 
-    <!-- Filtro per Classe e Azioni -->
-    <div class="card">
-        <div class="form-inline">
-            <div class="form-group">
-                <label for="class-filter-select">Visualizza Studenti della Classe:</label>
-                <select id="class-filter-select"></select>
-            </div>
-            <button id="add-student-btn" class="btn btn-primary"><span class="material-symbols-outlined">person_add</span> Aggiungi Studente</button>
-        </div>
+<!-- Barra degli strumenti con Filtro e Azioni -->
+<div class="toolbar">
+    <div class="filter-controls">
+        <label for="class-filter-select">Filtra per classe:</label>
+        <select id="class-filter-select"></select>
     </div>
-
-    <!-- Elenco Studenti -->
-    <div class="card">
-        <h3 id="student-list-title">Studenti</h3>
-        <div id="student-list" class="list-container">
-            <!-- Gli studenti verranno inseriti qui dinamicamente -->
-        </div>
+    <div class="actions">
+        <button id="export-students-btn" class="btn btn-secondary"><span class="material-symbols-outlined">download</span> Esporta in CSV</button>
+        <button id="add-student-btn" class="btn btn-primary"><span class="material-symbols-outlined">person_add</span> Aggiungi Studente</button>
     </div>
-
 </div>
+
+<!-- Elenco Studenti -->
+<div class="card">
+    <h3 id="student-list-title">Studenti</h3>
+    <div id="student-list" class="table-container">
+        <!-- La tabella degli studenti verrà inserita qui dinamicamente -->
+    </div>
+</div>
+
 
 <!-- Modal per Aggiungere/Modificare Studente (nascosto di default) -->
 <div id="student-modal" class="modal">

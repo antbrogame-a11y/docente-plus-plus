@@ -1,32 +1,31 @@
 <h2><span class="material-symbols-outlined">grading</span> Gestione Valutazioni</h2>
-<div class="container">
 
-    <!-- Filtri e Azioni -->
-    <div class="card">
-        <div class="form-inline">
-            <div class="form-group">
-                <label for="eval-class-select">Classe:</label>
-                <select id="eval-class-select"></select>
-            </div>
-            <div class="form-group">
-                <label for="eval-student-select">Studente:</label>
-                <select id="eval-student-select"></select>
-            </div>
+<!-- Barra degli strumenti con Filtri e Azioni -->
+<div class="toolbar">
+    <div class="filter-controls">
+        <div class="form-group">
+            <label for="eval-class-select">Classe:</label>
+            <select id="eval-class-select"></select>
+        </div>
+        <div class="form-group">
+            <label for="eval-student-select">Studente:</label>
+            <select id="eval-student-select"></select>
         </div>
     </div>
-
-    <!-- Elenco Valutazioni -->
-    <div class="card">
-        <div class="list-header">
-            <h3 id="evaluation-list-title">Valutazioni</h3>
-            <button id="add-evaluation-btn" class="btn btn-primary" disabled><span class="material-symbols-outlined">add_circle</span> Aggiungi Valutazione</button>
-        </div>
-        <div id="evaluation-list" class="list-container">
-            <!-- Le valutazioni verranno inserite qui -->
-        </div>
+    <div class="actions">
+        <button id="export-evaluations-btn" class="btn btn-secondary" disabled><span class="material-symbols-outlined">download</span> Esporta in CSV</button>
+        <button id="add-evaluation-btn" class="btn btn-primary" disabled><span class="material-symbols-outlined">add_circle</span> Aggiungi Valutazione</button>
     </div>
-
 </div>
+
+<!-- Elenco Valutazioni -->
+<div class="card">
+    <h3 id="evaluation-list-title">Valutazioni</h3>
+    <div id="evaluation-list" class="table-container">
+        <!-- La tabella delle valutazioni verrà inserita qui -->
+    </div>
+</div>
+
 
 <!-- Modal per Aggiungere/Modificare Valutazione -->
 <div id="evaluation-modal" class="modal">

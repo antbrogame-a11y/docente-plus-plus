@@ -2,17 +2,18 @@
 body {
     font-family: sans-serif;
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+    background-color: #f4f7f6;
 }
 
 header {
     display: flex;
     align-items: center;
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     padding: 10px 20px;
     border-bottom: 1px solid #dee2e6;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 header h1 {
@@ -28,81 +29,178 @@ header h1 {
     margin-right: 10px;
 }
 
-header .btn-icon:last-child {
-    margin-right: 0;
-}
-
-#info-app-btn {
-    margin-left: auto;
-}
-
-nav#main-nav {
-    width: 240px;
-    background-color: #f8f9fa;
-    padding-top: 20px;
-    border-right: 1px solid #dee2e6;
-    display: block; /* Visibile di default */
-    transition: width 0.3s;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-left: 3px solid transparent;
-}
-
-.nav-item:hover {
-    background-color: #e9ecef;
-}
-
-.nav-item.active {
-    background-color: #e9ecef;
-    border-left-color: #007bff;
-}
-
-.nav-item .material-symbols-outlined {
-    margin-right: 15px;
-}
-
 main {
-    flex-grow: 1;
     padding: 20px;
-    padding-left: 260px; /* Spazio per la nav */
-    transition: padding-left 0.3s;
+    /* Padding inferiore per non sovrapporre la navbar mobile */
+    padding-bottom: 80px; 
 }
 
-/* Barra degli strumenti */
-.toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* --- Stili per la Navigazione --- */
+
+/* Nasconde il toggle del menu su desktop */
+#menu-toggle {
+    display: none;
+}
+
+/* Stile per la nav laterale (Desktop) */
+@media (min-width: 769px) {
+    body {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        grid-template-rows: auto 1fr;
+        height: 100vh;
+    }
+
+    header {
+        grid-column: 1 / -1; 
+    }
+
+    #main-nav {
+        grid-row: 2;
+        width: 240px;
+        background-color: #ffffff;
+        border-right: 1px solid #dee2e6;
+        display: flex;
+        flex-direction: column;
+        padding-top: 20px;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        cursor: pointer;
+        border-left: 4px solid transparent;
+        color: #333;
+        text-decoration: none;
+    }
+
+    .nav-item:hover {
+        background-color: #e9ecef;
+    }
+
+    .nav-item.active {
+        background-color: #e9ecef;
+        border-left-color: #007bff;
+        font-weight: bold;
+    }
+
+    .nav-item .material-symbols-outlined {
+        margin-right: 15px;
+    }
+
+    main {
+        grid-column: 2;
+        grid-row: 2;
+        overflow-y: auto; /* Permette lo scrolling solo del contenuto principale */
+        padding-bottom: 20px; /* Ripristina padding per desktop */
+    }
+}
+
+/* Stile per la nav inferiore (Mobile) */
+@media (max-width: 768px) {
+    #menu-toggle {
+        display: block; /* Mostra il toggle su mobile */
+    }
+
+    #main-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #ffffff;
+        border-top: 1px solid #dee2e6;
+        display: flex;
+        overflow-x: auto; /* Permette lo scrolling orizzontale */
+        -webkit-overflow-scrolling: touch; /* Scrolling più fluido su iOS */
+        z-index: 1000;
+    }
+
+    /* Nasconde la barra di scorrimento ma mantiene la funzionalità */
+    #main-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-item {
+        flex: 0 0 auto; /* Impedisce agli item di restringersi */
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-top: 3px solid transparent;
+        font-size: 0.75rem;
+        text-align: center;
+    }
+
+    .nav-item .material-symbols-outlined {
+        margin-right: 0;
+        margin-bottom: 4px;
+        font-size: 24px;
+    }
+
+    .nav-item.active {
+        color: #007bff;
+        border-top-color: #007bff;
+        border-left-color: transparent; /* Rimuove il bordo laterale */
+    }
+}
+
+/* --- Componenti riutilizzabili (pulsanti, tabelle, etc.) --- */
+
+.page-description {
     margin-bottom: 20px;
+    color: #555;
 }
 
-.filter-controls {
+h2 {
     display: flex;
+    align-items: center;
     gap: 10px;
 }
 
-.filter-controls input[type="text"],
-.filter-controls select {
-    padding: 8px;
-    border: 1px solid #ccc;
+.toolbar {
+    display: flex;
+    flex-wrap: wrap; /* Permette di andare a capo su schermi piccoli */
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 15px;
     border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-weight: 500;
+    text-decoration: none;
 }
 
 .btn-primary {
     background-color: #007bff;
     color: white;
-    border: 1px solid #007bff;
+    border-color: #007bff;
 }
 
-/* Stili per la tabella */
+.btn-primary:hover { background-color: #0056b3; }
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+.btn-danger:hover { background-color: #c82333; }
+
 .table-container {
     width: 100%;
     overflow-x: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #ffffff;
 }
 
 table {
@@ -110,10 +208,9 @@ table {
     border-collapse: collapse;
 }
 
-table th,
-table td {
-    padding: 12px;
-    border: 1px solid #dee2e6;
+table th, table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6;
     text-align: left;
 }
 
@@ -121,88 +218,133 @@ table th {
     background-color: #f8f9fa;
 }
 
-/* Stili per le impostazioni */
-.settings-section {
-    margin-top: 20px;
-    border-top: 1px solid #dee2e6;
-    padding-top: 20px;
+table tr:last-child td {
+    border-bottom: none;
 }
 
-.settings-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: white;
-    border: 1px solid #6c757d;
-}
-
-/* Stili per la modale */
+/* Stili per la Modale */
 .modal {
     display: none; 
     position: fixed; 
-    z-index: 1; 
+    z-index: 2000; 
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto; 
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    width: 90%;
     max-width: 500px;
-    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-.close-btn {
+.close-button {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
-}
-
-.close-btn:hover,
-.close-btn:focus {
-    color: black;
-    text-decoration: none;
     cursor: pointer;
 }
 
-/* Stili per i form nelle modali */
-#add-class-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+/* Form all'interno delle modali */
+.form-group {
+    margin-bottom: 15px;
 }
 
-#add-class-form label {
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
-#add-class-form input[type="text"] {
+.form-group input, 
+.form-group select,
+.form-group textarea {
+    width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
-#add-class-form button {
-    align-self: flex-end;
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* --- Stili Specifici per l'Orario --- */
+.schedule-grid {
+    display: grid;
+    gap: 2px;
+    background-color: #dee2e6;
+    border: 1px solid #dee2e6;
+}
+
+.schedule-header {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    position: sticky; /* Sticky per le intestazioni */
+    top: 0; 
+}
+
+.schedule-cell {
+    background-color: #ffffff;
+    min-height: 80px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    padding: 5px;
+}
+
+.schedule-cell:hover {
+    background-color: #e9ecef;
+}
+
+.lesson {
+    padding: 8px;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.85rem;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.lesson-class { font-weight: bold; display: block; }
+.lesson-notes { font-size: 0.8rem; opacity: 0.9; }
+
+/* --- Stili Specifici per le Statistiche --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.span-4 { grid-column: span 4; }
+
+#student-chart-container,
+#class-chart-container {
+    height: 400px; /* Altezza fissa per contenere il canvas */
+}
+
+canvas {
+    max-height: 100%;
 }

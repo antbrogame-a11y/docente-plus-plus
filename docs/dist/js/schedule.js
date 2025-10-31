@@ -9,6 +9,7 @@ const setupSchedule = () => {
     const modalNotes = document.getElementById('modal-notes');
     const modalSaveButton = document.getElementById('modal-save-button');
     const modalDeleteButton = document.getElementById('modal-delete-button');
+    const exportScheduleBtn = document.getElementById('export-schedule-btn'); // Nuovo
 
     // --- CONFIGURAZIONE E DATI ---
     const days = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
@@ -19,17 +20,11 @@ const setupSchedule = () => {
 
     // --- FUNZIONI PRINCIPALI ---
 
-    /**
-     * Crea la struttura della griglia dell'orario, con intestazioni per giorni e ore.
-     */
     const createGrid = () => {
         gridContainer.innerHTML = '';
         gridContainer.style.gridTemplateColumns = `auto repeat(${days.length}, 1fr)`;
 
-        // Intestazione vuota angolo in alto a sinistra
-        gridContainer.appendChild(document.createElement('div'));
-
-        // Intestazioni dei giorni
+        gridContainer.appendChild(document.createElement('div')); // Angolo vuoto
         days.forEach(day => {
             const dayHeader = document.createElement('div');
             dayHeader.className = 'schedule-header';
@@ -37,17 +32,14 @@ const setupSchedule = () => {
             gridContainer.appendChild(dayHeader);
         });
 
-        // Righe delle ore
         hours.forEach(hour => {
             const hourHeader = document.createElement('div');
             hourHeader.className = 'schedule-header';
             hourHeader.textContent = hour;
             gridContainer.appendChild(hourHeader);
 
-            // Celle per ogni giorno in questa fascia oraria
             days.forEach(day => {
                 const cell = document.createElement('div');
-                const slotId = `${day}-${hour}`;
                 cell.className = 'schedule-cell';
                 cell.dataset.day = day;
                 cell.dataset.hour = hour;
@@ -57,13 +49,8 @@ const setupSchedule = () => {
         });
     };
 
-    /**
-     * Popola la griglia con i dati delle lezioni salvati.
-     */
     const populateGrid = () => {
-        // Rimuove le lezioni esistenti per evitare duplicati
         document.querySelectorAll('.lesson').forEach(lessonEl => lessonEl.remove());
-
         for (const slotId in scheduleData) {
             const lesson = scheduleData[slotId];
             const cell = gridContainer.querySelector(`[data-day="${lesson.day}"][data-hour="${lesson.hour}"]`);
@@ -76,24 +63,22 @@ const setupSchedule = () => {
                             ${lesson.notes ? `<span class="lesson-notes">${lesson.notes}</span>` : ''}
                         </div>
                     `;
+                } else { // Se la classe è stata eliminata, pulisci i dati
+                     delete scheduleData[slotId];
+                     saveData('docentepp_schedule', scheduleData);
+                     cell.innerHTML = '';
                 }
             } else if (cell) {
-                 cell.innerHTML = ''; // Pulisce la cella se non c'è lezione
+                 cell.innerHTML = '';
             }
         }
     };
 
-    /**
-     * Apre la modale per un dato slot (giorno/ora) e la popola.
-     */
     const openModal = (day, hour) => {
         currentSlot = { day, hour };
         const slotId = `${day}-${hour}`;
         const existingLesson = scheduleData[slotId];
-
         modalSlotInfo.textContent = `Slot: ${day}, Ora: ${hour}`;
-
-        // Popola il selettore delle classi
         modalClassSelector.innerHTML = '<option value="">-- Nessuna --</option>';
         classes.forEach(c => {
             const option = document.createElement('option');
@@ -111,46 +96,30 @@ const setupSchedule = () => {
             modalNotes.value = '';
             modalDeleteButton.style.display = 'none';
         }
-
         modal.style.display = 'flex';
     };
 
-    /**
-     * Chiude la modale.
-     */
     const closeModal = () => {
         modal.style.display = 'none';
         currentSlot = null;
     };
 
-    /**
-     * Salva la lezione corrente dalla modale nel localStorage.
-     */
     const saveLesson = () => {
         if (!currentSlot) return;
         const slotId = `${currentSlot.day}-${currentSlot.hour}`;
         const classId = modalClassSelector.value;
         const notes = modalNotes.value.trim();
 
-        if (classId) { // Salva solo se è stata selezionata una classe
-            scheduleData[slotId] = {
-                day: currentSlot.day,
-                hour: currentSlot.hour,
-                classId: classId,
-                notes: notes
-            };
-        } else { // Altrimenti rimuove la lezione dallo slot
+        if (classId) {
+            scheduleData[slotId] = { day: currentSlot.day, hour: currentSlot.hour, classId: classId, notes: notes };
+        } else {
             delete scheduleData[slotId];
         }
-
         saveData('docentepp_schedule', scheduleData);
         populateGrid();
         closeModal();
     };
 
-    /**
-     * Elimina la lezione per lo slot corrente.
-     */
     const deleteLesson = () => {
         if (!currentSlot) return;
         const slotId = `${currentSlot.day}-${currentSlot.hour}`;
@@ -160,14 +129,50 @@ const setupSchedule = () => {
         closeModal();
     };
 
+    // NUOVA FUNZIONE: Esportazione CSV
+    const exportScheduleToCSV = () => {
+        const header = ['"Ora"'].concat(days.map(d => `"${d}"`)).join(',');
+        
+        const rows = hours.map(hour => {
+            const row = [`"${hour}"`];
+            days.forEach(day => {
+                const slotId = `${day}-${hour}`;
+                const lesson = scheduleData[slotId];
+                let cellContent = '';
+                if (lesson && lesson.classId) {
+                    const classInfo = classes.find(c => c.id === parseInt(lesson.classId));
+                    if (classInfo) {
+                        cellContent = `${classInfo.name}`;
+                        if (lesson.notes) {
+                            cellContent += ` (${lesson.notes})`;
+                        }
+                    }
+                }
+                row.push(`"${cellContent.replace(/"/g, '''''''')}"`); // Escape double quotes
+            });
+            return row.join(',');
+        });
+
+        const csvString = [header].concat(rows).join('\n');
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'orario_scolastico.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     // --- EVENT LISTENERS ---
     modalCloseButton.addEventListener('click', closeModal);
     modalSaveButton.addEventListener('click', saveLesson);
     modalDeleteButton.addEventListener('click', deleteLesson);
+    exportScheduleBtn.addEventListener('click', exportScheduleToCSV); // Nuovo listener
     window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            closeModal();
-        }
+        if (event.target === modal) closeModal();
     });
 
     // --- INIZIALIZZAZIONE ---

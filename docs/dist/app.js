@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- ELEMENTI GLOBALI ---
     const mainContent = document.querySelector('main');
     const navItems = document.querySelectorAll('.nav-item');
+    const welcomeModal = document.getElementById('welcome-modal');
+    const closeWelcomeBtn = document.getElementById('close-welcome-btn');
+    const startTourBtn = document.getElementById('start-tour-btn');
 
     // --- VARIABILI GLOBALI (per i moduli) ---
     window.firebaseConfig = {};
@@ -32,6 +35,19 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.nav-item.active')?.classList.remove('active');
         document.querySelector(`.nav-item[data-tab="${tab}"]`)?.classList.add('active');
         loadContent(tab);
+    };
+
+    // --- LOGICA ONBOARDING ---
+    const closeWelcomeModal = () => {
+        welcomeModal.style.display = 'none';
+        saveData('docentepp_hasVisited', true);
+    };
+
+    const handleOnboarding = () => {
+        const hasVisited = loadData('docentepp_hasVisited', false);
+        if (!hasVisited) {
+            welcomeModal.style.display = 'flex';
+        }
     };
 
     // --- ROUTER PRINCIPALE ---
@@ -95,9 +111,20 @@ document.addEventListener('DOMContentLoaded', () => {
             item.addEventListener('click', () => navigateToTab(item.dataset.tab));
         });
 
+        // Listener per i pulsanti del modale di benvenuto
+        closeWelcomeBtn.addEventListener('click', closeWelcomeModal);
+        startTourBtn.addEventListener('click', () => {
+            closeWelcomeModal();
+            // TODO: In futuro, avviare qui il tour interattivo.
+            console.log("Avvio del tour guidato...");
+        });
+
         const initialTab = 'agenda';
         document.querySelector(`.nav-item[data-tab="${initialTab}"]`).classList.add('active');
         loadContent(initialTab);
+
+        // Controlla se mostrare il messaggio di benvenuto
+        handleOnboarding();
     };
 
     fetch('../firebase-config.json') // CORREZIONE: Path corretto per file nella root

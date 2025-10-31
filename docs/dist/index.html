@@ -2,41 +2,43 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=de-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Docente ++</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#2a3b4d"/>
 
+    <!-- Intro.js CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/intro.js/minified/introjs.min.css">
+
     <!-- Chart.js - Libreria per Grafici -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 <body>
-    <header>
-        <button id="menu-toggle" class="btn-icon"><span class="material-symbols-outlined">menu</span></button>
+    <header data-step="1" data-intro="Questa è l'intestazione principale dell'applicazione.">
         <h1>Docente ++</h1>
     </header>
 
-    <nav id="main-nav">
+    <nav id="main-nav" data-step="2" data-intro="Usa questa barra di navigazione per spostarti tra le diverse sezioni: Dashboard, Classi, Studenti, Valutazioni e altro ancora.">
         <div class="nav-item active" data-tab="agenda">
             <span class="material-symbols-outlined">dashboard</span>
             Dashboard
         </div>
-        <div class="nav-item" data-tab="classes">
+        <div class="nav-item" data-tab="classes" data-step="3" data-intro="Qui puoi creare e gestire le tue classi. Assegna un nome e un colore unico a ciascuna!">
             <span class="material-symbols-outlined">school</span>
             Classi
         </div>
-        <div class="nav-item" data-tab="students">
+        <div class="nav-item" data-tab="students" data-step="4" data-intro="Aggiungi e organizza i tuoi studenti, associandoli alle classi che hai creato.">
             <span class="material-symbols-outlined">groups</span>
             Studenti
         </div>
-        <div class="nav-item" data-tab="evaluations">
+        <div class="nav-item" data-tab="evaluations" data-step="5" data-intro="Registra le valutazioni dei tuoi studenti, calcola le medie e tieni traccia dei loro progressi.">
             <span class="material-symbols-outlined">grading</span>
             Valutazioni
         </div>
-        <div class="nav-item" data-tab="schedule">
+        <div class="nav-item" data-tab="schedule" data-step="6" data-intro="Definisci il tuo orario settimanale, associando le classi alle diverse ore.">
             <span class="material-symbols-outlined">calendar_view_week</span>
             Orario
         </div>
@@ -44,7 +46,7 @@
             <span class="material-symbols-outlined">monitoring</span>
             Statistiche
         </div>
-        <div class="nav-item" data-tab="aiAssistant">
+        <div class="nav-item" data-tab="aiAssistant" data-step="7" data-intro="Usa l'Assistente IA per ricevere aiuto, generare dati di esempio o automatizzare compiti.">
             <span class="material-symbols-outlined">smart_toy</span>
             Assistente IA
         </div>
@@ -54,13 +56,41 @@
         </div>
     </nav>
 
-    <main>
+    <!-- Welcome Onboarding Modal -->
+    <div id="welcome-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Benvenuto in Docente ++!</h2>
+            <p>La tua nuova app per la gestione della didattica, semplice e offline.</p>
+            <p>Docente ++ ti aiuta a organizzare:</p>
+            <ul>
+                <li>Le tue <strong>Classi</strong> e il loro colore</li>
+                <li>Gli <strong>Studenti</strong> per ogni classe</li>
+                <li><strong>Valutazioni</strong>, medie e note</li>
+                <li>L'<strong>Orario</strong> settimanale delle lezioni</li>
+            </ul>
+            <p>Tutti i dati sono salvati <strong>solo sul tuo dispositivo</strong> per la massima privacy. Inizia subito a esplorare!</p>
+            <div class="modal-actions">
+                <button id="start-tour-btn" class="btn btn-primary">Fai un Tour Guidato</button>
+                <button id="close-welcome-btn" class="btn btn-secondary">Inizia a Usare l'App</button>
+            </div>
+        </div>
+    </div>
+
+    <main data-step="8" data-intro="In quest'area vedrai il contenuto principale della sezione selezionata. Iniziamo con la Dashboard!">
         <!-- Il contenuto viene caricato dinamicamente qui da app.js -->
     </main>
+
+    <!-- Pulsante Aiuto/Tour (FAB) -->
+    <button id="help-tour-btn" class="fab" title="Fai un tour guidato" data-step="9" data-intro="Usa questo pulsante in qualsiasi momento per far ripartire il tour guidato.">
+        <span class="material-symbols-outlined">help_outline</span>
+    </button>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-vertexai-compat.js"></script>
+    
+    <!-- Intro.js JS -->
+    <script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
 
     <!-- Main App Logic -->
     <script src="dist/app.js" defer></script>

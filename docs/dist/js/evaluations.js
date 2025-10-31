@@ -11,8 +11,9 @@ const setupEvaluations = () => {
     const classSelect = document.getElementById('eval-class-select');
     const studentSelect = document.getElementById('eval-student-select');
     const evaluationListTitle = document.getElementById('evaluation-list-title');
-    const evaluationListDiv = document.getElementById('evaluation-list');
+    const evaluationListContainer = document.getElementById('evaluation-list');
     const addEvaluationBtn = document.getElementById('add-evaluation-btn');
+    const exportEvaluationsBtn = document.getElementById('export-evaluations-btn'); // Nuovo
 
     // Elementi del Modale
     const modal = document.getElementById('evaluation-modal');
@@ -33,89 +34,115 @@ const setupEvaluations = () => {
     // --- FUNZIONI ---
 
     const populateClasses = () => {
-        classSelect.innerHTML = '<option value="">Seleziona una classe...</option>';
+        const currentVal = classSelect.value;
+        classSelect.innerHTML = '<option value="">Tutte le classi</option>';
         classes.forEach(c => {
             const option = document.createElement('option');
             option.value = c.id;
             option.textContent = c.name;
             classSelect.appendChild(option);
         });
+        classSelect.value = currentVal;
     };
 
     const populateStudents = (classId) => {
-        studentSelect.innerHTML = '<option value="">Seleziona uno studente...</option>';
+        const currentVal = studentSelect.value;
+        studentSelect.innerHTML = '<option value="">Tutti gli studenti</option>';
         if (!classId) {
             studentSelect.disabled = true;
             return;
         }
         const filteredStudents = students.filter(s => s.classId === Number(classId));
-        studentSelect.disabled = filteredStudents.length === 0;
-        if(filteredStudents.length === 0) studentSelect.innerHTML = '<option value="">Nessuno studente</option>';
-
-        filteredStudents.forEach(s => {
+        studentSelect.disabled = false;
+        
+        filteredStudents.sort((a,b) => a.surname.localeCompare(b.surname)).forEach(s => {
             const option = document.createElement('option');
             option.value = s.id;
-            option.textContent = `${s.name} ${s.surname}`;
+            option.textContent = `${s.surname} ${s.name}`;
             studentSelect.appendChild(option);
         });
+        studentSelect.value = currentVal;
     };
 
-    const renderEvaluations = (studentId) => {
-        evaluationListDiv.innerHTML = '';
+    // REFACTOR: Usa una tabella per mostrare le valutazioni
+    const renderEvaluations = (classId, studentId) => {
+        evaluationListContainer.innerHTML = '';
         addEvaluationBtn.disabled = !studentId;
-        const selectedStudent = students.find(s => s.id === Number(studentId));
+        exportEvaluationsBtn.disabled = !classId;
+        
+        let title = 'Valutazioni';
+        let filteredEvaluations = evaluations;
 
-        if (!studentId || !selectedStudent) {
-            evaluationListTitle.textContent = 'Valutazioni';
-            evaluationListDiv.innerHTML = '<p class="empty-list-message">Seleziona uno studente per vedere le sue valutazioni.</p>';
-            return;
+        if (classId) {
+            const selectedClass = classes.find(c => c.id === Number(classId));
+            title += ` della ${selectedClass.name}`;
+            // Filtra le valutazioni per gli studenti appartenenti alla classe selezionata
+            const studentIdsInClass = students.filter(s => s.classId === Number(classId)).map(s => s.id);
+            filteredEvaluations = evaluations.filter(ev => studentIdsInClass.includes(ev.studentId));
         }
 
-        const filteredEvaluations = evaluations.filter(ev => ev.studentId === Number(studentId));
-        const average = filteredEvaluations.length > 0 ? (filteredEvaluations.reduce((acc, curr) => acc + Number(curr.grade), 0) / filteredEvaluations.length).toFixed(2) : 'N/A';
+        if (studentId) {
+            const selectedStudent = students.find(s => s.id === Number(studentId));
+            title = `Valutazioni di ${selectedStudent.surname} ${selectedStudent.name}`;
+            filteredEvaluations = filteredEvaluations.filter(ev => ev.studentId === Number(studentId));
+        }
 
-        evaluationListTitle.textContent = `Valutazioni di ${selectedStudent.name} ${selectedStudent.surname} (Media: ${average})`;
+        evaluationListTitle.textContent = title;
 
         if (filteredEvaluations.length === 0) {
-            evaluationListDiv.innerHTML = '<p class="empty-list-message">Nessuna valutazione per questo studente.</p>';
+            evaluationListContainer.innerHTML = '<p>Nessuna valutazione trovata per i filtri selezionati.</p>';
             return;
         }
         
-        // Ordina per data più recente
+        const table = document.createElement('table');
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Voto</th>
+                    ${!studentId ? '<th>Studente</th>' : ''} <!-- Mostra colonna studente solo se non filtrato per studente -->
+                    <th>Note</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        `;
+        const tbody = table.querySelector('tbody');
+
         filteredEvaluations.sort((a, b) => new Date(b.date) - new Date(a.date));
 
         filteredEvaluations.forEach(ev => {
-            const evalElement = document.createElement('div');
-            evalElement.className = 'list-item';
-            evalElement.innerHTML = `
-                <div class="list-item-main">
-                    <span class="grade-badge">${ev.grade}</span>
-                    <div>
-                        <span><strong>${new Date(ev.date).toLocaleDateString()}</strong><br>
-                        <small>${ev.notes || 'Nessuna nota'}</small></span>
-                    </div>
-                </div>
-                <div class="list-item-actions">
-                    <button class="btn-icon btn-edit" data-id="${ev.id}"><span class="material-symbols-outlined">edit</span></button>
-                    <button class="btn-icon btn-delete" data-id="${ev.id}"><span class="material-symbols-outlined">delete</span></button>
-                </div>
+            const student = students.find(s => s.id === ev.studentId);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${new Date(ev.date).toLocaleDateString()}</td>
+                <td><b>${ev.grade}</b></td>
+                ${!studentId ? `<td>${student ? `${student.surname} ${student.name}` : 'N/A'}</td>` : ''}
+                <td>${ev.notes || '-'}</td>
+                <td class="actions">
+                    <button class="btn-icon btn-edit" data-id="${ev.id}" title="Modifica"><span class="material-symbols-outlined">edit</span></button>
+                    <button class="btn-icon btn-delete" data-id="${ev.id}" title="Elimina"><span class="material-symbols-outlined">delete</span></button>
+                </td>
             `;
-            evalElement.querySelector('.btn-edit').addEventListener('click', () => openModal(ev.id));
-            evalElement.querySelector('.btn-delete').addEventListener('click', () => deleteEvaluation(ev.id));
-            evaluationListDiv.appendChild(evalElement);
+            tr.querySelector('.btn-edit').addEventListener('click', () => openModal(ev.id));
+            tr.querySelector('.btn-delete').addEventListener('click', () => deleteEvaluation(ev.id));
+            tbody.appendChild(tr);
         });
+        evaluationListContainer.appendChild(table);
     };
 
     const openModal = (evaluationId = null) => {
         const studentId = Number(studentSelect.value);
-        if (!studentId) return;
+        if (!studentId) {
+            alert("Seleziona prima uno studente per aggiungere una valutazione.");
+            return;
+        }
 
         evaluationForm.reset();
         evaluationStudentIdInput.value = studentId;
-        dateInput.valueAsDate = new Date(); // Imposta data odierna di default
+        dateInput.valueAsDate = new Date();
 
         if (evaluationId) {
-            // Modal in modalità Modifica
             modalTitle.textContent = 'Modifica Valutazione';
             const evaluation = evaluations.find(ev => ev.id === evaluationId);
             if (evaluation) {
@@ -125,7 +152,6 @@ const setupEvaluations = () => {
                 notesInput.value = evaluation.notes;
             }
         } else {
-            // Modal in modalità Aggiungi
             modalTitle.textContent = 'Aggiungi Valutazione';
             evaluationIdInput.value = '';
         }
@@ -148,16 +174,14 @@ const setupEvaluations = () => {
 
         if (evaluationId) {
             const index = evaluations.findIndex(ev => ev.id === evaluationId);
-            if (index !== -1) {
-                evaluations[index] = { ...evaluations[index], ...evalData };
-            }
+            if (index !== -1) evaluations[index] = { ...evaluations[index], ...evalData };
         } else {
             evalData.id = Date.now();
             evaluations.push(evalData);
         }
 
         saveData('docentepp_evaluations', evaluations);
-        renderEvaluations(evalData.studentId);
+        renderEvaluations(classSelect.value, studentSelect.value);
         closeModal();
     };
 
@@ -165,17 +189,73 @@ const setupEvaluations = () => {
         if (confirm('Sei sicuro di voler eliminare questa valutazione?')) {
             evaluations = evaluations.filter(ev => ev.id !== evaluationId);
             saveData('docentepp_evaluations', evaluations);
-            renderEvaluations(studentSelect.value);
+            renderEvaluations(classSelect.value, studentSelect.value);
         }
+    };
+
+    // NUOVA FUNZIONE: Esportazione in CSV
+    const exportEvaluationsToCSV = () => {
+        const classId = Number(classSelect.value);
+        const studentId = Number(studentSelect.value);
+
+        if (!classId) {
+            alert("Seleziona almeno una classe per esportare le valutazioni.");
+            return;
+        }
+
+        const selectedClass = classes.find(c => c.id === classId);
+        let studentsInClass = students.filter(s => s.classId === classId);
+
+        let evaluationsToExport = evaluations.filter(ev => studentsInClass.some(s => s.id === ev.studentId));
+        let fileName = `valutazioni_${selectedClass.name.replace(/\s+/g, '_')}.csv`;
+
+        // Se è selezionato uno studente specifico, filtra ulteriormente
+        if (studentId) {
+            const selectedStudent = students.find(s => s.id === studentId);
+            evaluationsToExport = evaluationsToExport.filter(ev => ev.studentId === studentId);
+            fileName = `valutazioni_${selectedStudent.surname}_${selectedStudent.name}.csv`;
+        }
+        
+        const csvRows = ['"Cognome Studente","Nome Studente","Voto","Data","Note"']; // Intestazione
+
+        evaluationsToExport.forEach(ev => {
+            const student = students.find(s => s.id === ev.studentId);
+            if (!student) return;
+
+            const row = [
+                `"${student.surname}"`,
+                `"${student.name}"`,
+                `"${ev.grade}"`,
+                `"${new Date(ev.date).toLocaleDateString()}"`,
+                `"${ev.notes.replace(/"/g, '''')}"` // Sostituisce le virgolette nelle note
+            ].join(',');
+            csvRows.push(row);
+        });
+
+        const csvString = csvRows.join('\n');
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', fileName);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     // --- EVENT LISTENER ---
     classSelect.addEventListener('change', (e) => {
-        populateStudents(e.target.value);
-        renderEvaluations(null); // Pulisce la lista quando la classe cambia
+        const classId = e.target.value;
+        populateStudents(classId);
+        renderEvaluations(classId, null);
     });
-    studentSelect.addEventListener('change', (e) => renderEvaluations(e.target.value));
+    studentSelect.addEventListener('change', (e) => {
+        renderEvaluations(classSelect.value, e.target.value);
+    });
     addEvaluationBtn.addEventListener('click', () => openModal());
+    exportEvaluationsBtn.addEventListener('click', exportEvaluationsToCSV); // Nuovo
     closeModalBtn.addEventListener('click', closeModal);
     evaluationForm.addEventListener('submit', handleFormSubmit);
     window.addEventListener('click', (e) => {
@@ -185,5 +265,7 @@ const setupEvaluations = () => {
     // --- INIZIALIZZAZIONE ---
     populateClasses();
     populateStudents(null);
-    renderEvaluations(null);
+    renderEvaluations(null, null);
+    studentSelect.disabled = true; // Inizia disabilitato
+    exportEvaluationsBtn.disabled = true; // Inizia disabilitato
 };
