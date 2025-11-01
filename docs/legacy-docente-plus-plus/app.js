@@ -15,7 +15,7 @@ Object.assign(loadingOverlay.style, {
     alignItems: 'center', zIndex: '1000', transition: 'opacity 0.3s'
 });
 const showLoading = (message) => {
-    loadingOverlay.innerHTML = `<p style=\"font-size: 1.2em; color: #333;\">${message}</p>`;
+    loadingOverlay.innerHTML = `<p style="font-size: 1.2em; color: #333;">${message}</p>`;
     document.body.appendChild(loadingOverlay);
 };
 const hideLoading = () => {
@@ -40,7 +40,7 @@ window.addEventListener('auth-changed', ({ detail: { user } }) => {
         console.log("Nessun utente. Visualizzo schermata di login.");
         navContainer.style.display = 'none'; // Nascondi navigazione
         mainContent.innerHTML = `
-            <div style=\"text-align: center; padding-top: 50px;\">
+            <div style="text-align: center; padding-top: 50px;">
                 <h2>Accesso Richiesto</h2>
                 <p>Per favore, effettua il login per usare l'applicazione.</p>
             </div>
@@ -93,7 +93,7 @@ const loadContent = (tab) => {
         })
         .catch(error => {
             console.error("Errore nel caricamento dei contenuti:", error);
-            mainContent.innerHTML = `<p style=\"color: red; text-align: center;\">${error.message}</p>`;
+            mainContent.innerHTML = `<p style="color: red; text-align: center;">${error.message}</p>`;
         });
 };
 
@@ -110,26 +110,22 @@ moreMenuToggle.addEventListener('click', (e) => {
 window.addEventListener('click', () => moreMenuPanel.classList.remove('active'));
 
 // --- INIZIALIZZAZIONE DELL'APP ---
-// Questo script è eseguito da firebase-init.js, quindi Firebase è già pronto.
-console.log("app.js in esecuzione. Firebase è inizializzato.");
-showLoading('Verifica autenticazione...');
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM completamente caricato. Inizializzo l'app.");
+    showLoading('Verifica autenticazione...');
 
-// Carica il modulo di autenticazione. Questo attiverà l'evento 'auth-changed'.
-const authScript = document.createElement('script');
-authScript.src = 'js/auth.js';
-authScript.onload = () => {
-    // La funzione setupAuth è definita in auth.js
-    if (window.setupAuth) {
-        window.setupAuth(firebase.app());
-    } else {
-        console.error("Funzione setupAuth non trovata!");
+    // Poiché auth.js è caricato da index.html prima di questo script,
+    // possiamo chiamare direttamente la funzione di setup.
+    try {
+        if (window.setupAuth && firebase.app()) {
+            console.log("SetupAuth e Firebase pronti. Configuro l'autenticazione.");
+            window.setupAuth(firebase.app());
+        } else {
+            throw new Error("Funzione setupAuth o app Firebase non trovate!");
+        }
+    } catch (error) {
+        console.error("Errore critico durante l'impostazione dell'autenticazione:", error);
         hideLoading();
-        mainContent.innerHTML = '<p style="color: red; text-align: center;">Errore critico: modulo di autenticazione corrotto.</p>';
+        mainContent.innerHTML = '<p style="color: red; text-align: center;">Errore critico: modulo di autenticazione corrotto o mancante.</p>';
     }
-};
-authScript.onerror = () => {
-    console.error("Impossibile caricare il modulo di autenticazione js/auth.js");
-    hideLoading();
-    mainContent.innerHTML = '<p style="color: red; text-align: center;">Errore critico: impossibile caricare il modulo di autenticazione.</p>';
-};
-document.head.appendChild(authScript);
+});
