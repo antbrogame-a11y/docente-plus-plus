@@ -27,3 +27,18 @@
     </div>
 
 </div>
+
+<script src="js/firestore.js"></script>
+<script src="js/documentImport.js"></script>
+<script>
+    // Inizializza la logica di importazione quando il DOM è pronto
+    document.addEventListener('DOMContentLoaded', () => {
+        // La funzione setupDocumentImport si trova in documentImport.js
+        if (typeof setupDocumentImport === 'function') {
+            setupDocumentImport();
+        } else {
+            console.error("La funzione di setup per l'importazione non è stata trovata.");
+            document.getElementById('import-result').innerHTML = '<p class="error">Errore critico: impossibile caricare il modulo di importazione.</p>';
+        }
+    });
+</script>
