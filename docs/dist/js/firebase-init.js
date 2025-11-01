@@ -12,6 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const app = firebase.initializeApp(firebaseConfig);
         console.log("Firebase inizializzato con successo dalla configurazione.");
+
+        // Use emulators if on localhost
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          console.log("Connecting to Firebase emulators");
+          firebase.firestore().useEmulator("localhost", 9014);
+          firebase.storage().useEmulator("localhost", 9199);
+          firebase.auth().useEmulator('http://localhost:9099');
+        }
         
         // Invia l'evento per notificare che Firebase è pronto
         const event = new CustomEvent('firebase-ready', { detail: { firebaseApp: app } });

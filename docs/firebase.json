@@ -30,6 +30,9 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
+  "storage": {
+    "rules": "storage.rules"
+  },
   "emulators": {
     "hosting": {
       "host": "0.0.0.0",
@@ -50,6 +53,14 @@
     "logging": {
       "host": "0.0.0.0",
       "port": 9012
+    },
+    "storage": {
+      "host": "0.0.0.0",
+      "port": 9199
+    },
+    "auth": {
+      "host": "0.0.0.0",
+      "port": 9099
     }
   }
 }
