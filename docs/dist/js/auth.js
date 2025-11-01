@@ -1,5 +1,5 @@
 // Funzione per configurare l'interfaccia di autenticazione
-window.setupAuth = (firebaseApp) => {
+/* window.setupAuth = (firebaseApp) => {
     const auth = firebaseApp.auth();
     const authContainer = document.getElementById('auth-container');
 
@@ -36,4 +36,4 @@ window.setupAuth = (firebaseApp) => {
             });
         }
     });
-};
+}; */
