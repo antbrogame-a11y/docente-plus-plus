@@ -1,5 +1,7 @@
 {
-  "projects": {},
+  "projects": {
+    "default": "docente-plus-plus-577885-d9bd1"
+  },
   "targets": {},
   "etags": {}
 }
