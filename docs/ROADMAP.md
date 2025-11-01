@@ -51,3 +51,16 @@ Ora che la Fase 2 è consolidata, possiamo portare l'applicazione al livello suc
 
 3.  **Gestione Attività Didattiche**
     *   **Obiettivo**: Completare la sezione `lessons.html` per tracciare piani di lezione e attività svolte.
+
+---
+
+### 🚀 **Fase 4: Modello di Accesso e Sostenibilità**
+
+Questa fase definisce la filosofia di accesso all'applicazione, garantendo che rimanga uno strumento democratico e accessibile.
+
+*   **Principio Guida: Gratuito per i Docenti**
+    *   **Obiettivo**: DocentEpp sarà **sempre gratuita** per l'utilizzo da parte di docenti individuali.
+    *   **Come**: Sfruttando il generoso piano gratuito "Spark" di Firebase, possiamo offrire tutte le funzionalità principali (Fasi 1-3) senza alcun costo per l'utente finale.
+*   **Sostenibilità a Lungo Termine**
+    *   **Obiettivo**: Garantire la longevità e l'evoluzione del progetto.
+    *   **Azioni Future**: In futuro, potranno essere introdotte funzionalità *premium* opzionali o piani specifici per istituti scolastici. Questo modello garantirà le risorse per la manutenzione e lo sviluppo di nuove feature, **mantenendo il nucleo dell'app gratuito per sempre**.
