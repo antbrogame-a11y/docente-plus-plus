@@ -145,3 +145,5 @@ const setupClasses = () => {
     console.log("Modulo Classi caricato e configurato con Firestore.");
 };
 
+// Avvia la configurazione non appena lo script viene eseguito.
+setupClasses();

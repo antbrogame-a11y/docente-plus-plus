@@ -1,45 +1,16 @@
 {
   "hosting": {
-    "public": "legacy-docente-plus-plus",
-    "rewrites": [
-      {
-        "source": "/**",
-        "destination": "/index.html"
-      }
-    ],
-    "headers": [
-      {
-        "source": "**",
-        "headers": [
-          {
-            "key": "Access-Control-Allow-Origin",
-            "value": "*"
-          }
-        ]
-      }
-    ],
+    "public": ".",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
-  },
-  "emulators": {
-    "hosting": {
-      "host": "0.0.0.0",
-      "port": 9013
-    },
-    "hub": {
-      "host": "0.0.0.0",
-      "port": 9011
-    },
-    "ui": {
-      "host": "0.0.0.0",
-      "port": 9010
-    },
-    "logging": {
-      "host": "0.0.0.0",
-      "port": 9012
-    }
   }
 }

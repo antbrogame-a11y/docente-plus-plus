@@ -30,15 +30,15 @@ const hideLoading = () => {
 // --- Gestore di Stato Autenticazione (Router Principale) ---
 window.addEventListener('auth-changed', ({ detail: { user } }) => {
     currentUser = user;
-    hideLoading(); // Nascondi overlay non appena lo stato auth è noto
+    hideLoading(); 
 
     if (user) {
         console.log("Utente autenticato. Avvio dell'app...");
-        navContainer.style.display = ''; // Mostra la navigazione
-        navigateToTab('agenda'); // Carica la dashboard come default
+        navContainer.style.display = ''; 
+        navigateToTab('agenda'); 
     } else {
         console.log("Nessun utente. Visualizzo schermata di login.");
-        navContainer.style.display = 'none'; // Nascondi navigazione
+        navContainer.style.display = 'none'; 
         mainContent.innerHTML = `
             <div style="text-align: center; padding-top: 50px;">
                 <h2>Accesso Richiesto</h2>
@@ -78,7 +78,6 @@ const loadContent = (tab) => {
         })
         .then(html => {
             mainContent.innerHTML = html;
-            // Esegui gli script presenti nel contenuto caricato
             const scripts = mainContent.querySelectorAll("script");
             scripts.forEach(script => {
                 const newScript = document.createElement("script");
@@ -97,7 +96,7 @@ const loadContent = (tab) => {
         });
 };
 
-// Associa gli eventi di navigazione
+// --- Eventi di Navigazione ---
 allNavItems.forEach(item => {
     if (item.id !== 'more-menu-toggle') {
         item.addEventListener('click', () => navigateToTab(item.dataset.tab));
@@ -109,23 +108,7 @@ moreMenuToggle.addEventListener('click', (e) => {
 });
 window.addEventListener('click', () => moreMenuPanel.classList.remove('active'));
 
-// --- INIZIALIZZAZIONE DELL'APP ---
+// --- Inizializzazione ---
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM completamente caricato. Inizializzo l'app.");
-    showLoading('Verifica autenticazione...');
-
-    // Poiché auth.js è caricato da index.html prima di questo script,
-    // possiamo chiamare direttamente la funzione di setup.
-    try {
-        if (window.setupAuth && firebase.app()) {
-            console.log("SetupAuth e Firebase pronti. Configuro l'autenticazione.");
-            window.setupAuth(firebase.app());
-        } else {
-            throw new Error("Funzione setupAuth o app Firebase non trovate!");
-        }
-    } catch (error) {
-        console.error("Errore critico durante l'impostazione dell'autenticazione:", error);
-        hideLoading();
-        mainContent.innerHTML = '<p style="color: red; text-align: center;">Errore critico: modulo di autenticazione corrotto o mancante.</p>';
-    }
+    showLoading('Avvio in corso...');
 });
