@@ -1,114 +1,125 @@
 
-// --- Elementi del DOM e stato globale ---
-const mainContent = document.querySelector('main');
-const navContainer = document.querySelector('.nav-container');
-const allNavItems = document.querySelectorAll('.nav-item');
-const moreMenuToggle = document.getElementById('more-menu-toggle');
-const moreMenuPanel = document.getElementById('more-menu-panel');
-let currentUser = null;
+import { initializeAuth } from './js/auth.js';
+import { setupAgendaUI, cleanupAgenda } from './js/agenda.js';
+import { setupClassUI, cleanupClasses } from './js/classes.js';
+import { setupStudentsUI, cleanupStudents } from './js/students.js';
+import { setupEvaluationsUI, cleanupEvaluations } from './js/evaluations.js';
+import { setupLessonsUI, cleanupLessons } from './js/lessons.js';
+import { setupScheduleUI, cleanupSchedule } from './js/schedule.js';
+import { setupSettingsUI, cleanupSettings } from './js/settings.js';
 
-// --- Overlay di Caricamento ---
-const loadingOverlay = document.createElement('div');
-Object.assign(loadingOverlay.style, {
-    position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)', display: 'flex', justifyContent: 'center',
-    alignItems: 'center', zIndex: '1000', transition: 'opacity 0.3s'
-});
-const showLoading = (message) => {
-    loadingOverlay.innerHTML = `<p style="font-size: 1.2em; color: #333;">${message}</p>`;
-    document.body.appendChild(loadingOverlay);
-};
-const hideLoading = () => {
-    loadingOverlay.style.opacity = '0';
-    setTimeout(() => {
-        if (loadingOverlay.parentNode) {
-            loadingOverlay.parentNode.removeChild(loadingOverlay);
-        }
-    }, 300);
+const mainContent = document.getElementById('main-content');
+const appStatus = document.getElementById('app-status');
+const navLinks = document.querySelectorAll('nav a');
+
+const showStatus = (message) => {
+    if (appStatus) appStatus.textContent = message;
 };
 
-// --- Gestore di Stato Autenticazione (Router Principale) ---
-window.addEventListener('auth-changed', ({ detail: { user } }) => {
-    currentUser = user;
-    hideLoading(); 
+const pageModules = {
+    'agenda': { setup: setupAgendaUI, cleanup: cleanupAgenda, path: 'templates/agenda.html' },
+    'classes': { setup: setupClassUI, cleanup: cleanupClasses, path: 'templates/classes.html' },
+    'students': { setup: setupStudentsUI, cleanup: cleanupStudents, path: 'templates/students.html' },
+    'evaluations': { setup: setupEvaluationsUI, cleanup: cleanupEvaluations, path: 'templates/evaluations.html' },
+    'lessons': { setup: setupLessonsUI, cleanup: cleanupLessons, path: 'templates/lessons.html' },
+    'schedule': { setup: setupScheduleUI, cleanup: cleanupSchedule, path: 'templates/schedule.html' },
+    'settings': { setup: setupSettingsUI, cleanup: cleanupSettings, path: 'templates/settings.html' },
+};
 
-    if (user) {
-        console.log("Utente autenticato. Avvio dell'app...");
-        navContainer.style.display = ''; 
-        navigateToTab('agenda'); 
-    } else {
-        console.log("Nessun utente. Visualizzo schermata di login.");
-        navContainer.style.display = 'none'; 
-        mainContent.innerHTML = `
-            <div style="text-align: center; padding-top: 50px;">
-                <h2>Accesso Richiesto</h2>
-                <p>Per favore, effettua il login per usare l'applicazione.</p>
-            </div>
-        `;
+let currentPageCleanup = null;
+
+const loadPage = async (pageIdWithParams) => {
+    if (currentPageCleanup) {
+        currentPageCleanup();
+        currentPageCleanup = null;
     }
-});
 
-// --- Logica di Navigazione --- 
-window.navigateToTab = (tab) => {
-    if (!tab) return;
-    if (!currentUser) {
-        console.warn("Tentativo di navigazione senza autenticazione. Bloccato.");
+    const [pageId, paramsString] = pageIdWithParams.split('?');
+    const params = new URLSearchParams(paramsString);
+    const action = params.get('action');
+    
+    const module = pageModules[pageId];
+    if (!module) {
+        console.warn(`Pagina non trovata: ${pageId}. Reindirizzamento alla dashboard.`);
+        window.location.hash = 'agenda'; // Questo triggera il router di nuovo
         return;
     }
 
-    allNavItems.forEach(item => item.classList.remove('active'));
-    moreMenuToggle.classList.remove('active');
-
-    const newActiveTab = document.querySelector(`.nav-item[data-tab="${tab}"]`);
-    if (newActiveTab) {
-        newActiveTab.classList.add('active');
-        if (moreMenuPanel.contains(newActiveTab)) {
-            moreMenuToggle.classList.add('active');
+    showStatus('Caricamento...');
+    try {
+        const response = await fetch(module.path);
+        if (!response.ok) {
+            console.error(`Errore nel caricamento del template: ${module.path}`);
+            mainContent.innerHTML = `<p class="error-message">Impossibile caricare il contenuto della pagina.</p>`;
+            showStatus('Errore di caricamento');
+            return;
         }
-        loadContent(tab);
+        mainContent.innerHTML = await response.text();
+        document.title = `Docente++ | ${pageId.charAt(0).toUpperCase() + pageId.slice(1)}`;
+
+        if (module.setup) {
+            module.setup();
+            currentPageCleanup = module.cleanup;
+        }
+
+        if (action === 'add') {
+            const addButton = document.getElementById(`add-${pageId.slice(0, -1)}-btn`);
+            if (addButton) {
+                addButton.click();
+            } else {
+                console.warn(`Azione 'add' richiesta, ma pulsante non trovato per ${pageId}`);
+            }
+        }
+
+        showStatus('');
+    } catch (error) {
+        console.error(`Errore fatale nel caricamento di ${pageId}:`, error);
+        mainContent.innerHTML = `<p class="error-message">C'è stato un errore critico. Ricarica la pagina o contatta il supporto.</p>`;
+        showStatus('Errore critico');
     }
-    if (moreMenuPanel) moreMenuPanel.classList.remove('active');
 };
 
-const loadContent = (tab) => {
-    fetch(`${tab}.html`)
-        .then(response => {
-            if (!response.ok) throw new Error(`Pagina non trovata: ${tab}.html`);
-            return response.text();
-        })
-        .then(html => {
-            mainContent.innerHTML = html;
-            const scripts = mainContent.querySelectorAll("script");
-            scripts.forEach(script => {
-                const newScript = document.createElement("script");
-                if (script.src) {
-                    newScript.src = script.src;
-                    newScript.onerror = () => console.error(`Errore nel caricamento dello script: ${script.src}`);
-                } else {
-                    newScript.textContent = script.textContent;
+const router = () => {
+    const hash = window.location.hash.substring(1) || 'agenda';
+    const pageId = hash.split('?')[0];
+    loadPage(pageId);
+    navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('data-page') === pageId);
+    });
+};
+
+const startApp = (user) => {
+    if (user) {
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const pageId = e.currentTarget.getAttribute('data-page');
+                if (pageId && !e.currentTarget.classList.contains('disabled')) {
+                    e.preventDefault();
+                    if (window.location.hash.substring(1) !== pageId) {
+                        window.location.hash = pageId;
+                    } else {
+                        // Se la pagina è già quella corrente, ricarica
+                        loadPage(pageId);
+                    }
                 }
-                document.head.appendChild(newScript).parentNode.removeChild(newScript);
             });
-        })
-        .catch(error => {
-            console.error("Errore nel caricamento dei contenuti:", error);
-            mainContent.innerHTML = `<p style="color: red; text-align: center;">${error.message}</p>`;
         });
+
+        window.addEventListener('hashchange', router);
+        router(); // Carica la pagina iniziale
+        showStatus('');
+        console.log("Applicazione avviata, routing configurato.");
+    } else {
+        mainContent.innerHTML = `
+            <div class="welcome-container">
+                <h2>Benvenuto in Docente++</h2>
+                <p>La tua super-app per la gestione della didattica.</p>
+                <p>Effettua il login per iniziare.</p>
+            </div>
+        `;
+        showStatus('Pronto per il login');
+    }
 };
 
-// --- Eventi di Navigazione ---
-allNavItems.forEach(item => {
-    if (item.id !== 'more-menu-toggle') {
-        item.addEventListener('click', () => navigateToTab(item.dataset.tab));
-    }
-});
-moreMenuToggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    moreMenuPanel.classList.toggle('active');
-});
-window.addEventListener('click', () => moreMenuPanel.classList.remove('active'));
-
-// --- Inizializzazione ---
-document.addEventListener('DOMContentLoaded', () => {
-    showLoading('Avvio in corso...');
-});
+showStatus('Avvio in corso...');
+initializeAuth(startApp);

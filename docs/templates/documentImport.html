@@ -1,0 +1,65 @@
+<h2><span class="material-symbols-outlined">upload_file</span> Importazione Dati</h2>
+<div class="container">
+
+    <!-- Card per Importazione Studenti (esistente) -->
+    <div class="card">
+        <h3>Importa Elenco Studenti da CSV</h3>
+        <p>Carica un file <strong>.csv</strong> per aggiungere studenti a una classe. Il file deve contenere: <code>nome,cognome,email</code>.</p>
+        
+        <div class="form-group">
+            <label for="import-student-class-select">1. Seleziona la classe:</label>
+            <select id="import-student-class-select"></select>
+        </div>
+
+        <div class="form-group">
+            <label for="student-file-input">2. Seleziona il file CSV:</label>
+            <div id="student-drop-area">
+                <p>Trascina il file o clicca per selezionare</p>
+                <input type="file" id="student-file-input" accept=".csv" style="display: none;">
+            </div>
+        </div>
+
+        <button id="import-student-btn" class="btn btn-primary" disabled><span class="material-symbols-outlined">upload</span> Importa Studenti</button>
+    </div>
+
+    <!-- Nuova Card per Importazione Valutazioni -->
+    <div class="card">
+        <h3>Importa Valutazioni da CSV</h3>
+        <p>Carica un file <strong>.csv</strong> con i risultati di una valutazione. Il file deve contenere: <code>email_studente,voto</code>.</p>
+        
+        <div class="form-group">
+            <label for="import-evaluation-select">1. Seleziona la valutazione:</label>
+            <select id="import-evaluation-select"></select>
+        </div>
+
+        <div class="form-group">
+            <label for="evaluation-file-input">2. Seleziona il file CSV:</label>
+            <div id="evaluation-drop-area">
+                <p>Trascina il file o clicca per selezionare</p>
+                <input type="file" id="evaluation-file-input" accept=".csv" style="display: none;">
+            </div>
+        </div>
+
+        <button id="import-evaluation-btn" class="btn btn-primary" disabled><span class="material-symbols-outlined">upload</span> Importa Valutazioni</button>
+    </div>
+
+    <!-- Card per i Risultati (unificata) -->
+    <div class="card">
+        <h3>Risultato Operazione</h3>
+        <div id="import-result"></div>
+    </div>
+
+</div>
+
+<script src="js/firestore.js"></script>
+<script src="js/documentImport.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof setupDocumentImport === 'function') {
+            setupDocumentImport();
+        } else {
+            console.error("La funzione di setup per l'importazione non è stata trovata.");
+            document.getElementById('import-result').innerHTML = '<p class="error">Errore critico: modulo di importazione non caricato.</p>';
+        }
+    });
+</script>

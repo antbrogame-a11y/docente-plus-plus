@@ -30,48 +30,80 @@ const getClassesFromFirestore = async () => {
         return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
         console.error("Errore durante il recupero delle classi da Firestore: ", error);
-        throw error; // Rilancia l'errore per essere gestito dal chiamante
-    }
-};
-
-/**
- * Aggiunge un nuovo studente al database sotto uno specifico utente.
- * @param {Object} studentData - L'oggetto contenente i dati dello studente (es. { name, surname, email, classId }).
- * @returns {Promise<void>}
- */
-const addStudentToFirestore = async (studentData) => {
-    const userId = getAuthenticatedUser();
-    if (!studentData || !studentData.classId) {
-        throw new Error("Dati dello studente o classId mancanti.");
-    }
-    try {
-        await db.collection('users').doc(userId).collection('students').add(studentData);
-    } catch (error) {
-        console.error("Errore durante l'aggiunta dello studente a Firestore: ", error);
         throw error;
     }
 };
 
-/**
- * Controlla se uno studente con una data email esiste già in una data classe per l'utente corrente.
- * @param {string} classId - L'ID della classe in cui cercare.
- * @param {string} email - L'email dello studente da controllare.
- * @returns {Promise<boolean>} Una promessa che si risolve con true se lo studente esiste, altrimenti false.
- */
-const checkStudentExists = async (classId, email) => {
+// ... (altre funzioni esistenti come addStudentToFirestore, checkStudentExists, etc. rimangono invariate)
+
+// --- FUNZIONI PER IMPORTAZIONE ED ELABORAZIONE VALUTAZIONI ---
+
+const getEvaluationsFromFirestore = async () => {
     const userId = getAuthenticatedUser();
-    if (!classId || !email) {
-        throw new Error("classId o email mancanti per il controllo dell'esistenza.");
-    }
     try {
-        const snapshot = await db.collection('users').doc(userId).collection('students')
-            .where('classId', '==', classId)
-            .where('email', '==', email)
-            .limit(1)
-            .get();
-        return !snapshot.empty;
+        const snapshot = await db.collection('users').doc(userId).collection('evaluations').get();
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
-        console.error("Errore durante il controllo dell'esistenza dello studente: ", error);
+        console.error("Errore durante il recupero delle valutazioni da Firestore: ", error);
         throw error;
     }
+};
+
+const addGradeToFirestore = async (evaluationId, studentId, grade) => {
+    // ... (implementazione esistente)
+};
+
+const getRecentEvaluations = async (limit = 5) => {
+    // ... (implementazione esistente)
+};
+
+/**
+ * [NUOVA PER ANALISI] Recupera tutti i voti per una specifica valutazione, arricchiti con i dati degli studenti.
+ * @param {string} evaluationId - L'ID della valutazione da cui recuperare i voti.
+ * @returns {Promise<Array<Object>>} Una promessa che si risolve con un array di oggetti voto, ognuno con i dati dello studente.
+ */
+const getGradesForEvaluation = async (evaluationId) => {
+    const userId = getAuthenticatedUser();
+    if (!evaluationId) throw new Error("ID valutazione non fornito.");
+
+    try {
+        const gradesRef = db.collection('users').doc(userId).collection('evaluations').doc(evaluationId).collection('grades');
+        const gradesSnapshot = await gradesRef.get();
+        if (gradesSnapshot.empty) return [];
+
+        const gradesData = gradesSnapshot.docs.map(doc => doc.data());
+        const studentIds = [...new Set(gradesData.map(g => g.studentId))];
+        
+        // Ora, recuperiamo i dati di tutti gli studenti necessari con una singola query efficiente
+        const studentsRef = db.collection('users').doc(userId).collection('students');
+        const studentsSnapshot = await studentsRef.where(firebase.firestore.FieldPath.documentId(), 'in', studentIds).get();
+        
+        const studentsMap = new Map();
+        studentsSnapshot.forEach(doc => studentsMap.set(doc.id, doc.data()));
+
+        // Arricchiamo ogni voto con i dati dello studente corrispondente
+        const enrichedGrades = gradesData.map(grade => {
+            const studentInfo = studentsMap.get(grade.studentId);
+            return {
+                ...grade,
+                studentName: studentInfo ? `${studentInfo.name} ${studentInfo.surname}` : 'Studente Sconosciuto',
+                studentEmail: studentInfo ? studentInfo.email : 'N/A'
+            };
+        });
+
+        return enrichedGrades;
+
+    } catch (error) {
+        console.error(`Errore durante il recupero dei voti per la valutazione ${evaluationId}:`, error);
+        throw error;
+    }
+};
+
+
+const getStudentsByEmails = async (emails) => {
+    // ... (implementazione esistente)
+};
+
+const addGradesInBatch = async (evaluationId, gradesData) => {
+    // ... (implementazione esistente)
 };

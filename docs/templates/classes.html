@@ -1,0 +1,33 @@
+<h2><span class="material-symbols-outlined">school</span> Gestione Classi</h2>
+<div class="container">
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Le Tue Classi</h3>
+            <button id="add-class-btn" class="btn btn-primary"><span class="material-symbols-outlined">add</span> Aggiungi Classe</button>
+        </div>
+        <div id="class-list" class="list-container">
+            <!-- Le classi verranno inserite qui dinamicamente -->
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal per Aggiungere/Modificare una Classe -->
+<div id="class-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3 class="modal-title">Aggiungi Classe</h3>
+        <form id="class-form">
+            <div class="form-group">
+                <label for="class-name-input">Nome Classe:</label>
+                <input type="text" id="class-name-input" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="class-description-input">Descrizione (opzionale):</label>
+                <textarea id="class-description-input" name="description"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Salva</button>
+        </form>
+    </div>
+</div>

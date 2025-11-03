@@ -1,0 +1,40 @@
+
+<div class="page-container" id="settings-page">
+    <header class="page-header">
+        <span class="material-symbols-outlined header-icon">settings</span>
+        <h1>Impostazioni</h1>
+    </header>
+
+    <div class="content-section">
+        <div class="card">
+            <div class="card-header">
+                <h2>Configurazione Assistente IA (OpenRouter)</h2>
+                <p>Inserisci qui le tue credenziali per OpenRouter.ai. La tua chiave API viene salvata solo localmente nel tuo browser e non viene mai inviata ai nostri server.</p>
+            </div>
+            <div class="card-content">
+                <div class="form-field">
+                    <label for="or-api-key">OpenRouter API Key</label>
+                    <input type="password" id="or-api-key" placeholder="sk-or-...">
+                </div>
+                <div class="form-field">
+                    <label for="or-model-name">Modello IA</label>
+                    <input type="text" id="or-model-name" placeholder="es. google/gemini-pro, openai/gpt-4o">
+                    <small>Specifica il modello come indicato nella documentazione di OpenRouter (es. `provider/modello`).</small>
+                </div>
+                
+                <div id="settings-feedback" class="feedback-container"></div>
+
+                <div class="button-group">
+                    <button id="save-settings-btn" class="btn btn-primary">
+                        <span class="material-symbols-outlined">save</span>
+                        Testa e Salva
+                    </button>
+                    <button id="clear-settings-btn" class="btn btn-secondary">
+                        <span class="material-symbols-outlined">delete</span>
+                        Rimuovi Impostazioni
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

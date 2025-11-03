@@ -1,1 +1,115 @@
-\nconst setupAgenda = () => {\n\n    if (!window.db || !firebase.auth().currentUser) {\n        console.error(\"Firestore o utente non disponibile. La Dashboard non può essere inizializzata.\");\n        return;\n    }\n\n    // --- RIFERIMENTI FIREBASE ---\n    const userId = firebase.auth().currentUser.uid;\n    const classesRef = db.collection('users').doc(userId).collection('classes');\n    const studentsRef = db.collection('users').doc(userId).collection('students');\n    const evaluationsRef = db.collection('users').doc(userId).collection('evaluations');\n\n    // --- ELEMENTI DEL DOM ---\n    const statsClassCount = document.getElementById('stats-class-count');\n    const statsStudentCount = document.getElementById('stats-student-count');\n    const latestEvaluationsList = document.getElementById('latest-evaluations-list');\n    const quickAddClassBtn = document.getElementById('quick-add-class');\n    const quickAddStudentBtn = document.getElementById('quick-add-student');\n    const quickAddEvaluationBtn = document.getElementById('quick-add-evaluation');\n    const dailyScheduleList = document.getElementById('daily-schedule-list');\n\n    // --- INIZIALIZZAZIONE CON LISTENER IN TEMPO REALE ---\n\n    // 1. Statistiche Classi\n    classesRef.onSnapshot(snapshot => {\n        if (statsClassCount) statsClassCount.textContent = snapshot.size;\n    }, err => console.error(\"Errore nel caricare le classi: \", err));\n\n    // 2. Statistiche Studenti\n    studentsRef.onSnapshot(snapshot => {\n        if (statsStudentCount) statsStudentCount.textContent = snapshot.size;\n    }, err => console.error(\"Errore nel caricare gli studenti: \", err));\n\n    // 3. Ultime Valutazioni\n    evaluationsRef.orderBy('date', 'desc').limit(5).onSnapshot(async (evalSnapshot) => {\n        if (!latestEvaluationsList) return;\n\n        latestEvaluationsList.innerHTML = '';\n        if (evalSnapshot.empty) {\n            latestEvaluationsList.innerHTML = '<p class=\"empty-list-message\">Nessuna valutazione registrata.</p>';\n            return;\n        }\n\n        // Per evitare query N+1, carichiamo tutti gli studenti in una mappa\n        const studentsSnapshot = await studentsRef.get();\n        const studentsMap = new Map();\n        studentsSnapshot.forEach(doc => studentsMap.set(doc.id, doc.data()));\n\n        evalSnapshot.forEach(doc => {\n            const ev = doc.data();\n            const student = studentsMap.get(ev.studentId);\n            const studentName = student ? `${student.surname} ${student.name}` : 'Studente eliminato';\n\n            const listItem = document.createElement('div');\n            listItem.className = 'list-item';\n            listItem.innerHTML = `\n                <div class=\"list-item-main\">\n                    <span class=\"material-symbols-outlined\">school</span>\n                    <span><strong>${studentName}</strong></span>\n                </div>\n                <div class=\"list-item-details\">\n                    <span>Voto: <strong>${ev.grade.toFixed(2)}</strong></span>\n                    <span>Data: ${new Date(ev.date).toLocaleDateString()}</span>\n                </div>\n            `;\n            latestEvaluationsList.appendChild(listItem);\n        });\n\n    }, err => {\n        console.error(\"Errore nel caricare le valutazioni: \", err);\n        if (latestEvaluationsList) latestEvaluationsList.innerHTML = '<p class=\"error-message\">Errore nel caricamento delle valutazioni.</p>';\n    });\n    \n    // 4. Lezioni del giorno (placeholder, come da HTML)\n    // La logica per questa sezione non era presente e la lasciamo invariata.\n    if (dailyScheduleList) {\n         dailyScheduleList.innerHTML = `\n            <div class=\"wip-icon\">\n                <span class=\"material-symbols-outlined\">construction</span>\n                <p>La funzione Agenda/Orario sarà implementata prossimamente.</p>\n            </div>`;\n    }\n\n    // --- SETUP AZIONI RAPIDE ---\n    if (quickAddClassBtn) quickAddClassBtn.addEventListener('click', () => window.navigateToTab('classes'));\n    if (quickAddStudentBtn) quickAddStudentBtn.addEventListener('click', () => window.navigateToTab('students'));\n    if (quickAddEvaluationBtn) quickAddEvaluationBtn.addEventListener('click', () => window.navigateToTab('evaluations'));\n    \n    console.log(\"Dashboard (Agenda) caricata e configurata con listener Firestore.\");\n};\n\n// Avvia la configurazione non appena lo script viene eseguito.\nsetupAgenda();\n
+
+import { db, auth } from './firebase.js';
+import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// Assumendo che getRecentEvaluations sia definita in firestore.js e caricata globalmente
+
+// Funzione di cleanup per i listener di questa pagina
+let unsubscribeClassStats = null;
+let unsubscribeStudentStats = null;
+let unsubscribeRecentEvaluations = null; // Listener specifico per le valutazioni recenti
+
+export const cleanupAgenda = () => {
+    if (unsubscribeClassStats) unsubscribeClassStats();
+    if (unsubscribeStudentStats) unsubscribeStudentStats();
+    if (unsubscribeRecentEvaluations) unsubscribeRecentEvaluations(); // Cleanup del nuovo listener
+    console.log("Listener della Dashboard (Agenda) rimossi.");
+};
+
+// Funzione di setup per l'interfaccia dell'agenda
+export const setupAgendaUI = () => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const userId = user.uid;
+    const classesRef = collection(db, 'users', userId, 'classes');
+    const studentsRef = collection(db, 'users', userId, 'students');
+    
+    // Elementi del DOM
+    const statsClassCount = document.getElementById('stats-class-count');
+    const statsStudentCount = document.getElementById('stats-student-count');
+    const latestEvaluationsList = document.getElementById('latest-evaluations-list');
+    const dailyScheduleList = document.getElementById('daily-schedule-list');
+    
+    const quickAddClassBtn = document.getElementById('quick-add-class');
+    const quickAddStudentBtn = document.getElementById('quick-add-student');
+    const quickAddEvaluationBtn = document.getElementById('quick-add-evaluation');
+
+    // STATISTICHE
+    unsubscribeClassStats = onSnapshot(classesRef, snapshot => {
+        if (statsClassCount) statsClassCount.textContent = snapshot.size;
+    });
+    unsubscribeStudentStats = onSnapshot(studentsRef, snapshot => {
+        if (statsStudentCount) statsStudentCount.textContent = snapshot.size;
+    });
+
+    // ULTIME VALUTAZIONI INSERITE (Logica Aggiornata)
+    const displayRecentEvaluations = async () => {
+        if (!latestEvaluationsList) return;
+        
+        try {
+            // Utilizziamo la nuova funzione per ottenere le valutazioni più recenti
+            const recentEvaluations = await getRecentEvaluations(5); // definita in firestore.js
+
+            latestEvaluationsList.innerHTML = ''; // Pulisce la lista
+
+            if (recentEvaluations.length === 0) {
+                latestEvaluationsList.innerHTML = '<p class="empty-list-message">Nessuna valutazione con voti inseriti di recente.</p>';
+                return;
+            }
+
+            recentEvaluations.forEach(evaluation => {
+                const listItem = document.createElement('div');
+                listItem.className = 'list-item';
+                
+                const date = evaluation.lastUpdated?.toDate ? evaluation.lastUpdated.toDate() : new Date();
+                const formattedDate = date.toLocaleDateString('it-IT', { day: '2-digit', month: 'short' });
+
+                listItem.innerHTML = `
+                    <div class="list-item-main">
+                        <span class="material-symbols-outlined">history_edu</span>
+                        <span><strong>${evaluation.name || 'Valutazione senza nome'}</strong></span>
+                    </div>
+                    <div class="list-item-details">
+                        <span>Aggiornata: <strong>${formattedDate}</strong></span>
+                    </div>
+                `;
+                latestEvaluationsList.appendChild(listItem);
+            });
+
+        } catch (error) {
+            console.error("Errore nel visualizzare le valutazioni recenti:", error);
+            latestEvaluationsList.innerHTML = '<p class="error-message">Impossibile caricare le valutazioni.</p>';
+        }
+    };
+
+    // Si potrebbe usare onSnapshot sulla collection evaluations per aggiornamenti in tempo reale,
+    // ma per semplicità e per coerenza con la nuova funzione, facciamo un fetch singolo.
+    // Per renderlo dinamico, potremmo usare un listener qui.
+    displayRecentEvaluations();
+
+    // ORARIO GIORNALIERO (Placeholder)
+    if (dailyScheduleList) {
+        dailyScheduleList.innerHTML = `
+            <div class="wip-icon">
+                <span class="material-symbols-outlined">construction</span>
+                <p>La funzione Orario sarà implementata prossimamente.</p>
+            </div>`;
+    }
+
+    // AZIONI RAPIDE
+    const setupQuickAddAction = (button, page, action) => {
+        if (button) {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.hash = `${page}?action=${action}`;
+            });
+        }
+    };
+    
+    setupQuickAddAction(quickAddClassBtn, 'classes', 'add');
+    setupQuickAddAction(quickAddStudentBtn, 'students', 'add');
+    setupQuickAddAction(quickAddEvaluationBtn, 'evaluations', 'add');
+
+    console.log("Dashboard (Agenda) caricata e configurata con la nuova logica per le valutazioni.");
+};

@@ -1,0 +1,49 @@
+<h2><span class="material-symbols-outlined">grading</span> Gestione Valutazioni</h2>
+<div class="container">
+
+    <div class="card">
+        <div class="card-header">
+             <h3>Filtra e Aggiungi</h3>
+             <div class="form-inline">
+                 <div class="form-group">
+                    <select id="eval-class-select" name="classFilter"></select>
+                </div>
+                <div class="form-group">
+                    <select id="eval-student-select" name="studentFilter" disabled></select>
+                </div>
+                <button id="add-evaluation-btn" class="btn btn-primary"><span class="material-symbols-outlined">add</span> Aggiungi Valutazione</button>
+             </div>
+        </div>
+        <div id="evaluation-list" class="list-container">
+            <!-- Le valutazioni verranno mostrate qui -->
+        </div>
+    </div>
+
+</div>
+
+<!-- MODAL VALUTAZIONE -->
+<div id="evaluation-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3 class="modal-title">Aggiungi Valutazione</h3>
+        <form id="evaluation-form">
+            <div class="form-group">
+                <label for="evaluation-student-select-modal">Studente:</label>
+                <select id="evaluation-student-select-modal" name="studentId" required></select>
+            </div>
+            <div class="form-group">
+                <label for="evaluation-grade-input">Voto:</label>
+                <input type="number" id="evaluation-grade-input" name="grade" step="0.01" min="1" max="10" required>
+            </div>
+            <div class="form-group">
+                <label for="evaluation-date-input">Data:</label>
+                <input type="date" id="evaluation-date-input" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="evaluation-notes-input">Note:</label>
+                <textarea id="evaluation-notes-input" name="notes"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Salva</button>
+        </form>
+    </div>
+</div>

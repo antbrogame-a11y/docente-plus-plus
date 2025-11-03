@@ -4,136 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Docente ++</title>
-    <link rel="stylesheet" href="styles.css?v=2.1">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#2a3b4d"/>
-
-    <!-- Intro.js CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/intro.js/minified/introjs.min.css">
-
-    <!-- Chart.js - Libreria per Grafici -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <title>Docente++</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-    <header data-step="1" data-intro="Questa è l'intestazione principale dell'applicazione.">
-        <h1>Docente ++</h1>
-        <div id="auth-container">
-            <!-- Il contenuto dell'autenticazione verrà inserito qui -->
-        </div>
+    <header>
+        <h1>Docente++</h1>
+        <div id="auth-container"></div>
     </header>
-
-    <div class="nav-container">
-        <nav id="main-nav" data-step="2" data-intro="Usa questa barra di navigazione per spostarti tra le diverse sezioni: Dashboard, Classi, Studenti, Valutazioni e altro ancora.">
-            <div class="nav-item active" data-tab="agenda">
-                <span class="material-symbols-outlined">dashboard</span>
-                Dashboard
-            </div>
-            <div class="nav-item" data-tab="classes" data-step="3" data-intro="Qui puoi creare e gestire le tue classi. Assegna un nome e un colore unico a ciascuna!">
-                <span class="material-symbols-outlined">school</span>
-                Classi
-            </div>
-            <div class="nav-item" data-tab="students" data-step="4" data-intro="Aggiungi e organizza i tuoi studenti, associandoli alle classi che hai creato.">
-                <span class="material-symbols-outlined">groups</span>
-                Studenti
-            </div>
-            <div class="nav-item" data-tab="evaluations" data-step="5" data-intro="Registra le valutazioni dei tuoi studenti, calcola le medie e tieni traccia dei loro progressi.">
-                <span class="material-symbols-outlined">grading</span>
-                Valutazioni
-            </div>
-            
-            <!-- Pulsante "Altro" per la navigazione mobile -->
-            <div class="nav-item" id="more-menu-toggle">
-                <span class="material-symbols-outlined">more_horiz</span>
-                Altro
-            </div>
-        </nav>
-        
-        <!-- Pannello a comparsa per le voci di menu aggiuntive -->
-        <div id="more-menu-panel">
-            <div class="nav-item" data-tab="schedule" data-step="6" data-intro="Definisci il tuo orario settimanale, associando le classi alle diverse ore.">
-                <span class="material-symbols-outlined">calendar_view_week</span>
-                Orario
-            </div>
-            <div class="nav-item" data-tab="lessons">
-                <span class="material-symbols-outlined">history_edu</span>
-                Lezioni
-            </div>
-            <div class="nav-item" data-tab="statistiche">
-                <span class="material-symbols-outlined">monitoring</span>
-                Statistiche
-            </div>
-            <div class="nav-item" data-tab="aiAssistant" data-step="7" data-intro="Usa l'Assistente IA per ricevere aiuto, generare dati di esempio o automatizzare compiti.">
-                <span class="material-symbols-outlined">smart_toy</span>
-                Assistente IA
-            </div>
-            <div class="nav-item" data-tab="ai-suggestions">
-                <span class="material-symbols-outlined">psychology</span>
-                Suggerimenti IA
-            </div>
-            <div class="nav-item" data-tab="documentImport">
-                <span class="material-symbols-outlined">upload_file</span>
-                Importa Documenti
+    <nav>
+        <a href="#agenda" data-page="agenda" class="active"><span class="material-symbols-outlined">dashboard</span> Dashboard</a>
+        <a href="#classes" data-page="classes"><span class="material-symbols-outlined">school</span> Classi</a>
+        <a href="#students" data-page="students"><span class="material-symbols-outlined">groups</span> Studenti</a>
+        <a href="#evaluations" data-page="evaluations"><span class="material-symbols-outlined">grading</span> Valutazioni</a>
+        <a href="#lessons" data-page="lessons"><span class="material-symbols-outlined">history_edu</span> Lezioni</a>
+        <a href="#schedule" data-page="schedule"><span class="material-symbols-outlined">calendar_month</span> Orario</a>
+        <div class="nav-group">
+            <a href="#" class="group-title"><span class="material-symbols-outlined">more_horiz</span> Altro</a>
+            <div class="group-items">
+                <a href="#aiAssistant" data-page="aiAssistant" class="disabled"><span class="material-symbols-outlined">smart_toy</span> Assistente AI</a>
+                <a href="#documentImport" data-page="documentImport" class="disabled"><span class="material-symbols-outlined">upload_file</span> Importa Documenti</a>
+                <a href="#settings" data-page="settings"><span class="material-symbols-outlined">settings</span> Impostazioni</a>
             </div>
         </div>
-    </div>
-
-    <main role="main" class="container">
-        <!-- Il contenuto verrà caricato qui -->
+    </nav>
+    <main id="main-content">
+        <!-- Il contenuto dinamico delle pagine verrà caricato qui -->
     </main>
+    <footer>
+        <p>Docente++ &copy; 2024</p>
+        <div id="app-status"></div>
+    </footer>
 
-    <div id="modal-container" style="display:none;">
-        <div id="modal-content">
-            <span id="close-modal">&times;</span>
-            <div id="modal-body">
-                <!-- Contenuto del modale -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-vertexai-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-    <!-- La nostra configurazione Firebase -->
     <script src="js/firebase-config.js"></script>
+    <script src="app.js" type="module"></script>
 
-    <!-- Firebase Init (il nostro "direttore d'orchestra") -->
-    <script src="js/firebase-init.js"></script>
-    
-    <!-- Moduli di autenticazione e app principale -->
-    <script src="js/auth.js"></script>
-    <script src="app.js"></script>
-    
-    <!-- Script specifici -->
-    <script src="js/agenda.js"></script>
-    <script src="js/ai-suggestions.js"></script>
-    <script src="js/aiAssistant.js"></script>
-    <script src="js/classes.js"></script>
-    <script src="js/documentImport.js"></script>
-    <script src="js/evaluations.js"></script>
-    <script src="js/firestore.js"></script>
-    <script src="js/lessons.js"></script>
-    <script src="js/schedule.js"></script>
-    <script src="js/statistiche.js"></script>
-    <script src="js/students.js"></script>
-
-    <!-- Intro.js JS -->
-    <script src="https://unpkg.com/intro.js/minified/intro.min.js"></script>
-
-    <!-- Service Worker -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(registration => console.log('Service Worker registrato con successo:', registration))
-                    .catch(err => console.log('Registrazione Service Worker fallita:', err));
-            });
-        }
-    </script>
 </body>
 </html>

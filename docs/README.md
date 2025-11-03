@@ -1,52 +1,67 @@
-# DocentEpp - Il Tuo Assistente Digitale per la Didattica
+# Docente++ - Il Tuo Assistente Digitale Potenziato dall'IA
 
-**DocentEpp** è una Progressive Web App (PWA) moderna e intuitiva, progettata per semplificare la vita dei docenti. Dimentica i registri cartacei e i file sparsi: DocentEpp centralizza la gestione delle classi, degli studenti e delle valutazioni in un unico posto, accessibile da qualsiasi dispositivo.
+**Docente++** è una Progressive Web App (PWA) moderna che trasforma la gestione della didattica. Progettata per i docenti del futuro, non solo centralizza classi, studenti e valutazioni, ma ora integra un potente **Assistente IA** per fornire analisi pedagogiche approfondite e ridurre drasticamente il tempo di analisi dei dati.
 
-L'applicazione è costruita su un'architettura **Single Page Application (SPA)**, garantendo un'esperienza utente fluida, veloce e reattiva, simile a quella di un'app nativa.
+Costruita su un'architettura **Single Page Application (SPA)** e **Firebase**, Docente++ offre un'esperienza fluida, sicura e intelligente.
 
 ---
 
-## ✨ Funzionalità Principali
+## ✨ Funzionalità Chiave
 
-*   **Dashboard Intelligente (`Agenda`**): Una panoramica giornaliera con le prossime lezioni, gli impegni e le scadenze.
-*   **Gestione Classi e Studenti**: Crea e organizza le tue classi, aggiungendo e gestendo gli studenti in modo semplice e veloce.
-*   **Registro Valutazioni**: Tieni traccia dei voti e delle note per ogni studente, con calcolo automatico della media.
-*   **Importazione Rapida da CSV**: Popola intere classi in pochi secondi importando un semplice file `.csv`.
-*   **Assistente IA (In sviluppo)**: Sfrutta l'intelligenza artificiale per ricevere supporto nella didattica.
-*   **Statistiche e Andamento**: Analizza l'andamento delle classi e dei singoli studenti.
+*   **Gestione Completa**: Amministra classi, studenti e prove di valutazione in un'interfaccia unica e intuitiva.
+*   **Importazione Rapida**: Carica intere classi di voti da file CSV in pochi secondi, con convalida automatica dei dati.
+*   **Analisi con Intelligenza Artificiale**: 
+    *   Ottieni report dettagliati sulle performance delle tue classi, generati da modelli linguistici avanzati.
+    *   Identifica cluster di studenti, punti di forza, aree di debolezza e ricevi azioni consigliate concrete.
+    *   Configurazione flessibile tramite **OpenRouter**, per permetterti di scegliere il modello IA che preferisci.
+*   **Accesso Universale**: Essendo una PWA, è accessibile e installabile su qualsiasi dispositivo (desktop, tablet, smartphone).
+*   **Sicurezza**: I tuoi dati sono al sicuro su Firebase e la tua chiave API per l'IA è salvata solo localmente nel tuo browser.
+
+---
+
+## 🛠️ Stack Tecnologico
+
+*   **Frontend**: HTML, CSS, JavaScript (Moduli ES)
+*   **Backend & Infrastruttura**: Firebase
+    *   **Firebase Hosting**: Per il deploy e la distribuzione dell'app.
+    *   **Firebase Authentication**: Per la gestione degli utenti.
+    *   **Cloud Firestore**: Come database NoSQL per i dati.
+*   **Intelligenza Artificiale**: Integrazione flessibile con provider IA tramite **OpenRouter**.
+*   **Strumenti**: Firebase CLI
 
 ---
 
 ## 🚀 Quick Start (Guida per Sviluppatori)
 
-Per avviare il progetto in locale, segui questi semplici passaggi:
+Per avviare il progetto in locale, segui questi passaggi:
 
-1.  **Clona il repository**:
+1.  **Installa la Firebase CLI**:
+    ```bash
+    npm install -g firebase-tools
+    ```
+
+2.  **Clona il repository**:
     ```bash
     git clone <URL_DEL_REPOSITORY>
     cd <NOME_DELLA_CARTELLA>
     ```
 
-2.  **Installa le dipendenze**:
+3.  **Login in Firebase**:
     ```bash
-    npm install
+    firebase login
     ```
 
-3.  **Avvia il server di sviluppo**:
+4.  **Avvia il server di sviluppo locale**:
     ```bash
-    npm start
+    firebase serve
     ```
-    L'applicazione sarà accessibile all'indirizzo `http://localhost:8080` (o una porta simile).
+    L'applicazione sarà accessibile all'indirizzo `http://localhost:5000`.
 
 ---
 
 ## 🗺️ Roadmap di Sviluppo
 
-Il nostro obiettivo è continuare a migliorare DocentEpp. Abbiamo grandi piani per il futuro, tra cui:
-
-*   **Visualizzazione grafica delle statistiche**
-*   **Implementazione dell'orario scolastico**
-*   **Sincronizzazione Cloud con Firebase**
+Abbiamo raggiunto un traguardo fondamentale con l'integrazione dell'IA! Ma non ci fermiamo qui.
 
 Per una visione dettagliata dei prossimi passi, consulta la nostra [**Roadmap completa**](ROADMAP.md).
 

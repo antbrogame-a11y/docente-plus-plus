@@ -1,0 +1,56 @@
+
+<div class="container">
+    <header class="page-header">
+        <h2>Orario Scolastico</h2>
+        <div class="header-actions">
+            <button id="save-schedule-btn" class="btn btn-primary" style="display: none;">Salva Orario</button>
+        </div>
+    </header>
+
+    <div id="schedule-container">
+        <p class="edit-instructions">Clicca su una cella per aggiungere o modificare una lezione.</p>
+        <table id="schedule-table">
+            <thead>
+                <tr>
+                    <th>Ora</th>
+                    <th>Lunedì</th>
+                    <th>Martedì</th>
+                    <th>Mercoledì</th>
+                    <th>Giovedì</th>
+                    <th>Venerdì</th>
+                    <th>Sabato</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Le righe dell'orario verranno generate dinamicamente qui -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal per Modificare la Cella dell'Orario -->
+<div id="schedule-cell-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3 id="cell-modal-title">Modifica Ora di Lezione</h3>
+        <form id="cell-form">
+            <input type="hidden" id="cell-hour-input">
+            <input type="hidden" id="cell-day-input">
+            <div class="form-group">
+                <label for="cell-subject-select">Materia:</label>
+                <select id="cell-subject-select" class="styled-select" required>
+                    <!-- Le opzioni verranno popolate dinamicamente -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cell-class-input">Classe (opzionale):</label>
+                <input type="text" id="cell-class-input" placeholder="Es. 4A Grafica">
+            </div>
+            <div class="modal-actions">
+                <button type="button" id="delete-entry-btn" class="btn btn-danger">Rimuovi Lezione</button>
+                <button type="submit" class="btn btn-primary">Conferma</button>
+            </div>
+        </form>
+    </div>
+</div>
+

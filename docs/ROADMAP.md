@@ -1,66 +1,61 @@
-# 🗺️ Roadmap di Sviluppo - DocentEpp
+# 🗺️ Roadmap di Sviluppo - Docente++
 
-Questa roadmap delinea la visione strategica e i passi operativi per l'evoluzione di DocentEpp. Il nostro obiettivo è procedere per fasi, consolidando le funzionalità prima di passare a quelle successive.
+Questa roadmap è la nostra memoria condivisa e la fonte di verità per lo stato del progetto. Ogni volta che riprenderemo a lavorare, partiremo da qui per ristabilire il contesto.
 
 ---
 
 ### ✅ **Fase 1: Nucleo Funzionale e Architettura SPA (Completata)**
 
-In questa fase cruciale, abbiamo gettato le fondamenta dell'applicazione, trasformandola in una Single Page Application robusta e modulare.
+Fondamenta dell'applicazione come Single Page Application robusta e modulare.
 
-*   **[COMPLETATO]** **Refactoring Architetturale**: Migrazione da un modello a pagine multiple a un'architettura SPA con caricamento dinamico dei contenuti.
-*   **[COMPLETATO]** **Gestione Classi**: Implementazione completa delle operazioni CRUD (Create, Read, Update, Delete) per le classi.
-*   **[COMPLETATO]** **Gestione Studenti**: Implementazione completa delle operazioni CRUD per gli studenti, con associazione alle classi.
-*   **[COMPLETATO]** **Gestione Valutazioni**: Implementazione completa delle operazioni CRUD per le valutazioni, collegate agli studenti.
-*   **[COMPLETATO]** **Importazione da CSV**: Creata la funzionalità per importare massivamente studenti da file `.csv`, potenziando la produttività.
-*   **[COMPLETATO]** **Integrazione Base Assistente IA**: Collegamento con i modelli di Firebase Vertex AI (Gemini) per l'assistenza contestuale.
-*   **[COMPLETATO]** **Dashboard (`Agenda`)**: Creata la schermata principale con una vista riassuntiva.
-*   **[COMPLETATO]** **Pagina Statistiche**: Implementata la pagina per il calcolo delle medie numeriche.
+*   **[COMPLETATO]** Refactoring Architetturale a SPA.
+*   **[COMPLETATO]** Gestione CRUD: Classi, Studenti, Valutazioni.
+*   **[COMPLETATO]** Importazione massiva di studenti da CSV.
+*   **[COMPLETATO]** Pagine di Base: Dashboard (`Agenda`) e Statistiche.
 
 ---
 
 ### ✅ **Fase 2: Potenziamento e Qualità della Vita (Completata)**
 
-L'obiettivo di questa fase è stato arricchire l'esperienza utente e fornire strumenti di visualizzazione e produttività più potenti.
+Arricchimento dell'esperienza utente e strumenti di produttività.
 
-*   **[COMPLETATO]** **Visualizzazione Grafica delle Statistiche**
-    *   **Obiettivo**: Trasformare i dati numerici in insight visivi immediati.
-    *   **Azioni**: Integrata una libreria per grafici (`Chart.js`) per mostrare l'andamento degli studenti e la distribuzione dei voti.
-
-*   **[COMPLETATO]** **Implementazione dell'Orario Scolastico (`schedule.html`)**
-    *   **Obiettivo**: Fornire una vista settimanale chiara delle lezioni.
-    *   **Azioni**: Progettata una griglia visiva che permette l'associazione delle classi alle ore.
-
-*   **[COMPLETATO]** **Esportazione Dati e Reportistica**
-    *   **Obiettivo**: Permettere ai docenti di salvare e stampare il proprio lavoro.
-    *   **Azioni**: Implementata l'esportazione in formato CSV per studenti, valutazioni e orario.
+*   **[COMPLETATO]** Visualizzazione Grafica delle Statistiche (`Chart.js`).
+*   **[COMPLETATO]** Implementazione dell'Orario Scolastico interattivo.
+*   **[COMPLETATO]** Esportazione Dati e Reportistica in formato CSV.
+*   **[COMPLETATO]** Sincronizzazione Cloud (Firebase Auth & Firestore) per tutte le funzionalità principali.
 
 ---
 
-### 🔮 **Fase 3: Funzionalità Avanzate e Cloud (Visione a Lungo Termine)**
+### ✅ **Fase 3: Funzionalità Didattiche Intelligenti (Completata)**
 
-Ora che la Fase 2 è consolidata, possiamo portare l'applicazione al livello successivo, trasformandola in uno strumento ancora più potente e connesso.
+Questa fase ha trasformato l'applicazione in un assistente didattico proattivo, automatizzando compiti ad alto valore aggiunto e fornendo insight pedagogici.
 
-1.  **Sincronizzazione Cloud e Multi-Dispositivo** - **[PROSSIMO PASSO]**
-    *   **Obiettivo**: Sostituire `localStorage` con **Firebase Firestore** per il salvataggio dei dati.
-    *   **Azioni**: Implementare un sistema di autenticazione (Firebase Auth) per la gestione di account utente sicuri.
+1.  **Gestione Attività Didattiche e Piano di Lezione** - **[COMPLETATO]**
+    *   **Obiettivo Raggiunto**: Implementata la sezione `lessons.html` per tracciare le attività didattiche con un flusso di lavoro migliorato.
 
-2.  **Potenziamento Assistente IA**
-    *   **Obiettivo**: Rendere l'IA un co-pilota proattivo per la didattica.
-    *   **Azioni**: Addestrare l'IA a generare bozze di lezioni, verifiche e fornire suggerimenti basati sui dati degli studenti.
-
-3.  **Gestione Attività Didattiche**
-    *   **Obiettivo**: Completare la sezione `lessons.html` per tracciare piani di lezione e attività svolte.
+2.  **Potenziamento Assistente IA: L'Analista dei Risultati** - **[COMPLETATO]**
+    *   **Obiettivo Strategico Raggiunto**: È stata creata una nuova funzionalità di **Analisi Valutazioni con IA**, che trasforma i dati grezzi dei voti in report pedagogici azionabili.
+    *   **Visione d'Implementazione Realizzata**:
+        *   **Pagina di Analisi Dedicata**: Creata la pagina `analysis.html` come centro di controllo per l'analisi IA.
+        *   **Integrazione Flessibile con OpenRouter**: Invece di vincolarsi a un singolo provider, è stata implementata una pagina di **Impostazioni** (`settings.html`) che permette all'utente di configurare la propria API Key di OpenRouter e di scegliere qualsiasi modello supportato. La chiave è salvata in modo sicuro nel `localStorage` del browser.
+        *   **Analisi IA Avanzata**: Al click di un pulsante, l'applicazione:
+            1.  Recupera i voti e i nomi degli studenti associati a una valutazione.
+            2.  Costruisce un **prompt ingegnerizzato** per istruire l'IA a agire come un assistente pedagogico.
+            3.  Invia i dati al modello scelto tramite OpenRouter.
+            4.  Riceve e visualizza un report completo in Markdown, includendo: Sintesi, Analisi Statistica, Cluster di Studenti, Punti di Forza, Aree di Miglioramento e Azioni Consigliate.
 
 ---
 
-### 🚀 **Fase 4: Modello di Accesso e Sostenibilità**
+### 🚀 **Fase 4: Prossimi Passi e Visione Futura (Da Definire)**
 
-Questa fase definisce la filosofia di accesso all'applicazione, garantendo che rimanga uno strumento democratico e accessibile.
+Ora che il nucleo intelligente dell'applicazione è completo e robusto, possiamo esplorare nuove direzioni.
 
-*   **Principio Guida: Gratuito per i Docenti**
-    *   **Obiettivo**: DocentEpp sarà **sempre gratuita** per l'utilizzo da parte di docenti individuali.
-    *   **Come**: Sfruttando il generoso piano gratuito "Spark" di Firebase, possiamo offrire tutte le funzionalità principali (Fasi 1-3) senza alcun costo per l'utente finale.
-*   **Sostenibilità a Lungo Termine**
-    *   **Obiettivo**: Garantire la longevità e l'evoluzione del progetto.
-    *   **Azioni Future**: In futuro, potranno essere introdotte funzionalità *premium* opzionali o piani specifici per istituti scolastici. Questo modello garantirà le risorse per la manutenzione e lo sviluppo di nuove feature, **mantenendo il nucleo dell'app gratuito per sempre**.
+*   **[PROSSIMO PASSO]** **Definire la prossima grande funzionalità**: Quale area della vita di un docente possiamo ancora migliorare? (Es. Comunicazioni con famiglie, gestione progetti di gruppo, gamification, etc.).
+*   **[PROSSIMO PASSO]** **Miglioramento continuo**: Raccogliere feedback e affinare le funzionalità esistenti.
+
+---
+
+### 💡 **Filosofia di Accesso (Promemoria)**
+
+*   **Principio Guida: Gratuito per i Docenti**: Docente++ sarà **sempre gratuita** per l'utilizzo da parte di docenti individuali, sfruttando il piano gratuito "Spark" di Firebase.
+*   **Sostenibilità a Lungo Termine**: In futuro, potranno essere introdotte funzionalità *premium* opzionali o piani per istituti per garantire la longevità e l'evoluzione del progetto, mantenendo il nucleo dell'app gratuito.

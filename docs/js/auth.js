@@ -1,39 +1,58 @@
-// Funzione per configurare l'interfaccia di autenticazione
-window.setupAuth = (firebaseApp) => {
-    const auth = firebaseApp.auth();
+
+import { auth } from './firebase.js'; // Importa l'istanza di auth centralizzata
+import { onAuthStateChanged, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+export const initializeAuth = (onAuthStateReady) => {
     const authContainer = document.getElementById('auth-container');
 
-    // Monitora i cambiamenti dello stato di autenticazione
-    auth.onAuthStateChanged(user => {
-        // Notifica all'applicazione il cambiamento di stato dell'utente
-        window.dispatchEvent(new CustomEvent('auth-changed', { detail: { user } }));
-
+    const updateAuthUI = (user) => {
+        if (!authContainer) return;
         if (user) {
-            // L'utente è autenticato: mostra le info e il pulsante di logout
-            console.log('Utente autenticato:', user.email);
             authContainer.innerHTML = `
                 <div class="user-info">
-                    <span id="user-email">${user.email}</span>
-                    <button id="logout-btn" class="btn btn-secondary">Logout</button>
+                    <span>${user.email}</span>
+                    <button id="logout-btn">Logout</button>
                 </div>
             `;
-            // Aggiunge l'evento per il logout
             document.getElementById('logout-btn').addEventListener('click', () => {
-                auth.signOut().catch(error => console.error('Errore durante il logout:', error));
+                signOut(auth)
+                    .then(() => {
+                        // Reload the page to ensure a clean state after logout
+                        window.location.reload();
+                    })
+                    .catch(error => console.error('Logout Error:', error));
             });
         } else {
-            // L'utente non è autenticato: mostra il pulsante di login
-            console.log('Nessun utente autenticato.');
-            authContainer.innerHTML = '<button id="login-btn" class="btn btn-primary">Login con Google</button>';
-            
-            // Aggiunge l'evento per il login
+            authContainer.innerHTML = '<button id="login-btn">Login con Google</button>';
             document.getElementById('login-btn').addEventListener('click', () => {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                auth.signInWithPopup(provider).catch(error => {
-                    console.error('Errore durante il login con popup:', error);
-                    // Gestire qui eventuali errori, ad es. popup bloccati
-                });
+                const provider = new GoogleAuthProvider();
+                signInWithRedirect(auth, provider);
             });
         }
-    });
+    };
+
+    // Handle the redirect result before setting up the real-time listener
+    // to avoid race conditions.
+    getRedirectResult(auth)
+        .then((result) => {
+            if (result) {
+                console.log("Login successful after redirect:", result.user);
+            }
+            // Whether there was a redirect result or not, set up the auth state listener.
+            onAuthStateChanged(auth, user => {
+                updateAuthUI(user);
+                if (onAuthStateReady) {
+                    onAuthStateReady(user);
+                }
+            });
+        }).catch((error) => {
+            console.error('Login Redirect Error:', error);
+            // Even on error, set up the listener. A user might be signed in from a previous session.
+             onAuthStateChanged(auth, user => {
+                updateAuthUI(user);
+                if (onAuthStateReady) {
+                    onAuthStateReady(user);
+                }
+            });
+        });
 };

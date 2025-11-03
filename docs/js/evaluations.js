@@ -1,245 +1,186 @@
 
-// Funzione di setup per la sezione Valutazioni, migrata a Firestore.
-const setupEvaluations = () => {
+import { db, auth } from './firebase.js';
+import {
+    collection, query, where, orderBy, onSnapshot, getDocs, addDoc, updateDoc, deleteDoc, doc, writeBatch
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { openModal, closeModal } from './ui.js';
 
-    if (!window.db || !firebase.auth().currentUser) {
-        console.error("Istanza Firestore o utente non disponibili. Impossibile inizializzare il modulo Valutazioni.");
+let unsubscribeEvaluations = null;
+let localStudents = []; // Cache degli studenti per la classe selezionata
+
+export const cleanupEvaluations = () => {
+    if (unsubscribeEvaluations) {
+        unsubscribeEvaluations();
+        unsubscribeEvaluations = null;
+        console.log("Listener delle valutazioni rimosso.");
+    }
+};
+
+const renderEvaluationsList = (snapshot) => {
+    const listContainer = document.getElementById('evaluation-list');
+    if (!listContainer) return;
+
+    listContainer.innerHTML = '';
+    if (snapshot.empty) {
+        listContainer.innerHTML = '<p class="empty-list-message">Nessuna valutazione trovata per i filtri selezionati.</p>';
         return;
     }
 
-    // --- RIFERIMENTI FIREBASE ---
-    const userId = firebase.auth().currentUser.uid;
-    const classesRef = db.collection('users').doc(userId).collection('classes');
-    const studentsRef = db.collection('users').doc(userId).collection('students');
-    const evaluationsRef = db.collection('users').doc(userId).collection('evaluations');
+    const table = document.createElement('table');
+    table.innerHTML = `<thead><tr><th>Studente</th><th>Data</th><th>Voto</th><th>Note</th><th class="actions">Azioni</th></tr></thead><tbody></tbody>`;
+    const tbody = table.querySelector('tbody');
 
-    // --- ELEMENTI DEL DOM ---
-    const classSelect = document.getElementById('eval-class-select');
-    const studentSelect = document.getElementById('eval-student-select');
-    const evaluationListTitle = document.getElementById('evaluation-list-title');
-    const evaluationListContainer = document.getElementById('evaluation-list');
-    const addEvaluationBtn = document.getElementById('add-evaluation-btn');
-    const exportEvaluationsBtn = document.getElementById('export-evaluations-btn');
-    const modal = document.getElementById('evaluation-modal');
-    const modalTitle = document.getElementById('evaluation-modal-title');
-    const closeModalBtn = modal.querySelector('.close-btn');
-    const evaluationForm = document.getElementById('evaluation-form');
-    const evaluationIdInput = document.getElementById('evaluation-id-input');
-    const evaluationStudentIdInput = document.getElementById('evaluation-student-id-input');
-    const evaluationGradeInput = document.getElementById('evaluation-grade-input');
-    const evaluationDateInput = document.getElementById('evaluation-date-input');
-    const evaluationNotesInput = document.getElementById('evaluation-notes-input');
-
-    let evaluationsUnsubscribe = null;
-    let localStudents = []; // Cache locale degli studenti della classe selezionata
-
-    // --- FUNZIONI ---
-
-    const populateClasses = async () => {
-        const snapshot = await classesRef.orderBy('name').get();
-        classSelect.innerHTML = '<option value="">Seleziona una classe...</option>';
-        if(snapshot.empty){
-             classSelect.innerHTML = '<option value="">Nessuna classe creata</option>';
-        }
-        snapshot.forEach(doc => {
-            const option = document.createElement('option');
-            option.value = doc.id;
-            option.textContent = doc.data().name;
-            classSelect.appendChild(option);
-        });
-    };
-
-    const populateStudents = async (classId) => {
-        studentSelect.innerHTML = '<option value="">Tutti gli studenti</option>';
-        if (!classId) {
-            studentSelect.disabled = true; 
-            localStudents = [];
-            return;
-        }
-        studentSelect.disabled = false;
-        const snapshot = await studentsRef.where('classId', '==', classId).orderBy('surname').get();
-        localStudents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        snapshot.forEach(doc => {
-            const s = doc.data();
-            const option = document.createElement('option');
-            option.value = doc.id;
-            option.textContent = `${s.surname} ${s.name}`;
-            studentSelect.appendChild(option);
-        });
-    };
-
-    const renderEvaluations = (snapshot) => {
-        evaluationListContainer.innerHTML = '';
-        if (snapshot.empty) {
-            evaluationListContainer.innerHTML = '<p>Nessuna valutazione trovata per i filtri selezionati.</p>'; 
-            return;
-        }
-        const table = document.createElement('table');
-        table.innerHTML = `<thead><tr><th>Data</th><th>Voto</th><th>Note</th><th class="actions">Azioni</th></tr></thead><tbody></tbody>`;
-        const tbody = table.querySelector('tbody');
-        snapshot.docs.forEach(doc => {
-            const ev = { id: doc.id, ...doc.data() };
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${new Date(ev.date).toLocaleDateString()}</td><td>${ev.grade.toFixed(2)}</td><td>${ev.notes || '-'}</td><td class="actions"><button class="btn-icon btn-edit"><span class="material-symbols-outlined">edit</span></button><button class="btn-icon btn-delete"><span class="material-symbols-outlined">delete</span></button></td>`;
-            tr.querySelector('.btn-edit').addEventListener('click', () => openModal(ev));
-            tr.querySelector('.btn-delete').addEventListener('click', () => deleteEvaluation(ev.id));
-            tbody.appendChild(tr);
-        });
-        evaluationListContainer.appendChild(table);
-    };
-
-    const createQueryAndListen = () => {
-        if (evaluationsUnsubscribe) evaluationsUnsubscribe();
-
-        const classId = classSelect.value;
-        const studentId = studentSelect.value;
+    snapshot.forEach(doc => {
+        const ev = { id: doc.id, ...doc.data() };
+        const student = localStudents.find(s => s.id === ev.studentId);
+        const studentName = student ? `${student.surname} ${student.name}` : 'N/D';
         
-        addEvaluationBtn.disabled = !studentId;
-        exportEvaluationsBtn.disabled = !classId;
-
-        let query = evaluationsRef;
-        if (studentId) {
-            evaluationListTitle.textContent = `Valutazioni di ${studentSelect.options[studentSelect.selectedIndex].text}`;
-            query = query.where('studentId', '==', studentId);
-        } else if (classId) {
-            const studentIds = localStudents.map(s => s.id);
-             evaluationListTitle.textContent = `Valutazioni in ${classSelect.options[classSelect.selectedIndex].text}`;
-            if (studentIds.length > 0) {
-                 query = query.where('studentId', 'in', studentIds);
-            } else {
-                renderEvaluations({ empty: true, docs: [] });
-                return;
-            }
-        } else {
-             evaluationListTitle.textContent = 'Seleziona una classe e uno studente';
-             renderEvaluations({ empty: true, docs: [] });
-             return;
-        }
-
-        evaluationsUnsubscribe = query.orderBy('date', 'desc').onSnapshot(renderEvaluations, console.error);
-    };
-
-    const openModal = (evaluation = null) => {
-        const studentId = studentSelect.value;
-        if (!studentId) { alert("Seleziona uno studente prima di aggiungere una valutazione."); return; }
-        
-        evaluationForm.reset();
-        evaluationStudentIdInput.value = studentId;
-        evaluationDateInput.valueAsDate = new Date(); // Imposta la data odierna di default
-        
-        if (evaluation) {
-            evaluationModalTitle.textContent = 'Modifica Valutazione';
-            evaluationIdInput.value = evaluation.id;
-            evaluationGradeInput.value = evaluation.grade;
-            evaluationDateInput.value = evaluation.date;
-            evaluationNotesInput.value = evaluation.notes;
-        } else {
-            evaluationModalTitle.textContent = 'Aggiungi Valutazione';
-            evaluationIdInput.value = '';
-        }
-        modal.style.display = 'flex';
-    };
-
-    const closeModal = () => modal.style.display = 'none';
-
-    const handleFormSubmit = async (e) => {
-        e.preventDefault();
-        const evaluationId = evaluationIdInput.value;
-        const studentId = evaluationStudentIdInput.value;
-        const evalData = {
-            studentId,
-            grade: parseFloat(evaluationGradeInput.value),
-            date: evaluationDateInput.value,
-            notes: evaluationNotesInput.value.trim()
-        };
-
-        try {
-            if (evaluationId) {
-                await evaluationsRef.doc(evaluationId).update(evalData);
-            } else {
-                await evaluationsRef.add(evalData);
-            }
-            closeModal();
-        } catch (error) {
-            console.error("Errore nel salvare la valutazione:", error);
-            alert('Errore nel salvataggio della valutazione.');
-        }
-    };
-
-    const deleteEvaluation = async (id) => {
-        if (confirm('Confermi di voler eliminare questa valutazione?')) {
-            try {
-                await evaluationsRef.doc(id).delete();
-            } catch (error) {
-                console.error("Errore nell'eliminare la valutazione:", error);
-                alert('Errore nell\'eliminazione della valutazione.');
-            }
-        }
-    };
-    
-    const exportEvaluationsToCSV = async () => {
-        const classId = classSelect.value;
-        if (!classId) return;
-        
-        const studentId = studentSelect.value;
-
-        let query = evaluationsRef;
-        if (studentId) {
-            query = query.where('studentId', '==', studentId)
-        } else {
-            const studentIds = localStudents.map(s => s.id);
-            if (studentIds.length === 0) { alert('Nessun dato da esportare.'); return; }
-            query = query.where('studentId', 'in', studentIds);
-        }
-
-        try {
-            const snapshot = await query.orderBy('date', 'desc').get();
-            if (snapshot.empty) { alert('Nessun dato da esportare.'); return; }
-
-            let csvContent = '"Studente","Data","Voto","Note"\n';
-            snapshot.forEach(doc => {
-                const ev = doc.data();
-                const student = localStudents.find(s => s.id === ev.studentId);
-                const studentName = student ? `${student.surname} ${student.name}` : 'N/D';
-                csvContent += `"${studentName}","${ev.date}","${ev.grade}","${ev.notes.replace(/"/g, '''''''')}"\n`;
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', 'valutazioni.csv');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-        } catch(err) {
-            console.error("Errore esportazione CSV: ", err);
-            alert('Errore durante l\'esportazione.');
-        }
-    };
-
-    // --- EVENT LISTENER & INIZIALIZZAZIONE ---
-    classSelect.addEventListener('change', async (e) => {
-        const classId = e.target.value;
-        await populateStudents(classId);
-        createQueryAndListen();
+        const tr = document.createElement('tr');
+        tr.dataset.id = ev.id;
+        tr.innerHTML = `
+            <td>${studentName}</td>
+            <td>${new Date(ev.date).toLocaleDateString()}</td>
+            <td>${ev.grade.toFixed(2)}</td>
+            <td>${ev.notes || '-'}</td>
+            <td class="actions">
+                <button class="btn-icon btn-edit"><span class="material-symbols-outlined">edit</span></button>
+                <button class="btn-icon btn-delete"><span class="material-symbols-outlined">delete</span></button>
+            </td>
+        `;
+        tbody.appendChild(tr);
     });
-    studentSelect.addEventListener('change', createQueryAndListen);
-    addEvaluationBtn.addEventListener('click', () => openModal());
-    exportEvaluationsBtn.addEventListener('click', exportEvaluationsToCSV);
-    closeModalBtn.addEventListener('click', closeModal);
-    evaluationForm.addEventListener('submit', handleFormSubmit);
-    window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-
-    const init = async () => {
-        await populateClasses();
-        await populateStudents(classSelect.value);
-        createQueryAndListen();
-        console.log("Modulo Valutazioni caricato e configurato con Firestore.");
-    };
-
-    init();
+    listContainer.appendChild(table);
 };
 
-setupEvaluations();
+const createQueryAndListen = () => {
+    cleanupEvaluations();
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const evaluationsRef = collection(db, 'users', user.uid, 'evaluations');
+    const classSelect = document.getElementById('eval-class-select');
+    const studentSelect = document.getElementById('eval-student-select');
+    const title = document.getElementById('evaluation-list-title');
+
+    const classId = classSelect.value;
+    const studentId = studentSelect.value;
+
+    let finalQuery;
+
+    if (studentId) {
+        title.textContent = `Valutazioni di: ${studentSelect.options[studentSelect.selectedIndex].text}`;
+        finalQuery = query(evaluationsRef, where("studentId", "==", studentId), orderBy("date", "desc"));
+    } else if (classId) {
+        title.textContent = `Tutte le valutazioni in: ${classSelect.options[classSelect.selectedIndex].text}`;
+        const studentIds = localStudents.map(s => s.id);
+        if (studentIds.length > 0) {
+            finalQuery = query(evaluationsRef, where("studentId", "in", studentIds), orderBy("date", "desc"));
+        } else {
+            renderEvaluationsList({ empty: true });
+            return;
+        }
+    } else {
+        title.textContent = 'Seleziona una classe per vedere le valutazioni';
+        renderEvaluationsList({ empty: true });
+        return;
+    }
+
+    unsubscribeEvaluations = onSnapshot(finalQuery, renderEvaluationsList, console.error);
+};
+
+const populateSelect = async (selectElement, collectionRef, nameField, surnameField = null) => {
+    const q = surnameField ? query(collectionRef, orderBy(surnameField)) : query(collectionRef, orderBy(nameField));
+    const snapshot = await getDocs(q);
+    selectElement.innerHTML = `<option value="">${selectElement.dataset.default || 'Seleziona...'}</option>`;
+    snapshot.forEach(doc => {
+        const data = doc.data();
+        const name = surnameField ? `${data[surnameField]} ${data[nameField]}` : data[nameField];
+        const option = document.createElement('option');
+        option.value = doc.id;
+        option.textContent = name;
+        selectElement.appendChild(option);
+    });
+};
+
+export const setupEvaluationsUI = () => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const classSelect = document.getElementById('eval-class-select');
+    const studentSelect = document.getElementById('eval-student-select');
+    const addBtn = document.getElementById('add-evaluation-btn');
+    const listContainer = document.getElementById('evaluation-list');
+    
+    const classesRef = collection(db, 'users', user.uid, 'classes');
+    const studentsRef = collection(db, 'users', user.uid, 'students');
+
+    populateSelect(classSelect, classesRef, 'name').then(() => {
+        createQueryAndListen();
+    });
+
+    classSelect.addEventListener('change', async () => {
+        const classId = classSelect.value;
+        studentSelect.innerHTML = '<option value="">Tutti gli studenti</option>';
+        studentSelect.disabled = true;
+        localStudents = [];
+
+        if (classId) {
+            const studentQuery = query(studentsRef, where("classId", "==", classId));
+            const studentSnapshot = await getDocs(studentQuery);
+            localStudents = studentSnapshot.docs.map(d => ({...d.data(), id: d.id}));
+            
+            studentSnapshot.forEach(doc => {
+                const s = doc.data();
+                const option = document.createElement('option');
+                option.value = doc.id;
+                option.textContent = `${s.surname} ${s.name}`;
+                studentSelect.appendChild(option);
+            });
+            studentSelect.disabled = false;
+        }
+        createQueryAndListen();
+    });
+
+    studentSelect.addEventListener('change', createQueryAndListen);
+
+    addBtn.addEventListener('click', () => {
+        const classId = classSelect.value;
+        if (!classId) {
+            alert('Seleziona prima una classe!');
+            return;
+        }
+        openModal('evaluation-modal', { 
+            title: 'Aggiungi Valutazione',
+            submitText: 'Aggiungi',
+            studentList: localStudents,
+            preselectedStudent: studentSelect.value
+        });
+    });
+    
+    listContainer.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+
+        const tr = btn.closest('tr');
+        const evalId = tr.dataset.id;
+
+        if (btn.classList.contains('btn-delete')) {
+            if (confirm('Sei sicuro di voler eliminare questa valutazione?')) {
+                await deleteDoc(doc(db, 'users', user.uid, 'evaluations', evalId));
+            }
+        } else if (btn.classList.contains('btn-edit')) {
+            const evalDoc = (await getDocs(query(collection(db, 'users', user.uid, 'evaluations'), where(documentId(), '==', evalId)))).docs[0];
+            openModal('evaluation-modal', {
+                isEdit: true,
+                evalId: evalId,
+                evaluation: evalDoc.data(),
+                studentList: localStudents,
+                title: 'Modifica Valutazione',
+                submitText: 'Salva Modifiche'
+            });
+        }
+    });
+
+    console.log("Interfaccia Valutazioni inizializzata.");
+};

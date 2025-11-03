@@ -1,167 +1,254 @@
 
-// Funzione di setup per la sezione Importazione Documenti
+// Funzione di setup per la sezione Importazione Dati
 const setupDocumentImport = () => {
 
-    // Verifica che le funzioni di Firestore siano disponibili
-    if (typeof getClassesFromFirestore !== 'function' || typeof addStudentToFirestore !== 'function' || typeof checkStudentExists !== 'function') {
-        console.error('Le funzioni Firestore non sono state trovate.');
-        document.getElementById('import-result').innerHTML = '<p class="error">Errore critico: mancano le dipendenze di Firestore.</p>';
+    // --- VERIFICA DIPENDENZE ---
+    const firestoreDependencies = [
+        'getClassesFromFirestore', 'addStudentToFirestore', 'checkStudentExists',
+        'getEvaluationsFromFirestore', 'getStudentsByEmails', 'addGradesInBatch' // Dipendenze ottimizzate
+    ];
+
+    let missingDeps = firestoreDependencies.filter(dep => typeof window[dep] !== 'function');
+    if (missingDeps.length > 0) {
+        console.error(`Errore critico: mancano le seguenti dipendenze di Firestore: ${missingDeps.join(', ')}.`);
+        const importResultDiv = document.getElementById('import-result');
+        if(importResultDiv) importResultDiv.innerHTML = `<p class="error">Errore critico: impossibile caricare il modulo di importazione.</p>`;
         return;
     }
 
-    // --- ELEMENTI DEL DOM ---
-    const classSelect = document.getElementById('import-class-select');
-    const dropArea = document.getElementById('drop-area');
-    const fileInput = document.getElementById('file-input');
-    const importBtn = document.getElementById('import-btn');
     const importResultDiv = document.getElementById('import-result');
 
-    // --- DATI ---
-    let selectedFile = null;
+    // --- SEZIONE: IMPORTAZIONE STUDENTI (invariata) ---
+    const setupStudentImport = () => {
+        // ... (la logica di importazione studenti rimane la stessa)
+        const classSelect = document.getElementById('import-student-class-select');
+        const dropArea = document.getElementById('student-drop-area');
+        const fileInput = document.getElementById('student-file-input');
+        const importBtn = document.getElementById('import-student-btn');
+        let selectedFile = null;
 
-    // --- FUNZIONI ---
-
-    const populateClasses = async () => {
-        try {
-            const classes = await getClassesFromFirestore();
-            classSelect.innerHTML = '<option value="">Seleziona una classe...</option>';
-            if (classes.length === 0) {
-                classSelect.innerHTML = '<option value="">Nessuna classe creata</option>';
-            } else {
+        const populateClasses = async () => {
+            try {
+                const classes = await getClassesFromFirestore();
+                classSelect.innerHTML = '<option value="">Seleziona una classe...</option>';
                 classes.forEach(c => {
                     const option = document.createElement('option');
                     option.value = c.id;
                     option.textContent = c.name;
                     classSelect.appendChild(option);
                 });
+            } catch (error) {
+                console.error("Errore nel caricamento delle classi: ", error);
             }
-        } catch (error) {
-            console.error("Errore nel caricamento delle classi: ", error);
-            classSelect.innerHTML = '<option value="">Errore nel caricare le classi</option>';
-        }
-    };
+        };
 
-    const handleFileSelect = (file) => {
-        if (file && file.type === 'text/csv') {
-            selectedFile = file;
-            dropArea.textContent = `File selezionato: ${file.name}`;
-            dropArea.classList.add('file-selected');
+        const handleFileSelect = (file) => {
+            if (file && file.type === 'text/csv') {
+                selectedFile = file;
+                dropArea.textContent = `File: ${file.name}`;
+                dropArea.classList.add('file-selected');
+            } else {
+                selectedFile = null;
+                dropArea.textContent = 'Trascina o clicca per selezionare';
+                dropArea.classList.remove('file-selected');
+            }
             updateImportButtonState();
-        } else {
+        };
+
+        const updateImportButtonState = () => { importBtn.disabled = !(selectedFile && classSelect.value); };
+
+        const processImport = async () => {
+            if (!selectedFile || !classSelect.value) return;
+            const classId = classSelect.value;
+            importBtn.disabled = true;
+            importResultDiv.innerHTML = '<p>Importazione studenti in corso...</p>';
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const lines = event.target.result.split(/\r\n|\n/);
+                let importedCount = 0, skippedCount = 0, errors = [];
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (line.trim() === '') continue;
+                    const [name, surname, email] = line.split(',').map(f => f.trim());
+                    if (name && surname && email) {
+                        try {
+                            if (await checkStudentExists(classId, email)) {
+                                skippedCount++;
+                            } else {
+                                await addStudentToFirestore({ classId, name, surname, email });
+                                importedCount++;
+                            }
+                        } catch (error) { errors.push(`Riga ${i + 1}: ${error.message}`); }
+                    } else { errors.push(`Riga ${i + 1}: Dati mancanti.`); }
+                }
+                displayImportResult('Studenti', importedCount, skippedCount, errors);
+                resetImportArea();
+            };
+            reader.readAsText(selectedFile);
+        };
+        
+        const resetImportArea = () => {
             selectedFile = null;
-            importResultDiv.innerHTML = '<p class="error">Formato file non valido. Seleziona un file .csv</p>';
-            dropArea.textContent = 'Trascina il file qui o clicca per selezionarlo';
+            fileInput.value = '';
+            dropArea.textContent = 'Trascina o clicca per selezionare';
             dropArea.classList.remove('file-selected');
             updateImportButtonState();
-        }
+        };
+
+        classSelect.addEventListener('change', updateImportButtonState);
+        importBtn.addEventListener('click', processImport);
+        dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('drag-over'); });
+        dropArea.addEventListener('dragleave', () => dropArea.classList.remove('drag-over'));
+        dropArea.addEventListener('drop', (e) => { e.preventDefault(); dropArea.classList.remove('drag-over'); handleFileSelect(e.dataTransfer.files[0]); });
+        dropArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0]));
+        populateClasses();
+        updateImportButtonState();
     };
 
-    const updateImportButtonState = () => {
-        importBtn.disabled = !(selectedFile && classSelect.value !== '' && classSelect.value !== null);
-    };
+    // --- SEZIONE: IMPORTAZIONE VALUTAZIONI (Logica Ottimizzata) ---
+    const setupEvaluationImport = () => {
+        const evaluationSelect = document.getElementById('import-evaluation-select');
+        const dropArea = document.getElementById('evaluation-drop-area');
+        const fileInput = document.getElementById('evaluation-file-input');
+        const importBtn = document.getElementById('import-evaluation-btn');
+        let selectedFile = null;
 
-    const processImport = async () => {
-        if (!selectedFile || !classSelect.value) return;
-
-        const classId = classSelect.value;
-        importBtn.disabled = true;
-        importResultDiv.innerHTML = '<p>Importazione in corso... questo potrebbe richiedere qualche istante.</p>';
-
-        const reader = new FileReader();
-
-        reader.onload = async (event) => {
-            const csv = event.target.result;
-            const lines = csv.split(/\r\n|\n/);
-            let importedCount = 0;
-            let skippedCount = 0;
-            let errors = [];
-
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i];
-                if (line.trim() === '') continue;
-
-                const [name, surname, email] = line.split(',').map(field => field.trim());
-
-                if (name && surname && email) {
-                    try {
-                        const studentExists = await checkStudentExists(classId, email);
-                        if (studentExists) {
-                            skippedCount++;
-                            continue; // Salta lo studente se esiste già
-                        }
-
-                        const newStudent = {
-                            classId: classId,
-                            name: name,
-                            surname: surname,
-                            email: email
-                        };
-                        
-                        await addStudentToFirestore(newStudent);
-                        importedCount++;
-                    } catch (error) {
-                        errors.push(`Riga ${i + 1}: Errore nel salvataggio su Firestore - ${error.message}`);
-                    }
-                } else {
-                    errors.push(`Riga ${i + 1}: Dati mancanti o formattati non correttamente.`);
-                }
+        const populateEvaluations = async () => {
+            try {
+                const evaluations = await getEvaluationsFromFirestore();
+                evaluationSelect.innerHTML = '<option value="">Seleziona una valutazione...</option>';
+                evaluations.forEach(e => {
+                    const option = document.createElement('option');
+                    option.value = e.id;
+                    option.textContent = e.name;
+                    evaluationSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Errore nel caricamento delle valutazioni: ", error);
             }
-
-            displayImportResult(importedCount, skippedCount, errors);
-            resetImportArea();
         };
 
-        reader.onerror = () => {
-            importResultDiv.innerHTML = '<p class="error">Errore durante la lettura del file.</p>';
-            importBtn.disabled = false;
+        const handleFileSelect = (file) => {
+            if (file && file.type === 'text/csv') {
+                selectedFile = file;
+                dropArea.textContent = `File: ${file.name}`;
+                dropArea.classList.add('file-selected');
+            } else {
+                selectedFile = null;
+                dropArea.textContent = 'Trascina o clicca per selezionare';
+                dropArea.classList.remove('file-selected');
+            }
+            updateImportButtonState();
         };
 
-        reader.readAsText(selectedFile);
+        const updateImportButtonState = () => { importBtn.disabled = !(selectedFile && evaluationSelect.value); };
+
+        const processImport = async () => {
+            if (!selectedFile || !evaluationSelect.value) return;
+
+            const evaluationId = evaluationSelect.value;
+            importBtn.disabled = true;
+            importResultDiv.innerHTML = '<p>Lettura file e preparazione dati...</p>';
+
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const lines = event.target.result.split(/\r\n|\n/).filter(line => line.trim() !== '');
+                if (lines.length === 0) {
+                    importResultDiv.innerHTML = '<p class="error">File vuoto o non valido.</p>';
+                    resetImportArea();
+                    return;
+                }
+
+                const gradesToProcess = [];
+                const emailsInFile = new Set();
+                let errors = [];
+
+                lines.forEach((line, index) => {
+                    const [email, gradeStr] = line.split(',').map(f => f.trim());
+                    const grade = parseFloat(gradeStr);
+                    if (email && !isNaN(grade)) {
+                        emailsInFile.add(email);
+                        gradesToProcess.push({ email, grade, lineNum: index + 1 });
+                    } else {
+                        errors.push(`Riga ${index + 1}: Dati mancanti o voto non numerico.`);
+                    }
+                });
+
+                if (emailsInFile.size === 0) {
+                    displayImportResult('Valutazioni', 0, lines.length, errors);
+                    resetImportArea();
+                    return;
+                }
+
+                try {
+                    importResultDiv.innerHTML = `<p>Recupero di ${emailsInFile.size} studenti dal database...</p>`;
+                    const studentsMap = await getStudentsByEmails(Array.from(emailsInFile));
+                    
+                    const gradesDataForBatch = [];
+                    let skippedCount = 0;
+
+                    gradesToProcess.forEach(item => {
+                        const student = studentsMap.get(item.email);
+                        if (student) {
+                            gradesDataForBatch.push({ studentId: student.id, grade: item.grade });
+                        } else {
+                            errors.push(`Riga ${item.lineNum}: Studente con email ${item.email} non trovato.`);
+                            skippedCount++;
+                        }
+                    });
+
+                    if (gradesDataForBatch.length > 0) {
+                        importResultDiv.innerHTML = `<p>Salvataggio di ${gradesDataForBatch.length} voti in corso...</p>`;
+                        await addGradesInBatch(evaluationId, gradesDataForBatch);
+                    }
+
+                    displayImportResult('Voti', gradesDataForBatch.length, skippedCount, errors);
+
+                } catch (error) {
+                    importResultDiv.innerHTML = `<p class="error">Errore irreversibile durante l'importazione: ${error.message}</p>`;
+                } finally {
+                    resetImportArea();
+                }
+            };
+            reader.readAsText(selectedFile);
+        };
+        
+        const resetImportArea = () => {
+            selectedFile = null;
+            fileInput.value = '';
+            dropArea.textContent = 'Trascina il file o clicca per selezionarlo';
+            dropArea.classList.remove('file-selected');
+            updateImportButtonState();
+        };
+
+        evaluationSelect.addEventListener('change', updateImportButtonState);
+        importBtn.addEventListener('click', processImport);
+        dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('drag-over'); });
+        dropArea.addEventListener('dragleave', () => dropArea.classList.remove('drag-over'));
+        dropArea.addEventListener('drop', (e) => { e.preventDefault(); dropArea.classList.remove('drag-over'); handleFileSelect(e.dataTransfer.files[0]); });
+        dropArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0]));
+
+        populateEvaluations();
+        updateImportButtonState();
     };
 
-    const displayImportResult = (imported, skipped, errors) => {
-        let html = `<p class="success"><strong>${imported} studenti importati con successo!</strong></p>`;
+    // --- FUNZIONI COMUNI ---
+    const displayImportResult = (type, imported, skipped, errors) => {
+        let html = `<p class="success"><strong>${imported} ${type} importati/e con successo!</strong></p>`;
         if (skipped > 0) {
-             html += `<p><strong>${skipped} studenti saltati perché già presenti.</strong></p>`;
+             html += `<p><strong>${skipped} record saltati (studenti non trovati o dati non validi).</strong></p>`;
         }
         if (errors.length > 0) {
-            html += '<p class="error">Sono stati riscontrati alcuni problemi:</p><ul>';
-            errors.forEach(err => {
-                html += `<li>${err}</li>`;
-            });
+            html += '<p class="error">Dettaglio errori:</p><ul>';
+            errors.forEach(err => { html += `<li>${err}</li>`; });
             html += '</ul>';
         }
         importResultDiv.innerHTML = html;
     };
-    
-    const resetImportArea = () => {
-        selectedFile = null;
-        fileInput.value = '';
-        dropArea.textContent = 'Trascina il file qui o clicca per selezionarlo';
-        dropArea.classList.remove('file-selected');
-        updateImportButtonState();
-    };
-
-    // --- EVENT LISTENER ---
-    classSelect.addEventListener('change', updateImportButtonState);
-    importBtn.addEventListener('click', processImport);
-
-    // Eventi per Drag & Drop
-    dropArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropArea.classList.add('drag-over');
-    });
-    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('drag-over'));
-    dropArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropArea.classList.remove('drag-over');
-        const file = e.dataTransfer.files[0];
-        handleFileSelect(file);
-    });
-    dropArea.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0]));
 
     // --- INIZIALIZZAZIONE ---
-    populateClasses();
-    updateImportButtonState();
+    setupStudentImport();
+    setupEvaluationImport();
 };

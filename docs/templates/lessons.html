@@ -1,0 +1,55 @@
+
+<div class="container">
+    <header class="page-header">
+        <h2>Registro di Classe</h2>
+        <div class="header-actions">
+            <div class="form-group">
+                <select id="lesson-class-selector" class="styled-select">
+                    <option value="">Seleziona una classe...</option>
+                </select>
+            </div>
+            <button id="add-lesson-btn" class="btn btn-primary">Aggiungi Lezione</button>
+        </div>
+    </header>
+
+    <div id="lessons-list-container">
+        <!-- Le lezioni verranno caricate qui dinamicamente -->
+        <p id="lessons-placeholder">Seleziona una classe per vedere le lezioni o aggiungerne una nuova.</p>
+    </div>
+</div>
+
+<!-- Modal per Aggiungere/Modificare Lezione -->
+<div id="lesson-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3 id="lesson-modal-title">Aggiungi Lezione</h3>
+        <form id="lesson-form">
+            <input type="hidden" id="lesson-id-input">
+            <div class="form-group">
+                <label for="lesson-date-input">Data:</label>
+                <input type="date" id="lesson-date-input" required>
+            </div>
+            <div class="form-group">
+                <div class="label-container">
+                    <label for="lesson-topic-input">Argomento della Lezione:</label>
+                    <button type="button" id="generate-lesson-ai-btn" class="btn-ai-sparkle">✨ Genera con IA</button>
+                </div>
+                <textarea id="lesson-topic-input" rows="6" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="lesson-assignments-input">Compiti Assegnati (opzionale):</label>
+                <textarea id="lesson-assignments-input" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Studenti Assenti (opzionale):</label>
+                <div id="lesson-absences-checklist" class="checklist-container">
+                    <!-- Le checkbox degli studenti verranno popolate qui -->
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" id="delete-lesson-btn" class="btn btn-danger" style="display: none;">Elimina</button>
+                <button type="submit" class="btn btn-primary">Salva</button>
+            </div>
+        </form>
+    </div>
+</div>
